@@ -20,7 +20,7 @@ type LocaleKey =
   | "de"
   | "ar";
 
-const CURRENT_LOCALE: LocaleKey = "en";
+const CURRENT_LOCALE: LocaleKey = "ja";
 
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
   { key: "en", label: "ENG", href: "/" },
@@ -79,7 +79,7 @@ const LEGAL_TEXT: Record<
   },
   ja: {
     terms: "利用規約",
-    privacy: "プライバシー",
+    privacy: "プライバシーポリシー",
     refunds: "返金ポリシー",
     contact: "お問い合わせ",
   },
@@ -127,7 +127,7 @@ const AVATAR_VARIATION_TEXT: Record<
   },
   ja: {
     line1: "各アバターパックに",
-    line2: "AI生成のユニークな変化を収録",
+    line2: "AI生成のユニークなバリエーション入り",
   },
   ko: {
     line1: "각 아바타 팩에는",
@@ -167,7 +167,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Save 49%",
     coloringTitle: "Coloring Page",
     keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "12 pcs Avatar Pack",
+    avatarTitle: "Avatar Pack (12 Designs)",
     singleSub: "Single purchase",
   },
   "zh-hk": {
@@ -177,17 +177,17 @@ const PRICING_TEXT: Record<
     bundleSave: "現省 49%",
     coloringTitle: "填色畫",
     keepsakeTitle: "寵物紀念證書",
-    avatarTitle: "12 款頭像包",
+    avatarTitle: "頭像包（12款設計）",
     singleSub: "單獨購買",
   },
   "zh-cn": {
     bundleTitle: "超值套装",
-    bundleSub: "包含全部 3 款",
+    bundleSub: "包含全部 3 款纪念品",
     bundleBadge: "超值首选",
     bundleSave: "立省 49%",
     coloringTitle: "填色画",
-    keepsakeTitle: "宠物纪念证书",
-    avatarTitle: "12 款头像包",
+    keepsakeTitle: "纪念证书",
+    avatarTitle: "头像包（12款设计）",
     singleSub: "单独购买",
   },
   ja: {
@@ -197,7 +197,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% OFF",
     coloringTitle: "塗り絵",
     keepsakeTitle: "記念証書",
-    avatarTitle: "アバター12種パック",
+    avatarTitle: "アバターパック（全12種）",
     singleSub: "単品購入",
   },
   ko: {
@@ -207,7 +207,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% 절약",
     coloringTitle: "컬러링 페이지",
     keepsakeTitle: "기념 증서",
-    avatarTitle: "12종 아바타 팩",
+    avatarTitle: "아바타 팩 (12종 디자인)",
     singleSub: "단품 구매",
   },
   es: {
@@ -217,7 +217,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Ahorra 49%",
     coloringTitle: "Página para Colorear",
     keepsakeTitle: "Certificado Conmemorativo",
-    avatarTitle: "Pack de 12 Avatares",
+    avatarTitle: "Pack de Avatares (12 Diseños)",
     singleSub: "Compra individual",
   },
   de: {
@@ -227,7 +227,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% sparen",
     coloringTitle: "Ausmalbild",
     keepsakeTitle: "Erinnerungszertifikat",
-    avatarTitle: "12er Avatar-Paket",
+    avatarTitle: "Avatar-Paket (12 Designs)",
     singleSub: "Einzelkauf",
   },
   ar: {
@@ -237,7 +237,7 @@ const PRICING_TEXT: Record<
     bundleSave: "وفّر 49٪",
     coloringTitle: "صفحة تلوين",
     keepsakeTitle: "شهادة تذكارية",
-    avatarTitle: "حزمة ١٢ صورة رمزية",
+    avatarTitle: "حزمة الصور الرمزية (12 تصميماً)",
     singleSub: "شراء فردي",
   },
 };
@@ -267,9 +267,9 @@ export default function PetKeepsakeLanding() {
   };
 
   const t = {
-    footerDisclaimer: "Digital files only. No physical products are shipped.",
-    footerDisclaimer2: "Available worldwide. Excludes Québec, Canada.",
-    footerDisclaimer3: "Prices in USD.",
+    footerDisclaimer: "デジタルファイルのみです。物理商品の発送はありません。",
+    footerDisclaimer2: "世界中でご利用可能。カナダ・ケベック州は対象外です。",
+    footerDisclaimer3: "価格は米ドル（USD）です。",
   };
 
   return (
@@ -331,13 +331,13 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
             href="#upload"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Upload
+            アップロード
           </a>
           <a
             href="#pricing"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Pricing
+            料金
           </a>
           <a
             href="#guide"
@@ -349,13 +349,13 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
             href="#examples"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            View Examples
+            実例を見る
           </a>
           <a
             href="#upload"
             className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
           >
-            Create Yours
+            作成を始める
           </a>
         </div>
 
@@ -374,7 +374,7 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
         <div className="relative block md:hidden">
           <details className="group relative">
             <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 Language
+              🌐 言語
             </summary>
 
             <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
@@ -409,23 +409,21 @@ function HeroBundleSection() {
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[1480px] text-center">
             <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">
-              Personalized digital keepsakes from your own pet photo
+              あなたのペット写真から作る、パーソナルなデジタル記念品
             </div>
 
             <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)] xl:whitespace-nowrap">
-              1 Photo → 3 Personalized Pet Keepsakes
+              1枚の写真 → 3つのパーソナルなペット記念品
             </h1>
 
             <p className="mx-auto mt-5 max-w-[1500px] whitespace-nowrap text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-              Turn your pet photo into a printable coloring page, a keepsake
-              certificate, and a 12-avatar pack — ready to download, print, gift,
-              and treasure.
+              ペット写真1枚から、印刷できる塗り絵ページ、記念証書、12種のアバターパックを作成。ダウンロードして、印刷して、贈って、大切に残せます。
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <HeroPill>Made from your own photo</HeroPill>
-              <HeroPill>Birthday or memorial-ready</HeroPill>
-              <HeroPill>Digital download only</HeroPill>
+              <HeroPill>あなた自身の写真から作成</HeroPill>
+              <HeroPill>誕生日や追悼ギフトにも最適</HeroPill>
+              <HeroPill>デジタルダウンロードのみ</HeroPill>
             </div>
           </div>
 
@@ -434,17 +432,17 @@ function HeroBundleSection() {
               <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    Upload start
+                    アップロード開始
                   </span>
                   <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG or PNG
+                    JPG または PNG
                   </span>
                 </div>
 
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
                   <img
                     src="/images/hero-original-demo.png"
-                    alt="Upload preview"
+                    alt="アップロードプレビュー"
                     className="h-auto w-full rounded-[20px] bg-white object-contain"
                   />
                 </div>
@@ -458,20 +456,20 @@ function HeroBundleSection() {
                         : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
                     }`}
                   >
-                    Upload Your Photo
+                    写真をアップロード
                   </button>
 
                   <a
                     href="#examples"
                     className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
                   >
-                    View Real Examples
+                    実際の作例を見る
                   </a>
                 </div>
 
                 <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
                   <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    Photo rights confirmation
+                    写真使用権の確認
                   </div>
 
                   <label className="flex cursor-pointer items-start gap-3">
@@ -482,20 +480,17 @@ function HeroBundleSection() {
                       className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
                     />
                     <span className="text-[15px] leading-7 text-[#5b4334]">
-                      I confirm that I own this photo or have permission to use it.
-                      Do not upload celebrity, public figure, fictional character,
-                      or internet-downloaded images.
+                      この写真を所有している、または使用許可を得ていることを確認します。著名人、公人、架空キャラクター、またはネットから取得した画像はアップロードしないでください。
                     </span>
                   </label>
 
                   <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    Orders that violate these rules may be refused or cancelled.
+                    これらのルールに違反する注文は、お断りまたはキャンセルとなる場合があります。
                   </p>
                 </div>
 
                 <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  No design skills needed. Upload once and get ready-to-download
-                  files.
+                  デザインスキルは不要です。1回アップロードするだけで、すぐにダウンロードできるファイルを受け取れます。
                 </div>
               </div>
             </div>
@@ -504,27 +499,27 @@ function HeroBundleSection() {
               <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    Bundle preview
+                    バンドルプレビュー
                   </span>
                   <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1 upload • 3 keepsakes
+                    1回アップロード • 3つの記念品
                   </span>
                 </div>
 
                 <div className="relative">
                   <img
                     src="/images/hero-keepsake-3-products.png"
-                    alt="Coloring page, keepsake certificate, and avatar pack preview"
+                    alt="塗り絵ページ、記念証書、アバターパックのプレビュー"
                     className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
                   />
                 </div>
               </div>
 
               <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
-                <HeroSubPill>Birthday</HeroSubPill>
-                <HeroSubPill>In Loving Memory</HeroSubPill>
-                <HeroSubPill>Printable</HeroSubPill>
-                <HeroSubPill>Shareable</HeroSubPill>
+                <HeroSubPill>誕生日</HeroSubPill>
+                <HeroSubPill>大切な思い出に</HeroSubPill>
+                <HeroSubPill>印刷可能</HeroSubPill>
+                <HeroSubPill>シェア可能</HeroSubPill>
                 <HeroSubPill>
                   {avatarVariationText.line1} {avatarVariationText.line2}
                 </HeroSubPill>
@@ -543,14 +538,14 @@ function HeroBundleSection() {
                     {pricingText.bundleTitle}
                   </div>
 
-                  <PriceCurrencyBadge bundle>USD</PriceCurrencyBadge>
+                  <PriceCurrencyBadge bundle>米ドル(USD)</PriceCurrencyBadge>
 
                   <div className="mt-3 text-[46px] font-black">$19.99</div>
                   <div className="mt-2 text-[18px] opacity-95">
                     {pricingText.bundleSub}
                   </div>
                   <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
-                    {pricingText.bundleSave} vs buying separately
+                    単品購入より {pricingText.bundleSave}
                   </div>
                 </button>
 
@@ -580,24 +575,24 @@ function HeroBundleSection() {
               </div>
 
               <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
-                <TrustPill>Secure checkout</TrustPill>
-                <TrustPill>Digital files only</TrustPill>
-                <TrustPill>No shipping needed</TrustPill>
+                <TrustPill>安全な決済</TrustPill>
+                <TrustPill>デジタルファイルのみ</TrustPill>
+                <TrustPill>発送不要</TrustPill>
               </div>
 
               <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
                 <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
                   <TrustMiniItem
-                    title="Personalized"
-                    text="Made from your own pet photo"
+                    title="パーソナル"
+                    text="あなたのペット写真から作成"
                   />
                   <TrustMiniItem
-                    title="Digital"
-                    text="Instant-ready download format"
+                    title="デジタル"
+                    text="すぐダウンロードできる形式"
                   />
                   <TrustMiniItem
-                    title="Giftable"
-                    text="Great for birthdays and memory"
+                    title="ギフト向き"
+                    text="誕生日や思い出の贈り物に最適"
                   />
                 </div>
               </div>
@@ -642,7 +637,7 @@ function PricingCard({
     <button className="flex min-h-[258px] flex-col items-center justify-center rounded-[28px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
       <div className="text-[18px] font-extrabold text-[#4B3427]">{title}</div>
       {extra}
-      <PriceCurrencyBadge>USD</PriceCurrencyBadge>
+      <PriceCurrencyBadge>米ドル(USD)</PriceCurrencyBadge>
       <div className="mt-3 text-[42px] font-black text-[#2E1D16]">{price}</div>
       <div className="mt-2 text-[18px] text-stone-600">{subtitle}</div>
     </button>
@@ -693,32 +688,31 @@ function HowItWorksSection() {
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1380px]">
         <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          How It Works
+          ご利用の流れ
         </h2>
 
         <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          One clear pet photo becomes a printable keepsake bundle in a few simple
-          steps.
+          はっきり写った1枚のペット写真から、印刷できる記念品セットが簡単に作れます。
         </p>
 
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <HowCard
             number="1"
             icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="Upload your photo"
-            text="Start with one clear photo of your pet with a visible face."
+            title="写真をアップロード"
+            text="顔がはっきり見える、鮮明なペット写真を1枚ご用意ください。"
           />
           <HowCard
             number="2"
             icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="Create your bundle"
-            text="Get a coloring page, a keepsake certificate, and a 12-avatar pack."
+            title="バンドルを作成"
+            text="塗り絵ページ、記念証書、12種のアバターパックをまとめて受け取れます。"
           />
           <HowCard
             number="3"
             icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="Download and keep"
-            text="Print, save, share, or gift your personalized digital files."
+            title="ダウンロードして保存"
+            text="印刷、保存、共有、ギフトにも使えるパーソナルなデジタルファイルです。"
           />
         </div>
       </div>
@@ -763,15 +757,15 @@ function ExamplesGallerySection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            Real Product Style Preview
+            実際の商品イメージ
           </h2>
 
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
             <span className="block">
-              See how one uploaded pet photo can become a printable coloring page,
+              アップロードした1枚のペット写真が、印刷できる塗り絵ページに。
             </span>
             <span className="block">
-              a personalized keepsake certificate, and a fun 12-avatar pack.
+              さらに、パーソナルな記念証書と楽しい12種のアバターパックにもなります。
             </span>
           </p>
         </div>
@@ -786,33 +780,33 @@ function ExamplesGallerySection() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             <ExampleFlowCard
               img="/images/avatar_example.jpg"
-              title="Original Photo"
-              badge="Original"
-              description="The pet photo you upload"
+              title="元の写真"
+              badge="元画像"
+              description="あなたがアップロードするペット写真"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/coloring_result.jpg"
-              title="Coloring Page"
-              badge="AI Preview"
-              description="Printable black-and-white line art"
+              title="塗り絵ページ"
+              badge="AIプレビュー"
+              description="印刷できる白黒ラインアート"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/keepsake-certificate.png"
-              title="Keepsake Certificate"
-              badge="AI Preview"
-              description="Birthday or memorial-ready keepsake"
+              title="記念証書"
+              badge="AIプレビュー"
+              description="誕生日や追悼向けの記念デザイン"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/avatar_pack_preview.png"
-              title="Avatar Pack"
-              badge="AI Preview"
-              description="12 unique shareable avatar styles"
+              title="アバターパック"
+              badge="AIプレビュー"
+              description="12種類のシェアしやすいアバタースタイル"
               badgeTone="gold"
               contain
             />
@@ -882,21 +876,21 @@ function PhotoGuideSection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            How to Choose the Best Photo
+            ベストな写真の選び方
           </h2>
           <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            A clear, bright photo gives the best keepsake results.
+            明るく鮮明な写真ほど、より良い仕上がりになります。
           </p>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           <GuidePanel
             good
-            title="✓ Good"
+            title="✓ 良い例"
             bullets={[
-              "Realistic lighting on the pet face",
-              "Face clearly visible and centered",
-              "Pet fills enough of the frame",
+              "ペットの顔に自然な光が当たっている",
+              "顔がはっきり見え、中央に写っている",
+              "フレーム内でペットが十分大きく写っている",
             ]}
             images={[
               "/images/good_1_bird_girl.png",
@@ -906,11 +900,11 @@ function PhotoGuideSection() {
           />
 
           <GuidePanel
-            title="✕ Avoid"
+            title="✕ 避けたい例"
             bullets={[
-              "Blurry or out of focus photo",
-              "Too dark or heavy shadows",
-              "Face cropped or turned away",
+              "ピンぼけ・不鮮明な写真",
+              "暗すぎる、または影が強すぎる写真",
+              "顔が切れている、または横を向いている写真",
             ]}
             images={[
               "/images/avoid_1_blurry_cat.png",
@@ -985,12 +979,11 @@ function FinalCTASection() {
     <section className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fff8f0_0%,#f8eee3_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto flex max-w-[1320px] flex-col items-center text-center">
         <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          Ready to turn your pet photo into something worth keeping?
+          ペット写真を、ずっと残したくなる特別な形にしませんか？
         </h2>
 
         <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px] lg:whitespace-nowrap">
-          Upload once and get a personalized coloring page, keepsake certificate,
-          and avatar pack made from your own photo.
+          1回アップロードするだけで、あなたの写真から作る塗り絵ページ、記念証書、アバターパックを受け取れます。
         </p>
 
         <div className="mt-8">
@@ -998,12 +991,12 @@ function FinalCTASection() {
             href="#upload"
             className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
           >
-            Upload Your Photo
+            写真をアップロード
           </a>
         </div>
 
         <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
-          Digital delivery • No shipping • Great for gifts and memory
+          デジタル納品 • 発送不要 • ギフトや思い出用に最適
         </div>
       </div>
     </section>
@@ -1041,7 +1034,7 @@ function Footer({
 
     if (isLocal) {
       alert(
-        "Google website translation usually does not work on localhost. Please test this on your live domain, or use Chrome Translate on the current page."
+        "Google翻訳によるサイト翻訳は通常 localhost では動作しません。公開ドメインでテストするか、Chrome のページ翻訳機能をご利用ください。"
       );
       return;
     }
@@ -1072,7 +1065,7 @@ function Footer({
                   />
                   {p === "link" && linkCopied && (
                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      COPIED
+                      コピー済み
                     </span>
                   )}
                 </button>
@@ -1115,7 +1108,7 @@ function Footer({
           <div className="mt-8 flex flex-col items-center gap-3 text-center">
             <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
               <Globe className="h-4 w-4" />
-              More languages (machine translated)
+              その他の言語（機械翻訳）
             </div>
 
             <select
@@ -1129,7 +1122,7 @@ function Footer({
               className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
             >
               <option value="" disabled>
-                Choose another language...
+                別の言語を選択...
               </option>
               {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
                 <option key={lang.tl} value={lang.tl}>
@@ -1139,8 +1132,7 @@ function Footer({
             </select>
 
             <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              Machine translation is provided for convenience only. Official
-              versions are the language pages listed on this site.
+              機械翻訳は便宜上のものです。正式版はこのサイトに掲載されている各言語ページをご確認ください。
             </p>
           </div>
 
@@ -1195,20 +1187,20 @@ function ContactModal({
         </button>
 
         <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          Support Request
+          サポートお問い合わせ
         </h3>
         <p className="mt-1 text-sm text-stone-600">
-          This opens your email app with a pre-filled message.
+          メールアプリを開き、内容を自動入力します。
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Your Name
+              お名前
             </label>
             <input
               type="text"
-              placeholder="Name (optional)"
+              placeholder="お名前（任意）"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1217,7 +1209,7 @@ function ContactModal({
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Subject / Inquiry Type
+              件名 / お問い合わせ種別
             </label>
             <select
               value={supportSubject}
@@ -1225,22 +1217,22 @@ function ContactModal({
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
             >
               <option value="" disabled>
-                Select an inquiry type...
+                お問い合わせ種別を選択してください...
               </option>
-              <option value="Order Support">Order Support</option>
-              <option value="File Access">File Access</option>
-              <option value="Photo Upload Issue">Photo Upload Issue</option>
-              <option value="General Question">General Question</option>
+              <option value="Order Support">注文サポート</option>
+              <option value="File Access">ファイルアクセス</option>
+              <option value="Photo Upload Issue">写真アップロードの問題</option>
+              <option value="General Question">一般的な質問</option>
             </select>
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Message
+              メッセージ
             </label>
             <textarea
               rows={4}
-              placeholder="How can we help you today?"
+              placeholder="どのようなご用件ですか？"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1251,7 +1243,7 @@ function ContactModal({
             className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
             onClick={() => {
               const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
+                supportSubject || "お問い合わせ"
               }`;
               const bodyLines = [
                 `Customer Name: ${name || "Not provided"}`,
@@ -1263,13 +1255,13 @@ function ContactModal({
               )}&body=${encodeURIComponent(bodyLines)}`;
             }}
           >
-            Open Email App
+            メールアプリを開く
           </button>
 
           <button
             onClick={async () => {
               const textToCopy = `Subject: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
+                supportSubject || "お問い合わせ"
               }\n\nCustomer Name: ${name || "Not provided"}\nMessage: ${message}`;
 
               await navigator.clipboard.writeText(textToCopy);
@@ -1278,7 +1270,7 @@ function ContactModal({
             }}
             className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
           >
-            {msgCopied ? "Copied to Clipboard! ✓" : "Alternative: Copy Message Text"}
+            {msgCopied ? "クリップボードにコピーしました ✓" : "代替方法：メッセージ本文をコピー"}
           </button>
         </div>
       </div>

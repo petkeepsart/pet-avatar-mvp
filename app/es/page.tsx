@@ -20,7 +20,7 @@ type LocaleKey =
   | "de"
   | "ar";
 
-const CURRENT_LOCALE: LocaleKey = "en";
+const CURRENT_LOCALE: LocaleKey = "es";
 
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
   { key: "en", label: "ENG", href: "/" },
@@ -92,8 +92,8 @@ const LEGAL_TEXT: Record<
   es: {
     terms: "Términos",
     privacy: "Privacidad",
-    refunds: "Reembolsos",
-    contact: "Contacto",
+    refunds: "Política de Reembolsos",
+    contact: "Contáctanos",
   },
   de: {
     terms: "AGB",
@@ -130,7 +130,7 @@ const AVATAR_VARIATION_TEXT: Record<
     line2: "AI生成のユニークな変化を収録",
   },
   ko: {
-    line1: "각 아바타 팩에는",
+    line1: "각 아바타 팩마다",
     line2: "AI 생성 고유 변형이 포함됩니다",
   },
   es: {
@@ -167,7 +167,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Save 49%",
     coloringTitle: "Coloring Page",
     keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "12 pcs Avatar Pack",
+    avatarTitle: "Avatar Pack (12 Designs)",
     singleSub: "Single purchase",
   },
   "zh-hk": {
@@ -177,17 +177,17 @@ const PRICING_TEXT: Record<
     bundleSave: "現省 49%",
     coloringTitle: "填色畫",
     keepsakeTitle: "寵物紀念證書",
-    avatarTitle: "12 款頭像包",
+    avatarTitle: "頭像包（12款設計）",
     singleSub: "單獨購買",
   },
   "zh-cn": {
     bundleTitle: "超值套装",
-    bundleSub: "包含全部 3 款",
+    bundleSub: "包含全部 3 款纪念品",
     bundleBadge: "超值首选",
     bundleSave: "立省 49%",
     coloringTitle: "填色画",
-    keepsakeTitle: "宠物纪念证书",
-    avatarTitle: "12 款头像包",
+    keepsakeTitle: "纪念证书",
+    avatarTitle: "头像包（12款设计）",
     singleSub: "单独购买",
   },
   ja: {
@@ -197,7 +197,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% OFF",
     coloringTitle: "塗り絵",
     keepsakeTitle: "記念証書",
-    avatarTitle: "アバター12種パック",
+    avatarTitle: "アバターパック（全12種）",
     singleSub: "単品購入",
   },
   ko: {
@@ -207,7 +207,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% 절약",
     coloringTitle: "컬러링 페이지",
     keepsakeTitle: "기념 증서",
-    avatarTitle: "12종 아바타 팩",
+    avatarTitle: "아바타 팩 (12종 디자인)",
     singleSub: "단품 구매",
   },
   es: {
@@ -217,7 +217,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Ahorra 49%",
     coloringTitle: "Página para Colorear",
     keepsakeTitle: "Certificado Conmemorativo",
-    avatarTitle: "Pack de 12 Avatares",
+    avatarTitle: "Pack de Avatares (12 Diseños)",
     singleSub: "Compra individual",
   },
   de: {
@@ -227,7 +227,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% sparen",
     coloringTitle: "Ausmalbild",
     keepsakeTitle: "Erinnerungszertifikat",
-    avatarTitle: "12er Avatar-Paket",
+    avatarTitle: "Avatar-Paket (12 Designs)",
     singleSub: "Einzelkauf",
   },
   ar: {
@@ -237,7 +237,7 @@ const PRICING_TEXT: Record<
     bundleSave: "وفّر 49٪",
     coloringTitle: "صفحة تلوين",
     keepsakeTitle: "شهادة تذكارية",
-    avatarTitle: "حزمة ١٢ صورة رمزية",
+    avatarTitle: "حزمة الصور الرمزية (12 تصميماً)",
     singleSub: "شراء فردي",
   },
 };
@@ -267,9 +267,9 @@ export default function PetKeepsakeLanding() {
   };
 
   const t = {
-    footerDisclaimer: "Digital files only. No physical products are shipped.",
-    footerDisclaimer2: "Available worldwide. Excludes Québec, Canada.",
-    footerDisclaimer3: "Prices in USD.",
+    footerDisclaimer: "Solo archivos digitales. No se envían productos físicos.",
+    footerDisclaimer2: "Disponible en todo el mundo. Excluye Quebec, Canadá.",
+    footerDisclaimer3: "Los precios están en dólares estadounidenses (USD).",
   };
 
   return (
@@ -331,13 +331,13 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
             href="#upload"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Upload
+            Subir
           </a>
           <a
             href="#pricing"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Pricing
+            Precios
           </a>
           <a
             href="#guide"
@@ -349,13 +349,13 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
             href="#examples"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            View Examples
+            Ver Ejemplos
           </a>
           <a
             href="#upload"
             className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
           >
-            Create Yours
+            Crea el Tuyo
           </a>
         </div>
 
@@ -374,7 +374,7 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
         <div className="relative block md:hidden">
           <details className="group relative">
             <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 Language
+              🌐 Idioma
             </summary>
 
             <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
@@ -408,24 +408,28 @@ function HeroBundleSection() {
       <div className="mx-auto max-w-[1560px]">
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[1480px] text-center">
-            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">
-              Personalized digital keepsakes from your own pet photo
+            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold tracking-[0.02em] text-[#7B5B47] shadow-sm">
+              Recuerdos digitales personalizados creados a partir de la foto de tu mascota
             </div>
 
-            <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)] xl:whitespace-nowrap">
-              1 Photo → 3 Personalized Pet Keepsakes
-            </h1>
+           <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)]">
+  <span className="block">1 Foto → 3 Recuerdos</span>
+  <span className="block">Personalizados de tu Mascota</span>
+</h1>
 
-            <p className="mx-auto mt-5 max-w-[1500px] whitespace-nowrap text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-              Turn your pet photo into a printable coloring page, a keepsake
-              certificate, and a 12-avatar pack — ready to download, print, gift,
-              and treasure.
-            </p>
+            <p className="mx-auto mt-5 max-w-[1500px] text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
+  <span className="block">
+    Convierte una foto de tu mascota en una página para colorear imprimible,
+  </span>
+  <span className="block">
+    un certificado conmemorativo y un pack de 12 avatares — listos para descargar, imprimir, regalar y conservar.
+  </span>
+</p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <HeroPill>Made from your own photo</HeroPill>
-              <HeroPill>Birthday or memorial-ready</HeroPill>
-              <HeroPill>Digital download only</HeroPill>
+              <HeroPill>Hecho a partir de tu propia foto</HeroPill>
+              <HeroPill>Ideal para cumpleaños o recuerdo</HeroPill>
+              <HeroPill>Solo descarga digital</HeroPill>
             </div>
           </div>
 
@@ -434,17 +438,17 @@ function HeroBundleSection() {
               <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    Upload start
+                    Comenzar subida
                   </span>
                   <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG or PNG
+                    JPG o PNG
                   </span>
                 </div>
 
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
                   <img
                     src="/images/hero-original-demo.png"
-                    alt="Upload preview"
+                    alt="Vista previa de subida"
                     className="h-auto w-full rounded-[20px] bg-white object-contain"
                   />
                 </div>
@@ -458,20 +462,20 @@ function HeroBundleSection() {
                         : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
                     }`}
                   >
-                    Upload Your Photo
+                    Sube Tu Foto
                   </button>
 
                   <a
                     href="#examples"
                     className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
                   >
-                    View Real Examples
+                    Ver Ejemplos Reales
                   </a>
                 </div>
 
                 <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
                   <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    Photo rights confirmation
+                    Confirmación de derechos de la foto
                   </div>
 
                   <label className="flex cursor-pointer items-start gap-3">
@@ -482,20 +486,19 @@ function HeroBundleSection() {
                       className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
                     />
                     <span className="text-[15px] leading-7 text-[#5b4334]">
-                      I confirm that I own this photo or have permission to use it.
-                      Do not upload celebrity, public figure, fictional character,
-                      or internet-downloaded images.
+                      Confirmo que esta foto es mía o que tengo permiso para usarla.
+                      No subas imágenes de celebridades, figuras públicas,
+                      personajes ficticios o imágenes descargadas de internet.
                     </span>
                   </label>
 
                   <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    Orders that violate these rules may be refused or cancelled.
+                    Los pedidos que incumplan estas reglas pueden ser rechazados o cancelados.
                   </p>
                 </div>
 
                 <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  No design skills needed. Upload once and get ready-to-download
-                  files.
+                  No necesitas habilidades de diseño. Sube una vez y recibe archivos listos para descargar.
                 </div>
               </div>
             </div>
@@ -504,27 +507,27 @@ function HeroBundleSection() {
               <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    Bundle preview
+                    Vista previa del paquete
                   </span>
                   <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1 upload • 3 keepsakes
+                    1 subida • 3 recuerdos
                   </span>
                 </div>
 
                 <div className="relative">
                   <img
                     src="/images/hero-keepsake-3-products.png"
-                    alt="Coloring page, keepsake certificate, and avatar pack preview"
+                    alt="Vista previa de página para colorear, certificado conmemorativo y pack de avatares"
                     className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
                   />
                 </div>
               </div>
 
               <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
-                <HeroSubPill>Birthday</HeroSubPill>
-                <HeroSubPill>In Loving Memory</HeroSubPill>
-                <HeroSubPill>Printable</HeroSubPill>
-                <HeroSubPill>Shareable</HeroSubPill>
+                <HeroSubPill>Cumpleaños</HeroSubPill>
+                <HeroSubPill>En memoria</HeroSubPill>
+                <HeroSubPill>Imprimible</HeroSubPill>
+                <HeroSubPill>Compartible</HeroSubPill>
                 <HeroSubPill>
                   {avatarVariationText.line1} {avatarVariationText.line2}
                 </HeroSubPill>
@@ -550,7 +553,7 @@ function HeroBundleSection() {
                     {pricingText.bundleSub}
                   </div>
                   <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
-                    {pricingText.bundleSave} vs buying separately
+                    {pricingText.bundleSave} frente a comprar por separado
                   </div>
                 </button>
 
@@ -566,8 +569,8 @@ function HeroBundleSection() {
                   subtitle={pricingText.singleSub}
                   extra={
                     <div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]">
-                      <div>Happy Birthday /</div>
-                      <div>In Loving Memory</div>
+                      <div>Feliz Cumpleaños /</div>
+                      <div>En Memoria</div>
                     </div>
                   }
                 />
@@ -580,24 +583,24 @@ function HeroBundleSection() {
               </div>
 
               <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
-                <TrustPill>Secure checkout</TrustPill>
-                <TrustPill>Digital files only</TrustPill>
-                <TrustPill>No shipping needed</TrustPill>
+                <TrustPill>Pago seguro</TrustPill>
+                <TrustPill>Solo archivos digitales</TrustPill>
+                <TrustPill>Sin envío</TrustPill>
               </div>
 
               <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
                 <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
                   <TrustMiniItem
-                    title="Personalized"
-                    text="Made from your own pet photo"
+                    title="Personalizado"
+                    text="Hecho a partir de la foto de tu mascota"
                   />
                   <TrustMiniItem
                     title="Digital"
-                    text="Instant-ready download format"
+                    text="Formato listo para descargar al instante"
                   />
                   <TrustMiniItem
-                    title="Giftable"
-                    text="Great for birthdays and memory"
+                    title="Ideal para regalar"
+                    text="Perfecto para cumpleaños y recuerdos"
                   />
                 </div>
               </div>
@@ -618,7 +621,7 @@ function PriceCurrencyBadge({
 }) {
   return (
     <div
-      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold uppercase tracking-[0.14em] shadow-sm ${
+      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold tracking-[0.02em] shadow-sm ${
         bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"
       }`}
     >
@@ -693,32 +696,31 @@ function HowItWorksSection() {
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1380px]">
         <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          How It Works
+          Cómo Funciona
         </h2>
 
         <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          One clear pet photo becomes a printable keepsake bundle in a few simple
-          steps.
+          Una foto clara de tu mascota se convierte en un paquete de recuerdos imprimibles en solo unos pasos.
         </p>
 
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <HowCard
             number="1"
             icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="Upload your photo"
-            text="Start with one clear photo of your pet with a visible face."
+            title="Sube tu foto"
+            text="Empieza con una foto clara de tu mascota donde se vea bien la cara."
           />
           <HowCard
             number="2"
             icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="Create your bundle"
-            text="Get a coloring page, a keepsake certificate, and a 12-avatar pack."
+            title="Crea tu paquete"
+            text="Recibe una página para colorear, un certificado conmemorativo y un pack de 12 avatares."
           />
           <HowCard
             number="3"
             icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="Download and keep"
-            text="Print, save, share, or gift your personalized digital files."
+            title="Descarga y conserva"
+            text="Imprime, guarda, comparte o regala tus archivos digitales personalizados."
           />
         </div>
       </div>
@@ -763,15 +765,15 @@ function ExamplesGallerySection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            Real Product Style Preview
+            Vista Previa del Estilo Real del Producto
           </h2>
 
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
             <span className="block">
-              See how one uploaded pet photo can become a printable coloring page,
+              Mira cómo una sola foto de tu mascota puede convertirse en una página para colorear imprimible,
             </span>
             <span className="block">
-              a personalized keepsake certificate, and a fun 12-avatar pack.
+              un certificado conmemorativo personalizado y un divertido pack de 12 avatares.
             </span>
           </p>
         </div>
@@ -786,33 +788,33 @@ function ExamplesGallerySection() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             <ExampleFlowCard
               img="/images/avatar_example.jpg"
-              title="Original Photo"
+              title="Foto Original"
               badge="Original"
-              description="The pet photo you upload"
+              description="La foto de tu mascota que subes"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/coloring_result.jpg"
-              title="Coloring Page"
-              badge="AI Preview"
-              description="Printable black-and-white line art"
+              title="Página para Colorear"
+              badge="Vista previa IA"
+              description="Arte lineal en blanco y negro para imprimir"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/keepsake-certificate.png"
-              title="Keepsake Certificate"
-              badge="AI Preview"
-              description="Birthday or memorial-ready keepsake"
+              title="Certificado Conmemorativo"
+              badge="Vista previa IA"
+              description="Recuerdo ideal para cumpleaños o memoria"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/avatar_pack_preview.png"
-              title="Avatar Pack"
-              badge="AI Preview"
-              description="12 unique shareable avatar styles"
+              title="Pack de Avatares"
+              badge="Vista previa IA"
+              description="12 estilos de avatar únicos para compartir"
               badgeTone="gold"
               contain
             />
@@ -882,21 +884,21 @@ function PhotoGuideSection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            How to Choose the Best Photo
+            Cómo Elegir la Mejor Foto
           </h2>
           <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            A clear, bright photo gives the best keepsake results.
+            Una foto clara y luminosa da los mejores resultados.
           </p>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           <GuidePanel
             good
-            title="✓ Good"
+            title="✓ Buena"
             bullets={[
-              "Realistic lighting on the pet face",
-              "Face clearly visible and centered",
-              "Pet fills enough of the frame",
+              "Luz natural sobre la cara de la mascota",
+              "La cara se ve claramente y está centrada",
+              "La mascota ocupa suficiente espacio en la foto",
             ]}
             images={[
               "/images/good_1_bird_girl.png",
@@ -906,11 +908,11 @@ function PhotoGuideSection() {
           />
 
           <GuidePanel
-            title="✕ Avoid"
+            title="✕ Evitar"
             bullets={[
-              "Blurry or out of focus photo",
-              "Too dark or heavy shadows",
-              "Face cropped or turned away",
+              "Foto borrosa o desenfocada",
+              "Demasiado oscura o con sombras fuertes",
+              "Cara recortada o girada hacia otro lado",
             ]}
             images={[
               "/images/avoid_1_blurry_cat.png",
@@ -985,25 +987,29 @@ function FinalCTASection() {
     <section className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fff8f0_0%,#f8eee3_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto flex max-w-[1320px] flex-col items-center text-center">
         <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          Ready to turn your pet photo into something worth keeping?
+          ¿Listo para convertir la foto de tu mascota en algo que valga la pena conservar?
         </h2>
 
-        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px] lg:whitespace-nowrap">
-          Upload once and get a personalized coloring page, keepsake certificate,
-          and avatar pack made from your own photo.
-        </p>
+        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
+  <span className="block">
+    Sube una vez y recibe una página para colorear personalizada,
+  </span>
+  <span className="block">
+    un certificado conmemorativo y un pack de avatares creados a partir de tu propia foto.
+  </span>
+</p>
 
         <div className="mt-8">
           <a
             href="#upload"
             className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
           >
-            Upload Your Photo
+            Sube Tu Foto
           </a>
         </div>
 
         <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
-          Digital delivery • No shipping • Great for gifts and memory
+          Entrega digital • Sin envío • Ideal para regalos y recuerdos
         </div>
       </div>
     </section>
@@ -1041,7 +1047,7 @@ function Footer({
 
     if (isLocal) {
       alert(
-        "Google website translation usually does not work on localhost. Please test this on your live domain, or use Chrome Translate on the current page."
+        "La traducción de Google normalmente no funciona en localhost. Pruébala en tu dominio en vivo o usa la traducción de Chrome en la página actual."
       );
       return;
     }
@@ -1072,7 +1078,7 @@ function Footer({
                   />
                   {p === "link" && linkCopied && (
                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      COPIED
+                      COPIADO
                     </span>
                   )}
                 </button>
@@ -1115,7 +1121,7 @@ function Footer({
           <div className="mt-8 flex flex-col items-center gap-3 text-center">
             <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
               <Globe className="h-4 w-4" />
-              More languages (machine translated)
+              Más idiomas (traducción automática)
             </div>
 
             <select
@@ -1129,7 +1135,7 @@ function Footer({
               className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
             >
               <option value="" disabled>
-                Choose another language...
+                Elige otro idioma...
               </option>
               {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
                 <option key={lang.tl} value={lang.tl}>
@@ -1139,8 +1145,7 @@ function Footer({
             </select>
 
             <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              Machine translation is provided for convenience only. Official
-              versions are the language pages listed on this site.
+              La traducción automática se ofrece solo por comodidad. Las versiones oficiales son las páginas de idioma publicadas en este sitio.
             </p>
           </div>
 
@@ -1195,20 +1200,20 @@ function ContactModal({
         </button>
 
         <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          Support Request
+          Solicitud de Soporte
         </h3>
         <p className="mt-1 text-sm text-stone-600">
-          This opens your email app with a pre-filled message.
+          Esto abrirá tu aplicación de correo con un mensaje ya preparado.
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Your Name
+              Tu Nombre
             </label>
             <input
               type="text"
-              placeholder="Name (optional)"
+              placeholder="Nombre (opcional)"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1217,7 +1222,7 @@ function ContactModal({
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Subject / Inquiry Type
+              Asunto / Tipo de Consulta
             </label>
             <select
               value={supportSubject}
@@ -1225,22 +1230,22 @@ function ContactModal({
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
             >
               <option value="" disabled>
-                Select an inquiry type...
+                Selecciona un tipo de consulta...
               </option>
-              <option value="Order Support">Order Support</option>
-              <option value="File Access">File Access</option>
-              <option value="Photo Upload Issue">Photo Upload Issue</option>
-              <option value="General Question">General Question</option>
+              <option value="Soporte de Pedido">Soporte de Pedido</option>
+              <option value="Acceso a Archivos">Acceso a Archivos</option>
+              <option value="Problema de Subida de Foto">Problema de Subida de Foto</option>
+              <option value="Consulta General">Consulta General</option>
             </select>
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Message
+              Mensaje
             </label>
             <textarea
               rows={4}
-              placeholder="How can we help you today?"
+              placeholder="¿Cómo podemos ayudarte hoy?"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1251,11 +1256,11 @@ function ContactModal({
             className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
             onClick={() => {
               const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
+                supportSubject || "Consulta"
               }`;
               const bodyLines = [
-                `Customer Name: ${name || "Not provided"}`,
-                `Message: ${message}`,
+                `Nombre del cliente: ${name || "No indicado"}`,
+                `Mensaje: ${message}`,
               ].join("\n");
 
               window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent(
@@ -1263,14 +1268,14 @@ function ContactModal({
               )}&body=${encodeURIComponent(bodyLines)}`;
             }}
           >
-            Open Email App
+            Abrir Aplicación de Correo
           </button>
 
           <button
             onClick={async () => {
-              const textToCopy = `Subject: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
-              }\n\nCustomer Name: ${name || "Not provided"}\nMessage: ${message}`;
+              const textToCopy = `Asunto: [PET KEEPSAKE STUDIO] ${
+                supportSubject || "Consulta"
+              }\n\nNombre del cliente: ${name || "No indicado"}\nMensaje: ${message}`;
 
               await navigator.clipboard.writeText(textToCopy);
               setMsgCopied(true);
@@ -1278,7 +1283,7 @@ function ContactModal({
             }}
             className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
           >
-            {msgCopied ? "Copied to Clipboard! ✓" : "Alternative: Copy Message Text"}
+            {msgCopied ? "¡Copiado al portapapeles! ✓" : "Alternativa: Copiar el texto del mensaje"}
           </button>
         </div>
       </div>

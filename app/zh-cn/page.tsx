@@ -20,7 +20,7 @@ type LocaleKey =
   | "de"
   | "ar";
 
-const CURRENT_LOCALE: LocaleKey = "en";
+const CURRENT_LOCALE: LocaleKey = "zh-cn";
 
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
   { key: "en", label: "ENG", href: "/" },
@@ -122,7 +122,7 @@ const AVATAR_VARIATION_TEXT: Record<
     line2: "AI 生成變化款式",
   },
   "zh-cn": {
-    line1: "每个贴图包都有独特的",
+    line1: "每个头像包都有独特的",
     line2: "AI 生成变化款式",
   },
   ja: {
@@ -167,7 +167,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Save 49%",
     coloringTitle: "Coloring Page",
     keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "12 pcs Avatar Pack",
+    avatarTitle: "Avatar Pack (12 Designs)",
     singleSub: "Single purchase",
   },
   "zh-hk": {
@@ -177,17 +177,17 @@ const PRICING_TEXT: Record<
     bundleSave: "現省 49%",
     coloringTitle: "填色畫",
     keepsakeTitle: "寵物紀念證書",
-    avatarTitle: "12 款頭像包",
+    avatarTitle: "頭像包（12款設計）",
     singleSub: "單獨購買",
   },
   "zh-cn": {
     bundleTitle: "超值套装",
-    bundleSub: "包含全部 3 款",
+    bundleSub: "包含全部 3 款纪念品",
     bundleBadge: "超值首选",
     bundleSave: "立省 49%",
     coloringTitle: "填色画",
-    keepsakeTitle: "宠物纪念证书",
-    avatarTitle: "12 款头像包",
+    keepsakeTitle: "纪念证书",
+    avatarTitle: "头像包（12款设计）",
     singleSub: "单独购买",
   },
   ja: {
@@ -197,7 +197,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% OFF",
     coloringTitle: "塗り絵",
     keepsakeTitle: "記念証書",
-    avatarTitle: "アバター12種パック",
+    avatarTitle: "アバターパック（全12種）",
     singleSub: "単品購入",
   },
   ko: {
@@ -207,7 +207,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% 절약",
     coloringTitle: "컬러링 페이지",
     keepsakeTitle: "기념 증서",
-    avatarTitle: "12종 아바타 팩",
+    avatarTitle: "아바타 팩 (12종 디자인)",
     singleSub: "단품 구매",
   },
   es: {
@@ -217,7 +217,7 @@ const PRICING_TEXT: Record<
     bundleSave: "Ahorra 49%",
     coloringTitle: "Página para Colorear",
     keepsakeTitle: "Certificado Conmemorativo",
-    avatarTitle: "Pack de 12 Avatares",
+    avatarTitle: "Pack de Avatares (12 Diseños)",
     singleSub: "Compra individual",
   },
   de: {
@@ -227,7 +227,7 @@ const PRICING_TEXT: Record<
     bundleSave: "49% sparen",
     coloringTitle: "Ausmalbild",
     keepsakeTitle: "Erinnerungszertifikat",
-    avatarTitle: "12er Avatar-Paket",
+    avatarTitle: "Avatar-Paket (12 Designs)",
     singleSub: "Einzelkauf",
   },
   ar: {
@@ -237,7 +237,7 @@ const PRICING_TEXT: Record<
     bundleSave: "وفّر 49٪",
     coloringTitle: "صفحة تلوين",
     keepsakeTitle: "شهادة تذكارية",
-    avatarTitle: "حزمة ١٢ صورة رمزية",
+    avatarTitle: "حزمة الصور الرمزية (12 تصميماً)",
     singleSub: "شراء فردي",
   },
 };
@@ -267,9 +267,9 @@ export default function PetKeepsakeLanding() {
   };
 
   const t = {
-    footerDisclaimer: "Digital files only. No physical products are shipped.",
-    footerDisclaimer2: "Available worldwide. Excludes Québec, Canada.",
-    footerDisclaimer3: "Prices in USD.",
+    footerDisclaimer: "仅提供数字文件，不会寄送任何实体产品。",
+    footerDisclaimer2: "全球适用，不包括加拿大魁北克省。",
+    footerDisclaimer3: "所有价格均以美元（USD）计算。",
   };
 
   return (
@@ -331,31 +331,31 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
             href="#upload"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Upload
+            上传照片
           </a>
           <a
             href="#pricing"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            Pricing
+            价格
           </a>
           <a
             href="#guide"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            FAQ
+            常见问题
           </a>
           <a
             href="#examples"
             className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
           >
-            View Examples
+            查看示例
           </a>
           <a
             href="#upload"
             className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
           >
-            Create Yours
+            立即制作
           </a>
         </div>
 
@@ -374,7 +374,7 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
         <div className="relative block md:hidden">
           <details className="group relative">
             <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 Language
+              🌐 语言
             </summary>
 
             <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
@@ -409,23 +409,21 @@ function HeroBundleSection() {
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[1480px] text-center">
             <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">
-              Personalized digital keepsakes from your own pet photo
+              用你的宠物照片制作个性化数字纪念品
             </div>
 
             <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)] xl:whitespace-nowrap">
-              1 Photo → 3 Personalized Pet Keepsakes
+              1 张照片 → 3 款个性化宠物纪念品
             </h1>
 
             <p className="mx-auto mt-5 max-w-[1500px] whitespace-nowrap text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-              Turn your pet photo into a printable coloring page, a keepsake
-              certificate, and a 12-avatar pack — ready to download, print, gift,
-              and treasure.
+              将你的宠物照片变成可打印填色画、纪念证书和 12 款头像包，可下载、打印、送礼与珍藏。
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <HeroPill>Made from your own photo</HeroPill>
-              <HeroPill>Birthday or memorial-ready</HeroPill>
-              <HeroPill>Digital download only</HeroPill>
+              <HeroPill>由你的照片制作</HeroPill>
+              <HeroPill>适合生日或纪念用途</HeroPill>
+              <HeroPill>仅限数字下载</HeroPill>
             </div>
           </div>
 
@@ -434,17 +432,17 @@ function HeroBundleSection() {
               <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    Upload start
+                    开始上传
                   </span>
                   <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG or PNG
+                    JPG 或 PNG
                   </span>
                 </div>
 
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
                   <img
                     src="/images/hero-original-demo.png"
-                    alt="Upload preview"
+                    alt="上传预览"
                     className="h-auto w-full rounded-[20px] bg-white object-contain"
                   />
                 </div>
@@ -458,20 +456,20 @@ function HeroBundleSection() {
                         : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
                     }`}
                   >
-                    Upload Your Photo
+                    上传你的照片
                   </button>
 
                   <a
                     href="#examples"
                     className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
                   >
-                    View Real Examples
+                    查看真实示例
                   </a>
                 </div>
 
                 <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
                   <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    Photo rights confirmation
+                    照片权利确认
                   </div>
 
                   <label className="flex cursor-pointer items-start gap-3">
@@ -482,20 +480,19 @@ function HeroBundleSection() {
                       className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
                     />
                     <span className="text-[15px] leading-7 text-[#5b4334]">
-                      I confirm that I own this photo or have permission to use it.
-                      Do not upload celebrity, public figure, fictional character,
-                      or internet-downloaded images.
+                      我确认我拥有此照片，或已获得授权使用。
+                      请勿上传名人、公众人物、虚构角色，
+                      或从网络下载的图片。
                     </span>
                   </label>
 
                   <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    Orders that violate these rules may be refused or cancelled.
+                    如订单违反以上规则，我们可拒绝或取消处理。
                   </p>
                 </div>
 
                 <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  No design skills needed. Upload once and get ready-to-download
-                  files.
+                  无需设计技巧。上传一次，即可获得可即时下载的文件。
                 </div>
               </div>
             </div>
@@ -504,27 +501,27 @@ function HeroBundleSection() {
               <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    Bundle preview
+                    套装预览
                   </span>
                   <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1 upload • 3 keepsakes
+                    1 次上传 • 3 款纪念品
                   </span>
                 </div>
 
                 <div className="relative">
                   <img
                     src="/images/hero-keepsake-3-products.png"
-                    alt="Coloring page, keepsake certificate, and avatar pack preview"
+                    alt="填色画、纪念证书和头像包预览"
                     className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
                   />
                 </div>
               </div>
 
               <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
-                <HeroSubPill>Birthday</HeroSubPill>
-                <HeroSubPill>In Loving Memory</HeroSubPill>
-                <HeroSubPill>Printable</HeroSubPill>
-                <HeroSubPill>Shareable</HeroSubPill>
+                <HeroSubPill>生日</HeroSubPill>
+                <HeroSubPill>温柔纪念</HeroSubPill>
+                <HeroSubPill>可打印</HeroSubPill>
+                <HeroSubPill>可分享</HeroSubPill>
                 <HeroSubPill>
                   {avatarVariationText.line1} {avatarVariationText.line2}
                 </HeroSubPill>
@@ -543,14 +540,14 @@ function HeroBundleSection() {
                     {pricingText.bundleTitle}
                   </div>
 
-                  <PriceCurrencyBadge bundle>USD</PriceCurrencyBadge>
+                  <PriceCurrencyBadge bundle>美元（USD）</PriceCurrencyBadge>
 
                   <div className="mt-3 text-[46px] font-black">$19.99</div>
                   <div className="mt-2 text-[18px] opacity-95">
                     {pricingText.bundleSub}
                   </div>
                   <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
-                    {pricingText.bundleSave} vs buying separately
+                    {pricingText.bundleSave} 对比单买
                   </div>
                 </button>
 
@@ -566,8 +563,8 @@ function HeroBundleSection() {
                   subtitle={pricingText.singleSub}
                   extra={
                     <div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]">
-                      <div>Happy Birthday /</div>
-                      <div>In Loving Memory</div>
+                      <div>生日版 /</div>
+                      <div>温柔纪念版</div>
                     </div>
                   }
                 />
@@ -580,24 +577,24 @@ function HeroBundleSection() {
               </div>
 
               <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
-                <TrustPill>Secure checkout</TrustPill>
-                <TrustPill>Digital files only</TrustPill>
-                <TrustPill>No shipping needed</TrustPill>
+                <TrustPill>安全付款</TrustPill>
+                <TrustPill>纯数字文件</TrustPill>
+                <TrustPill>无需寄送</TrustPill>
               </div>
 
               <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
                 <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
                   <TrustMiniItem
-                    title="Personalized"
-                    text="Made from your own pet photo"
+                    title="个性化"
+                    text="根据你的宠物照片制作"
                   />
                   <TrustMiniItem
-                    title="Digital"
-                    text="Instant-ready download format"
+                    title="数字"
+                    text="即时可下载格式"
                   />
                   <TrustMiniItem
-                    title="Giftable"
-                    text="Great for birthdays and memory"
+                    title="适合送礼"
+                    text="适合生日与纪念用途"
                   />
                 </div>
               </div>
@@ -618,7 +615,7 @@ function PriceCurrencyBadge({
 }) {
   return (
     <div
-      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold uppercase tracking-[0.14em] shadow-sm ${
+      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold tracking-[0.08em] shadow-sm ${
         bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"
       }`}
     >
@@ -642,7 +639,7 @@ function PricingCard({
     <button className="flex min-h-[258px] flex-col items-center justify-center rounded-[28px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
       <div className="text-[18px] font-extrabold text-[#4B3427]">{title}</div>
       {extra}
-      <PriceCurrencyBadge>USD</PriceCurrencyBadge>
+      <PriceCurrencyBadge>美元（USD）</PriceCurrencyBadge>
       <div className="mt-3 text-[42px] font-black text-[#2E1D16]">{price}</div>
       <div className="mt-2 text-[18px] text-stone-600">{subtitle}</div>
     </button>
@@ -693,32 +690,31 @@ function HowItWorksSection() {
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1380px]">
         <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          How It Works
+          制作流程
         </h2>
 
         <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          One clear pet photo becomes a printable keepsake bundle in a few simple
-          steps.
+          一张清晰的宠物照片，就能变成可打印的个性化纪念套装。
         </p>
 
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <HowCard
             number="1"
             icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="Upload your photo"
-            text="Start with one clear photo of your pet with a visible face."
+            title="上传照片"
+            text="使用一张清晰、正面可见的宠物照片开始制作。"
           />
           <HowCard
             number="2"
             icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="Create your bundle"
-            text="Get a coloring page, a keepsake certificate, and a 12-avatar pack."
+            title="生成套装"
+            text="获得填色画、纪念证书和 12 款头像包。"
           />
           <HowCard
             number="3"
             icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="Download and keep"
-            text="Print, save, share, or gift your personalized digital files."
+            title="下载与珍藏"
+            text="可打印、保存、分享，或作为礼物送出。"
           />
         </div>
       </div>
@@ -763,15 +759,15 @@ function ExamplesGallerySection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            Real Product Style Preview
+            产品效果预览
           </h2>
 
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
             <span className="block">
-              See how one uploaded pet photo can become a printable coloring page,
+              看看一张宠物照片如何变成可打印填色画、
             </span>
             <span className="block">
-              a personalized keepsake certificate, and a fun 12-avatar pack.
+              个性化纪念证书，以及有趣的 12 款头像包。
             </span>
           </p>
         </div>
@@ -786,33 +782,33 @@ function ExamplesGallerySection() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             <ExampleFlowCard
               img="/images/avatar_example.jpg"
-              title="Original Photo"
-              badge="Original"
-              description="The pet photo you upload"
+              title="原始照片"
+              badge="原图"
+              description="你上传的宠物照片"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/coloring_result.jpg"
-              title="Coloring Page"
-              badge="AI Preview"
-              description="Printable black-and-white line art"
+              title="填色画"
+              badge="AI 预览"
+              description="可打印黑白线稿"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/keepsake-certificate.png"
-              title="Keepsake Certificate"
-              badge="AI Preview"
-              description="Birthday or memorial-ready keepsake"
+              title="纪念证书"
+              badge="AI 预览"
+              description="适合生日或纪念用途"
               badgeTone="gold"
             />
 
             <ExampleFlowCard
               img="/images/avatar_pack_preview.png"
-              title="Avatar Pack"
-              badge="AI Preview"
-              description="12 unique shareable avatar styles"
+              title="头像包"
+              badge="AI 预览"
+              description="12 款可分享头像风格"
               badgeTone="gold"
               contain
             />
@@ -882,21 +878,21 @@ function PhotoGuideSection() {
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            How to Choose the Best Photo
+            如何选择最佳照片
           </h2>
           <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            A clear, bright photo gives the best keepsake results.
+            清晰、明亮的照片会带来最佳纪念效果。
           </p>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           <GuidePanel
             good
-            title="✓ Good"
+            title="✓ 适合"
             bullets={[
-              "Realistic lighting on the pet face",
-              "Face clearly visible and centered",
-              "Pet fills enough of the frame",
+              "宠物面部光线自然",
+              "面部清晰可见并居中",
+              "宠物在画面中占比足够",
             ]}
             images={[
               "/images/good_1_bird_girl.png",
@@ -906,11 +902,11 @@ function PhotoGuideSection() {
           />
 
           <GuidePanel
-            title="✕ Avoid"
+            title="✕ 避免"
             bullets={[
-              "Blurry or out of focus photo",
-              "Too dark or heavy shadows",
-              "Face cropped or turned away",
+              "照片模糊或失焦",
+              "画面过暗或阴影太重",
+              "面部被裁切或转开镜头",
             ]}
             images={[
               "/images/avoid_1_blurry_cat.png",
@@ -985,12 +981,11 @@ function FinalCTASection() {
     <section className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fff8f0_0%,#f8eee3_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto flex max-w-[1320px] flex-col items-center text-center">
         <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          Ready to turn your pet photo into something worth keeping?
+          准备好把你的宠物照片变成值得珍藏的回忆了吗？
         </h2>
 
         <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px] lg:whitespace-nowrap">
-          Upload once and get a personalized coloring page, keepsake certificate,
-          and avatar pack made from your own photo.
+          上传一次，即可获得个性化填色画、纪念证书和头像包。
         </p>
 
         <div className="mt-8">
@@ -998,12 +993,12 @@ function FinalCTASection() {
             href="#upload"
             className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
           >
-            Upload Your Photo
+            上传你的照片
           </a>
         </div>
 
         <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
-          Digital delivery • No shipping • Great for gifts and memory
+          数字交付 • 无需寄送 • 适合送礼与纪念
         </div>
       </div>
     </section>
@@ -1041,7 +1036,7 @@ function Footer({
 
     if (isLocal) {
       alert(
-        "Google website translation usually does not work on localhost. Please test this on your live domain, or use Chrome Translate on the current page."
+        "Google 网页翻译通常无法在 localhost 上正常工作。请在正式域名测试，或直接使用 Chrome 的网页翻译功能。"
       );
       return;
     }
@@ -1072,7 +1067,7 @@ function Footer({
                   />
                   {p === "link" && linkCopied && (
                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      COPIED
+                      已复制
                     </span>
                   )}
                 </button>
@@ -1115,7 +1110,7 @@ function Footer({
           <div className="mt-8 flex flex-col items-center gap-3 text-center">
             <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
               <Globe className="h-4 w-4" />
-              More languages (machine translated)
+              更多语言（机器翻译）
             </div>
 
             <select
@@ -1129,7 +1124,7 @@ function Footer({
               className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
             >
               <option value="" disabled>
-                Choose another language...
+                选择其他语言...
               </option>
               {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
                 <option key={lang.tl} value={lang.tl}>
@@ -1139,8 +1134,7 @@ function Footer({
             </select>
 
             <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              Machine translation is provided for convenience only. Official
-              versions are the language pages listed on this site.
+              机器翻译仅供参考与使用便利。正式版本以本站已提供的语言页面为准。
             </p>
           </div>
 
@@ -1195,20 +1189,20 @@ function ContactModal({
         </button>
 
         <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          Support Request
+          支持请求
         </h3>
         <p className="mt-1 text-sm text-stone-600">
-          This opens your email app with a pre-filled message.
+          这会打开你的邮箱应用，并自动填入预设内容。
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Your Name
+              你的姓名
             </label>
             <input
               type="text"
-              placeholder="Name (optional)"
+              placeholder="姓名（可选）"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1217,7 +1211,7 @@ function ContactModal({
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Subject / Inquiry Type
+              主题 / 咨询类型
             </label>
             <select
               value={supportSubject}
@@ -1225,22 +1219,22 @@ function ContactModal({
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
             >
               <option value="" disabled>
-                Select an inquiry type...
+                请选择咨询类型...
               </option>
-              <option value="Order Support">Order Support</option>
-              <option value="File Access">File Access</option>
-              <option value="Photo Upload Issue">Photo Upload Issue</option>
-              <option value="General Question">General Question</option>
+              <option value="Order Support">订单支持</option>
+              <option value="File Access">文件访问</option>
+              <option value="Photo Upload Issue">照片上传问题</option>
+              <option value="General Question">一般问题</option>
             </select>
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Message
+              内容
             </label>
             <textarea
               rows={4}
-              placeholder="How can we help you today?"
+              placeholder="请填写你需要帮助的内容"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
@@ -1251,7 +1245,7 @@ function ContactModal({
             className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
             onClick={() => {
               const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
+                supportSubject || "咨询"
               }`;
               const bodyLines = [
                 `Customer Name: ${name || "Not provided"}`,
@@ -1263,13 +1257,13 @@ function ContactModal({
               )}&body=${encodeURIComponent(bodyLines)}`;
             }}
           >
-            Open Email App
+            打开邮箱应用
           </button>
 
           <button
             onClick={async () => {
               const textToCopy = `Subject: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
+                supportSubject || "咨询"
               }\n\nCustomer Name: ${name || "Not provided"}\nMessage: ${message}`;
 
               await navigator.clipboard.writeText(textToCopy);
@@ -1278,7 +1272,7 @@ function ContactModal({
             }}
             className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
           >
-            {msgCopied ? "Copied to Clipboard! ✓" : "Alternative: Copy Message Text"}
+            {msgCopied ? "已复制到剪贴板！✓" : "另一种方式：复制咨询文字"}
           </button>
         </div>
       </div>
