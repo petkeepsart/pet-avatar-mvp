@@ -1,30 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Check, X, Upload, PawPrint, Sparkles, Globe } from "lucide-react";
+import Image from "next/image";
+import { Check, X, Upload, PawPrint, Sparkles } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
+  name: "Pet Keeps Art",
   year: 2026,
-  email: "support@petkeepsake.com",
+  email: "info@petkeepsart.com",
 };
 
-type LocaleKey =
-  | "en"
-  | "zh-hk"
-  | "zh-cn"
-  | "ja"
-  | "ko"
-  | "es"
-  | "de"
-  | "ar";
+type LocaleKey = "en" | "zh-hk" | "zh-cn" | "ja" | "ko" | "es" | "de" | "ar";
 
 const CURRENT_LOCALE: LocaleKey = "en";
 
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
   { key: "en", label: "ENG", href: "/" },
-  { key: "zh-hk", label: "繁體中文", href: "/zh-hk" },
+  { key: "zh-hk", label: "繁中", href: "/zh-hk" },
   { key: "zh-cn", label: "简中", href: "/zh-cn" },
   { key: "ja", label: "日本語", href: "/ja" },
   { key: "ko", label: "한국어", href: "/ko" },
@@ -33,21 +26,10 @@ const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
   { key: "ar", label: "العربية", href: "/ar" },
 ];
 
-const LEGAL_LINKS: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string }
-> = {
+const LEGAL_LINKS: Record<LocaleKey, { terms: string; privacy: string; refunds: string }> = {
   en: { terms: "/terms", privacy: "/privacy", refunds: "/refund-policy" },
-  "zh-hk": {
-    terms: "/terms-zh-hk",
-    privacy: "/privacy-zh-hk",
-    refunds: "/refund-policy-zh-hk",
-  },
-  "zh-cn": {
-    terms: "/terms-zh-cn",
-    privacy: "/privacy-zh-cn",
-    refunds: "/refund-policy-zh-cn",
-  },
+  "zh-hk": { terms: "/terms-zh-hk", privacy: "/privacy-zh-hk", refunds: "/refund-policy-zh-hk" },
+  "zh-cn": { terms: "/terms-zh-cn", privacy: "/privacy-zh-cn", refunds: "/refund-policy-zh-cn" },
   ja: { terms: "/terms-ja", privacy: "/privacy-ja", refunds: "/refund-policy-ja" },
   ko: { terms: "/terms-ko", privacy: "/privacy-ko", refunds: "/refund-policy-ko" },
   es: { terms: "/terms-es", privacy: "/privacy-es", refunds: "/refund-policy-es" },
@@ -55,111 +37,29 @@ const LEGAL_LINKS: Record<
   ar: { terms: "/terms-ar", privacy: "/privacy-ar", refunds: "/refund-policy-ar" },
 };
 
-const LEGAL_TEXT: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string; contact: string }
-> = {
-  en: {
-    terms: "Terms",
-    privacy: "Privacy",
-    refunds: "Refund Policy",
-    contact: "Contact Us",
-  },
-  "zh-hk": {
-    terms: "條款",
-    privacy: "私隱政策",
-    refunds: "退款政策",
-    contact: "聯絡我們",
-  },
-  "zh-cn": {
-    terms: "条款",
-    privacy: "隐私政策",
-    refunds: "退款政策",
-    contact: "联系我们",
-  },
-  ja: {
-    terms: "利用規約",
-    privacy: "プライバシー",
-    refunds: "返金ポリシー",
-    contact: "お問い合わせ",
-  },
-  ko: {
-    terms: "이용약관",
-    privacy: "개인정보처리방침",
-    refunds: "환불정책",
-    contact: "문의하기",
-  },
-  es: {
-    terms: "Términos",
-    privacy: "Privacidad",
-    refunds: "Reembolsos",
-    contact: "Contacto",
-  },
-  de: {
-    terms: "AGB",
-    privacy: "Datenschutz",
-    refunds: "Rückerstattung",
-    contact: "Kontakt",
-  },
-  ar: {
-    terms: "الشروط",
-    privacy: "الخصوصية",
-    refunds: "الاسترداد",
-    contact: "اتصل بنا",
-  },
+const LEGAL_TEXT: Record<LocaleKey, { terms: string; privacy: string; refunds: string; contact: string }> = {
+  en: { terms: "Terms", privacy: "Privacy", refunds: "Refund Policy", contact: "Contact Us" },
+  "zh-hk": { terms: "條款", privacy: "私隱政策", refunds: "退款政策", contact: "聯絡我們" },
+  "zh-cn": { terms: "条款", privacy: "隐私政策", refunds: "退款政策", contact: "联系我们" },
+  ja: { terms: "利用規約", privacy: "プライバシー", refunds: "返金ポリシー", contact: "お問い合わせ" },
+  ko: { terms: "이용약관", privacy: "개인정보처리방침", refunds: "환불정책", contact: "문의하기" },
+  es: { terms: "Términos", privacy: "Privacidad", refunds: "Reembolsos", contact: "Contacto" },
+  de: { terms: "AGB", privacy: "Datenschutz", refunds: "Rückerstattung", contact: "Kontakt" },
+  ar: { terms: "الشروط", privacy: "الخصوصية", refunds: "الاسترداد", contact: "اتصل بنا" },
 };
 
-const AVATAR_VARIATION_TEXT: Record<
-  LocaleKey,
-  { line1: string; line2: string }
-> = {
-  en: {
-    line1: "Unique AI variations",
-    line2: "in every avatar pack",
-  },
-  "zh-hk": {
-    line1: "每個貼圖包都有獨特的",
-    line2: "AI 生成變化款式",
-  },
-  "zh-cn": {
-    line1: "每个贴图包都有独特的",
-    line2: "AI 生成变化款式",
-  },
-  ja: {
-    line1: "各アバターパックに",
-    line2: "AI生成のユニークな変化を収録",
-  },
-  ko: {
-    line1: "각 아바타 팩에는",
-    line2: "AI 생성 고유 변형이 포함됩니다",
-  },
-  es: {
-    line1: "Cada pack incluye",
-    line2: "variaciones únicas generadas por IA",
-  },
-  de: {
-    line1: "Jedes Paket enthält",
-    line2: "einzigartige KI-Varianten",
-  },
-  ar: {
-    line1: "تتضمن كل حزمة",
-    line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي",
-  },
+const AVATAR_VARIATION_TEXT: Record<LocaleKey, { line1: string; line2: string }> = {
+  en: { line1: "Unique AI variations", line2: "in every avatar pack" },
+  "zh-hk": { line1: "每個貼圖包都有獨特的", line2: "AI 生成變化款式" },
+  "zh-cn": { line1: "每个贴图包都有独特的", line2: "AI 生成变化款式" },
+  ja: { line1: "各アバターパックに", line2: "AI生成のユニークな変化を収録" },
+  ko: { line1: "각 아바타 팩에는", line2: "AI 생성 고유 변형이 포함됩니다" },
+  es: { line1: "Cada pack incluye", line2: "variaciones únicas generadas por IA" },
+  de: { line1: "Jedes Paket enthält", line2: "einzigartige KI-Varianten" },
+  ar: { line1: "تتضمن كل حزمة", line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي" },
 };
 
-const PRICING_TEXT: Record<
-  LocaleKey,
-  {
-    bundleTitle: string;
-    bundleSub: string;
-    bundleBadge: string;
-    bundleSave: string;
-    coloringTitle: string;
-    keepsakeTitle: string;
-    avatarTitle: string;
-    singleSub: string;
-  }
-> = {
+const PRICING_TEXT: Record<LocaleKey, any> = {
   en: {
     bundleTitle: "Bundle Deal",
     bundleSub: "All 3 keepsakes",
@@ -181,7 +81,7 @@ const PRICING_TEXT: Record<
     singleSub: "單獨購買",
   },
   "zh-cn": {
-    bundleTitle: "超值套装",
+    bundleTitle: "超值套餐",
     bundleSub: "包含全部 3 款",
     bundleBadge: "超值首选",
     bundleSave: "立省 49%",
@@ -205,7 +105,7 @@ const PRICING_TEXT: Record<
     bundleSub: "3가지 기념품 모두 포함",
     bundleBadge: "가장 인기",
     bundleSave: "49% 절약",
-    coloringTitle: "컬러링 페이지",
+    coloringTitle: "컬러リング 페이지",
     keepsakeTitle: "기념 증서",
     avatarTitle: "12종 아바타 팩",
     singleSub: "단품 구매",
@@ -242,29 +142,44 @@ const PRICING_TEXT: Record<
   },
 };
 
-const MACHINE_TRANSLATE_OPTIONS = [
-  { label: "Français", tl: "fr" },
-  { label: "Italiano", tl: "it" },
-  { label: "Português", tl: "pt" },
-  { label: "Nederlands", tl: "nl" },
-  { label: "Русский", tl: "ru" },
-  { label: "ไทย", tl: "th" },
-];
-
 export default function PetKeepsakeLanding() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [msgCopied, setMsgCopied] = useState(false);
-
   const [name, setName] = useState("");
   const [supportSubject, setSupportSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [uploadRightsConfirmed, setUploadRightsConfirmed] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 1800);
   };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    const objectUrl = URL.createObjectURL(file);
+    setSelectedImage(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  const handleStartGenerator = () => {
+    if (!uploadRightsConfirmed) return;
+    fileInputRef.current?.click();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const t = {
     footerDisclaimer: "Digital files only. No physical products are shipped.",
@@ -277,17 +192,19 @@ export default function PetKeepsakeLanding() {
       <div className="mx-auto max-w-[1600px] px-2 py-2 md:px-3 md:py-3">
         <div className="overflow-hidden rounded-[28px] border border-[#d8cdbf] bg-[#FAF6F0] shadow-[0_24px_60px_rgba(72,51,36,0.14)]">
           <Header currentLocale={CURRENT_LOCALE} />
-
-          <HeroBundleSection />
-
+          <HeroBundleSection
+            uploadRightsConfirmed={uploadRightsConfirmed}
+            setUploadRightsConfirmed={setUploadRightsConfirmed}
+            selectedImage={selectedImage}
+            previewUrl={previewUrl}
+            handleStartGenerator={handleStartGenerator}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+          />
           <HowItWorksSection />
-
           <ExamplesGallerySection />
-
           <PhotoGuideSection />
-
           <FinalCTASection />
-
           <Footer
             currentLocale={CURRENT_LOCALE}
             linkCopied={linkCopied}
@@ -318,87 +235,88 @@ export default function PetKeepsakeLanding() {
 function Header({ currentLocale }: { currentLocale: LocaleKey }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-[#e3d8cb] bg-white/82 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-3 px-5 py-4">
-        <div className="flex shrink-0 items-center gap-3">
-          <div className="text-[18px]">🐾</div>
-          <span className="whitespace-nowrap text-[16px] font-extrabold tracking-tight text-[#3A2418] xl:text-[17px]">
-            Pet Keepsake Studio
-          </span>
-        </div>
+      <div className="mx-auto flex max-w-[1680px] items-center justify-between gap-3 px-3 py-2.5">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
+          <Image
+            src="/images/petkeepsart_logo.png"
+            alt="Pet Keeps Art"
+            width={120}
+            height={120}
+            className="h-auto w-[105px] md:w-[120px]"
+            priority
+          />
+          <span className="text-[20px] font-extrabold text-[#4A3428]">Pet Keeps Art</span>
+        </Link>
 
-        <div className="hidden items-center gap-5 lg:flex">
-          <a
-            href="#upload"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
+        <div className="hidden items-center gap-5 lg:flex -ml-1">
+          <a href="#upload" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
             Upload
           </a>
-          <a
-            href="#pricing"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
+          <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
             Pricing
           </a>
-          <a
-            href="#guide"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
+          <a href="#guide" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
             FAQ
           </a>
-          <a
-            href="#examples"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
+          <a href="#examples" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
             View Examples
-          </a>
-          <a
-            href="#upload"
-            className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
-          >
-            Create Yours
           </a>
         </div>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 md:flex mr-10">
           {LANGUAGE_HOME_LINKS.map((lang) => (
-            <LangButton
-              key={lang.key}
-              href={lang.href}
-              active={lang.key === currentLocale}
-            >
+            <LangButton key={lang.key} href={lang.href} active={lang.key === currentLocale}>
               {lang.label}
             </LangButton>
           ))}
-        </div>
-
-        <div className="relative block md:hidden">
-          <details className="group relative">
-            <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 Language
-            </summary>
-
-            <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
-              {LANGUAGE_HOME_LINKS.map((lang) => (
-                <LangButton
-                  key={lang.key}
-                  href={lang.href}
-                  active={lang.key === currentLocale}
-                >
-                  {lang.label}
-                </LangButton>
-              ))}
-            </div>
-          </details>
         </div>
       </div>
     </nav>
   );
 }
 
-function HeroBundleSection() {
+function LangButton({
+  children,
+  href,
+  active = false,
+}: {
+  children: React.ReactNode;
+  href: string;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[16px] border px-3 py-1.5 text-[12px] font-bold transition ${
+        active
+          ? "border-[#3A2418] bg-[#3A2418] text-white"
+          : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
+      }`}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function HeroBundleSection({
+  uploadRightsConfirmed,
+  setUploadRightsConfirmed,
+  selectedImage,
+  previewUrl,
+  handleStartGenerator,
+  handleImageChange,
+  fileInputRef,
+}: {
+  uploadRightsConfirmed: boolean;
+  setUploadRightsConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedImage: File | null;
+  previewUrl: string | null;
+  handleStartGenerator: () => void;
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+}) {
   const avatarVariationText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
   const pricingText = PRICING_TEXT[CURRENT_LOCALE];
-  const [uploadRightsConfirmed, setUploadRightsConfirmed] = useState(false);
 
   return (
     <section
@@ -417,9 +335,8 @@ function HeroBundleSection() {
             </h1>
 
             <p className="mx-auto mt-5 max-w-[1500px] whitespace-nowrap text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-              Turn your pet photo into a printable coloring page, a keepsake
-              certificate, and a 12-avatar pack — ready to download, print, gift,
-              and treasure.
+              Turn your pet photo into a printable coloring page, a keepsake certificate, and a
+              12-avatar pack — ready to download, print, gift, and treasure.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -436,29 +353,37 @@ function HeroBundleSection() {
                   <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
                     Upload start
                   </span>
-                  <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG or PNG
-                  </span>
+                  <span className="text-[14px] font-semibold text-[#7B6658]">JPG or PNG</span>
                 </div>
 
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
                   <img
-                    src="/images/hero-original-demo.png"
+                    src={previewUrl || "/images/hero-original-demo.png"}
                     alt="Upload preview"
                     className="h-auto w-full rounded-[20px] bg-white object-contain"
                   />
                 </div>
 
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+
                 <div className="mt-5 flex flex-col gap-3">
                   <button
+                    type="button"
+                    onClick={handleStartGenerator}
                     disabled={!uploadRightsConfirmed}
-                    className={`w-full rounded-full px-5 py-4 text-[20px] font-extrabold text-white transition ${
+                    className={`w-full rounded-full px-5 py-4 text-center text-[20px] font-extrabold text-white transition ${
                       uploadRightsConfirmed
                         ? "bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] shadow-[0_12px_22px_rgba(157,97,65,0.22)] hover:brightness-95"
                         : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
                     }`}
                   >
-                    Upload Your Photo
+                    {selectedImage ? "Change Photo" : "Start Generator"}
                   </button>
 
                   <a
@@ -481,10 +406,9 @@ function HeroBundleSection() {
                       onChange={(e) => setUploadRightsConfirmed(e.target.checked)}
                       className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
                     />
-                    <span className="text-[15px] leading-7 text-[#5b4334]">
-                      I confirm that I own this photo or have permission to use it.
-                      Do not upload celebrity, public figure, fictional character,
-                      or internet-downloaded images.
+                    <span className="text-[15px] leading-relaxed text-[#5b4334]">
+                      I confirm that I own this photo or have permission to use it. Do not upload
+                      celebrity, public figure, fictional character, or internet-downloaded images.
                     </span>
                   </label>
 
@@ -494,33 +418,135 @@ function HeroBundleSection() {
                 </div>
 
                 <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  No design skills needed. Upload once and get ready-to-download
-                  files.
+                  {selectedImage
+                    ? `Selected photo: ${selectedImage.name}`
+                    : "No design skills needed. Upload once and get ready-to-download files."}
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col items-center xl:items-start">
-              <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    Bundle preview
+              <div className="w-full max-w-[1100px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-6 shadow-[0_16px_28px_rgba(84,58,39,0.06)]">
+                <div className="mb-5 flex flex-wrap items-center justify-between gap-3 px-2">
+                  <span className="rounded-full bg-white px-5 py-2 text-[14px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
+                    Live preview mockup
                   </span>
-                  <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1 upload • 3 keepsakes
+                  <span className="text-[16px] font-semibold text-[#7B6658]">
+                    1 upload • 3 product styles
                   </span>
                 </div>
 
-                <div className="relative">
-                  <img
-                    src="/images/hero-keepsake-3-products.png"
-                    alt="Coloring page, keepsake certificate, and avatar pack preview"
-                    className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
-                  />
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    {previewUrl && (
+                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                        Preview Mockup
+                      </div>
+                    )}
+
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
+                      {pricingText.coloringTitle}
+                    </div>
+
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      {previewUrl ? (
+                        <img
+                          src={previewUrl}
+                          alt="Coloring Preview"
+                          className="h-full w-full scale-[1.2] object-contain grayscale contrast-125 mix-blend-multiply opacity-90"
+                        />
+                      ) : (
+                        <img
+                          src="/images/coloringpage.png"
+                          alt="Coloring Default"
+                          className="h-full w-full scale-[1.2] object-contain"
+                        />
+                      )}
+                    </div>
+
+                    {previewUrl && (
+                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                        Final high-res line art generated after payment
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    {previewUrl && (
+                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                        Preview Mockup
+                      </div>
+                    )}
+
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
+                      {pricingText.keepsakeTitle}
+                    </div>
+
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      {previewUrl ? (
+                        <img
+                          src={previewUrl}
+                          alt="Certificate Preview"
+                          className="h-full w-full scale-[1.2] object-contain"
+                        />
+                      ) : (
+                        <img
+                          src="/images/keepsake-certificate.png"
+                          alt="Certificate Default"
+                          className="h-full w-full scale-[1.2] object-contain"
+                        />
+                      )}
+                    </div>
+
+                    {previewUrl && (
+                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                        Custom birthday/memorial layout ready after payment
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    {previewUrl && (
+                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                        Preview Mockup
+                      </div>
+                    )}
+
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
+                      {pricingText.avatarTitle}
+                    </div>
+
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      {previewUrl ? (
+                        <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-3 p-0">
+                          {[1, 2, 3, 4].map((i) => (
+                            <img
+                              key={i}
+                              src={previewUrl}
+                              alt={`Avatar Preview ${i}`}
+                              className="h-full w-full scale-[1.2] rounded-[15px] object-contain"
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <img
+                          src="/images/avatarpack.png"
+                          alt="Avatar Pack Default"
+                          className="h-full w-full scale-[1.2] object-contain"
+                        />
+                      )}
+                    </div>
+
+                    {previewUrl && (
+                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                        12 unique AI variation styles generated after payment
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex w-full max-w-[1100px] flex-wrap items-center justify-center gap-3">
                 <HeroSubPill>Birthday</HeroSubPill>
                 <HeroSubPill>In Loving Memory</HeroSubPill>
                 <HeroSubPill>Printable</HeroSubPill>
@@ -532,23 +558,18 @@ function HeroBundleSection() {
 
               <div
                 id="pricing"
-                className="mt-8 grid w-full max-w-[1000px] gap-4 sm:grid-cols-2 xl:grid-cols-4"
+                className="mt-8 grid w-full max-w-[1100px] gap-5 sm:grid-cols-2 xl:grid-cols-4"
               >
-                <button className="relative flex min-h-[258px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[28px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95">
+                <button className="relative flex min-h-[280px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95">
                   <div className="absolute left-4 top-4 rounded-full bg-white/18 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em]">
                     {pricingText.bundleBadge}
                   </div>
-
-                  <div className="mt-6 text-[18px] font-extrabold uppercase tracking-[0.04em]">
+                  <div className="mt-6 text-[20px] font-black uppercase tracking-[0.04em]">
                     {pricingText.bundleTitle}
                   </div>
-
                   <PriceCurrencyBadge bundle>USD</PriceCurrencyBadge>
-
-                  <div className="mt-3 text-[46px] font-black">$19.99</div>
-                  <div className="mt-2 text-[18px] opacity-95">
-                    {pricingText.bundleSub}
-                  </div>
+                  <div className="mt-3 text-[50px] font-black">$19.99</div>
+                  <div className="mt-1 text-[18px] font-bold opacity-95">{pricingText.bundleSub}</div>
                   <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
                     {pricingText.bundleSave} vs buying separately
                   </div>
@@ -559,7 +580,6 @@ function HeroBundleSection() {
                   price="$12.99"
                   subtitle={pricingText.singleSub}
                 />
-
                 <PricingCard
                   title={pricingText.keepsakeTitle}
                   price="$12.99"
@@ -571,7 +591,6 @@ function HeroBundleSection() {
                     </div>
                   }
                 />
-
                 <PricingCard
                   title={pricingText.avatarTitle}
                   price="$12.99"
@@ -579,27 +598,10 @@ function HeroBundleSection() {
                 />
               </div>
 
-              <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex w-full max-w-[1100px] flex-wrap items-center justify-center gap-3">
                 <TrustPill>Secure checkout</TrustPill>
                 <TrustPill>Digital files only</TrustPill>
                 <TrustPill>No shipping needed</TrustPill>
-              </div>
-
-              <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
-                <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
-                  <TrustMiniItem
-                    title="Personalized"
-                    text="Made from your own pet photo"
-                  />
-                  <TrustMiniItem
-                    title="Digital"
-                    text="Instant-ready download format"
-                  />
-                  <TrustMiniItem
-                    title="Giftable"
-                    text="Great for birthdays and memory"
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -639,12 +641,12 @@ function PricingCard({
   extra?: React.ReactNode;
 }) {
   return (
-    <button className="flex min-h-[258px] flex-col items-center justify-center rounded-[28px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
-      <div className="text-[18px] font-extrabold text-[#4B3427]">{title}</div>
+    <button className="flex min-h-[280px] flex-col items-center justify-center rounded-[32px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
+      <div className="text-[19px] leading-tight font-black text-[#4B3427]">{title}</div>
       {extra}
       <PriceCurrencyBadge>USD</PriceCurrencyBadge>
-      <div className="mt-3 text-[42px] font-black text-[#2E1D16]">{price}</div>
-      <div className="mt-2 text-[18px] text-stone-600">{subtitle}</div>
+      <div className="mt-3 text-[44px] font-black text-[#2E1D16]">{price}</div>
+      <div className="mt-1 text-[17px] font-medium text-stone-600">{subtitle}</div>
     </button>
   );
 }
@@ -673,21 +675,6 @@ function TrustPill({ children }: { children: React.ReactNode }) {
   );
 }
 
-function TrustMiniItem({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="flex min-h-[128px] flex-col items-center justify-center px-6 py-5 text-center">
-      <span className="text-[19px] font-extrabold text-[#3E2B1F]">{title}</span>
-      <span className="mt-2 text-[17px] leading-7 text-[#7B6658]">{text}</span>
-    </div>
-  );
-}
-
 function HowItWorksSection() {
   return (
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
@@ -695,10 +682,8 @@ function HowItWorksSection() {
         <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
           How It Works
         </h2>
-
         <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          One clear pet photo becomes a printable keepsake bundle in a few simple
-          steps.
+          One clear pet photo becomes a printable keepsake bundle in a few simple steps.
         </p>
 
         <div className="mt-10 grid gap-8 md:grid-cols-3">
@@ -740,16 +725,11 @@ function HowCard({
   return (
     <div className="rounded-[28px] border border-[#eadfd2] bg-white/85 px-6 py-10 text-center shadow-[0_12px_22px_rgba(84,58,39,0.05)]">
       <div className="flex items-end justify-center gap-3">
-        <span className="text-[82px] font-black leading-none text-[#A6825D]">
-          {number}
-        </span>
+        <span className="text-[82px] leading-none font-black text-[#A6825D]">{number}</span>
         <span className="mb-2 text-[#A6825D]">{icon}</span>
       </div>
-
       <div className="mt-5 text-[25px] font-black text-[#35241A]">{title}</div>
-      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">
-        {text}
-      </p>
+      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">{text}</p>
     </div>
   );
 }
@@ -765,7 +745,6 @@ function ExamplesGallerySection() {
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
             Real Product Style Preview
           </h2>
-
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
             <span className="block">
               See how one uploaded pet photo can become a printable coloring page,
@@ -777,12 +756,6 @@ function ExamplesGallerySection() {
         </div>
 
         <div className="mx-auto mt-10 max-w-[1450px] rounded-[36px] border border-[#e8ddd1] bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(255,251,246,0.98)_100%)] p-6 shadow-[0_18px_40px_rgba(84,58,39,0.08)] md:p-8 xl:p-10">
-          <div className="mb-7 hidden items-center justify-center gap-8 md:flex">
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-            <div className="text-[48px] leading-none text-[#c8b6a0]">→</div>
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             <ExampleFlowCard
               img="/images/avatar_example.jpg"
@@ -791,7 +764,6 @@ function ExamplesGallerySection() {
               description="The pet photo you upload"
               badgeTone="gold"
             />
-
             <ExampleFlowCard
               img="/images/coloring_result.jpg"
               title="Coloring Page"
@@ -799,7 +771,6 @@ function ExamplesGallerySection() {
               description="Printable black-and-white line art"
               badgeTone="gold"
             />
-
             <ExampleFlowCard
               img="/images/keepsake-certificate.png"
               title="Keepsake Certificate"
@@ -807,7 +778,6 @@ function ExamplesGallerySection() {
               description="Birthday or memorial-ready keepsake"
               badgeTone="gold"
             />
-
             <ExampleFlowCard
               img="/images/avatar_pack_preview.png"
               title="Avatar Pack"
@@ -851,23 +821,15 @@ function ExampleFlowCard({
         >
           {badge}
         </span>
-
         <img
           src={img}
           alt={title}
-          className={`h-[360px] w-full bg-white object-contain ${
-            contain ? "p-4" : "p-3"
-          }`}
+          className={`h-[360px] w-full bg-white object-contain ${contain ? "p-4" : "p-3"}`}
         />
       </div>
-
       <div className="pt-5 text-center">
-        <div className="font-serif text-[28px] font-black leading-tight text-[#2F1C13]">
-          {title}
-        </div>
-        <div className="mt-2 text-[18px] leading-8 text-stone-600">
-          {description}
-        </div>
+        <div className="font-serif text-[28px] font-black text-[#2F1C13]">{title}</div>
+        <div className="mt-2 text-[18px] leading-8 text-stone-600">{description}</div>
       </div>
     </div>
   );
@@ -875,10 +837,7 @@ function ExampleFlowCard({
 
 function PhotoGuideSection() {
   return (
-    <section
-      id="guide"
-      className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12"
-    >
+    <section id="guide" className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
@@ -904,7 +863,6 @@ function PhotoGuideSection() {
               "/images/good_3_hedgehog_girl.png",
             ]}
           />
-
           <GuidePanel
             title="✕ Avoid"
             bullets={[
@@ -987,12 +945,10 @@ function FinalCTASection() {
         <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
           Ready to turn your pet photo into something worth keeping?
         </h2>
-
-        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px] lg:whitespace-nowrap">
-          Upload once and get a personalized coloring page, keepsake certificate,
-          and avatar pack made from your own photo.
+        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
+          Upload once and get a personalized coloring page, keepsake certificate, and avatar pack
+          made from your own photo.
         </p>
-
         <div className="mt-8">
           <a
             href="#upload"
@@ -1001,7 +957,6 @@ function FinalCTASection() {
             Upload Your Photo
           </a>
         </div>
-
         <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
           Digital delivery • No shipping • Great for gifts and memory
         </div>
@@ -1030,127 +985,57 @@ function Footer({
   const legalLinks = LEGAL_LINKS[currentLocale];
   const legalText = LEGAL_TEXT[currentLocale];
 
-  const openMachineTranslatedSite = (targetLang: string) => {
-    const currentUrl = window.location.href;
-    const hostname = window.location.hostname;
-
-    const isLocal =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.endsWith(".local");
-
-    if (isLocal) {
-      alert(
-        "Google website translation usually does not work on localhost. Please test this on your live domain, or use Chrome Translate on the current page."
-      );
-      return;
-    }
-
-    const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${targetLang}&u=${encodeURIComponent(
-      currentUrl
-    )}`;
-
-    window.location.href = translateUrl;
-  };
-
   return (
     <footer className="border-t border-black/5 bg-[#efe5d8]">
-      <div className="mx-auto max-w-[1320px] px-5 py-8 sm:px-8">
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {["email", "facebook", "instagram", "tiktok", "pinterest", "link"].map(
-              (p) => (
-                <button
-                  key={p}
-                  onClick={p === "link" ? copyLink : undefined}
-                  className="relative transition hover:opacity-75"
-                >
-                  <img
-                    src={`/social/${p}.png`}
-                    alt={p}
-                    className="h-10 w-10 object-contain"
-                  />
-                  {p === "link" && linkCopied && (
-                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      COPIED
-                    </span>
-                  )}
-                </button>
-              )
-            )}
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
-            <Link href={legalLinks.terms} className="hover:underline">
-              {legalText.terms}
-            </Link>
-            <Link href={legalLinks.privacy} className="hover:underline">
-              {legalText.privacy}
-            </Link>
-            <Link href={legalLinks.refunds} className="hover:underline">
-              {legalText.refunds}
-            </Link>
-            <button onClick={openContact} className="hover:underline">
-              {legalText.contact}
-            </button>
-          </div>
-
-          <div className="mt-5 flex flex-col items-center gap-4 md:flex-row md:gap-6">
-            <div className="text-[17px] font-medium text-[#1f1a16]">
-              © {BRAND.year} {BRAND.name}
-            </div>
-
-            <div className="flex items-center gap-2">
-              {["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => (
-                <img
-                  key={p}
-                  src={`/payments/${p}.png`}
-                  alt={p}
-                  className="h-7 w-auto object-contain"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-3 text-center">
-            <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
-              <Globe className="h-4 w-4" />
-              More languages (machine translated)
-            </div>
-
-            <select
-              defaultValue=""
-              onChange={(e) => {
-                const value = e.target.value;
-                if (!value) return;
-                openMachineTranslatedSite(value);
-                e.target.value = "";
-              }}
-              className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
+      <div className="mx-auto flex max-w-[1320px] flex-col items-center px-5 py-8 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {["facebook", "instagram", "tiktok", "pinterest", "link"].map((p) => (
+            <button
+              key={p}
+              onClick={p === "link" ? copyLink : undefined}
+              className="relative transition hover:opacity-75"
             >
-              <option value="" disabled>
-                Choose another language...
-              </option>
-              {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
-                <option key={lang.tl} value={lang.tl}>
-                  {lang.label}
-                </option>
-              ))}
-            </select>
+              <img src={`/social/${p}.png`} alt={p} className="h-10 w-10 object-contain" />
+              {p === "link" && linkCopied && (
+                <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
+                  COPIED
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
 
-            <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              Machine translation is provided for convenience only. Official
-              versions are the language pages listed on this site.
-            </p>
-          </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
+          <Link href={legalLinks.terms} className="hover:underline">
+            {legalText.terms}
+          </Link>
+          <Link href={legalLinks.privacy} className="hover:underline">
+            {legalText.privacy}
+          </Link>
+          <Link href={legalLinks.refunds} className="hover:underline">
+            {legalText.refunds}
+          </Link>
+          <button onClick={openContact} className="hover:underline">
+            {legalText.contact}
+          </button>
+        </div>
 
-          <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
-            <span>{t.footerDisclaimer}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer2}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer3}</span>
-          </div>
+        <div className="mt-5 text-[17px] font-medium text-[#1f1a16]">
+          © {BRAND.year} {BRAND.name}
+        </div>
+
+        <div className="mt-5 flex items-center gap-2">
+          {["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => (
+            <img key={p} src={`/payments/${p}.png`} alt={p} className="h-7 w-auto object-contain" />
+          ))}
+        </div>
+
+        <div className="mt-8 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
+          <span>{t.footerDisclaimer}</span>
+          <span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer2}</span>
+          <span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer3}</span>
         </div>
       </div>
     </footer>
@@ -1164,18 +1049,16 @@ function ContactModal({
   setSupportSubject,
   message,
   setMessage,
-  msgCopied,
-  setMsgCopied,
   close,
 }: {
   name: string;
-  setName: (v: string) => void;
+  setName: React.Dispatch<React.SetStateAction<string>>;
   supportSubject: string;
-  setSupportSubject: (v: string) => void;
+  setSupportSubject: React.Dispatch<React.SetStateAction<string>>;
   message: string;
-  setMessage: (v: string) => void;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
   msgCopied: boolean;
-  setMsgCopied: (v: boolean) => void;
+  setMsgCopied: React.Dispatch<React.SetStateAction<boolean>>;
   close: () => void;
 }) {
   return (
@@ -1194,117 +1077,49 @@ function ContactModal({
           ✕
         </button>
 
-        <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          Support Request
-        </h3>
-        <p className="mt-1 text-sm text-stone-600">
-          This opens your email app with a pre-filled message.
-        </p>
+        <h3 className="pr-10 font-serif text-[28px] font-black text-[#24140D]">Support Request</h3>
 
         <div className="mt-6 space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Your Name
-            </label>
-            <input
-              type="text"
-              placeholder="Name (optional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none"
+          />
 
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Subject / Inquiry Type
-            </label>
-            <select
-              value={supportSubject}
-              onChange={(e) => setSupportSubject(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            >
-              <option value="" disabled>
-                Select an inquiry type...
-              </option>
-              <option value="Order Support">Order Support</option>
-              <option value="File Access">File Access</option>
-              <option value="Photo Upload Issue">Photo Upload Issue</option>
-              <option value="General Question">General Question</option>
-            </select>
-          </div>
+          <select
+            value={supportSubject}
+            onChange={(e) => setSupportSubject(e.target.value)}
+            className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none"
+          >
+            <option value="" disabled>
+              Select an inquiry type...
+            </option>
+            <option value="Order Support">Order Support</option>
+            <option value="General Question">General Question</option>
+          </select>
 
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Message
-            </label>
-            <textarea
-              rows={4}
-              placeholder="How can we help you today?"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
+          <textarea
+            rows={4}
+            placeholder="How can we help?"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none"
+          />
 
           <button
             className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
-            onClick={() => {
-              const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
-              }`;
-              const bodyLines = [
-                `Customer Name: ${name || "Not provided"}`,
-                `Message: ${message}`,
-              ].join("\n");
-
-              window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent(
-                finalSubject
-              )}&body=${encodeURIComponent(bodyLines)}`;
-            }}
+            onClick={() =>
+              (window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent(
+                supportSubject
+              )}&body=${encodeURIComponent(message)}`)
+            }
           >
             Open Email App
-          </button>
-
-          <button
-            onClick={async () => {
-              const textToCopy = `Subject: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "Inquiry"
-              }\n\nCustomer Name: ${name || "Not provided"}\nMessage: ${message}`;
-
-              await navigator.clipboard.writeText(textToCopy);
-              setMsgCopied(true);
-              setTimeout(() => setMsgCopied(false), 1500);
-            }}
-            className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
-          >
-            {msgCopied ? "Copied to Clipboard! ✓" : "Alternative: Copy Message Text"}
           </button>
         </div>
       </div>
     </div>
-  );
-}
-
-function LangButton({
-  children,
-  href,
-  active = false,
-}: {
-  children: React.ReactNode;
-  href: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[12px] border px-3 py-1.5 text-[11px] font-bold leading-none transition ${
-        active
-          ? "border-[#3A2418] bg-[#3A2418] text-white"
-          : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
-      }`}
-    >
-      {children}
-    </Link>
   );
 }
