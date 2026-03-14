@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, X, Upload, PawPrint, Sparkles } from "lucide-react";
+import { Check, X, PawPrint, Sparkles, ShoppingBag } from "lucide-react";
 
 const BRAND = {
   name: "Pet Keeps Art",
@@ -67,7 +67,7 @@ const PRICING_TEXT: Record<LocaleKey, any> = {
     bundleSave: "Save 49%",
     coloringTitle: "Coloring Page",
     keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "12 pcs Avatar Pack",
+    avatarTitle: "12 Avatar Pack",
     singleSub: "Single purchase",
   },
   "zh-hk": {
@@ -105,7 +105,7 @@ const PRICING_TEXT: Record<LocaleKey, any> = {
     bundleSub: "3가지 기념품 모두 포함",
     bundleBadge: "가장 인기",
     bundleSave: "49% 절약",
-    coloringTitle: "컬러リング 페이지",
+    coloringTitle: "컬러링 페이지",
     keepsakeTitle: "기념 증서",
     avatarTitle: "12종 아바타 팩",
     singleSub: "단품 구매",
@@ -149,37 +149,12 @@ export default function PetKeepsakeLanding() {
   const [name, setName] = useState("");
   const [supportSubject, setSupportSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [uploadRightsConfirmed, setUploadRightsConfirmed] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 1800);
   };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    const objectUrl = URL.createObjectURL(file);
-    setSelectedImage(file);
-    setPreviewUrl(objectUrl);
-  };
-
-  const handleStartGenerator = () => {
-    if (!uploadRightsConfirmed) return;
-    fileInputRef.current?.click();
-  };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
 
   const t = {
     footerDisclaimer: "Digital files only. No physical products are shipped.",
@@ -192,15 +167,7 @@ export default function PetKeepsakeLanding() {
       <div className="mx-auto max-w-[1600px] px-2 py-2 md:px-3 md:py-3">
         <div className="overflow-hidden rounded-[28px] border border-[#d8cdbf] bg-[#FAF6F0] shadow-[0_24px_60px_rgba(72,51,36,0.14)]">
           <Header currentLocale={CURRENT_LOCALE} />
-          <HeroBundleSection
-            uploadRightsConfirmed={uploadRightsConfirmed}
-            setUploadRightsConfirmed={setUploadRightsConfirmed}
-            selectedImage={selectedImage}
-            previewUrl={previewUrl}
-            handleStartGenerator={handleStartGenerator}
-            handleImageChange={handleImageChange}
-            fileInputRef={fileInputRef}
-          />
+          <HeroBundleSection />
           <HowItWorksSection />
           <ExamplesGallerySection />
           <PhotoGuideSection />
@@ -249,8 +216,8 @@ function Header({ currentLocale }: { currentLocale: LocaleKey }) {
         </Link>
 
         <div className="hidden items-center gap-5 lg:flex -ml-1">
-          <a href="#upload" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
-            Upload
+          <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
+            Bundle
           </a>
           <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">
             Pricing
@@ -298,29 +265,12 @@ function LangButton({
   );
 }
 
-function HeroBundleSection({
-  uploadRightsConfirmed,
-  setUploadRightsConfirmed,
-  selectedImage,
-  previewUrl,
-  handleStartGenerator,
-  handleImageChange,
-  fileInputRef,
-}: {
-  uploadRightsConfirmed: boolean;
-  setUploadRightsConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedImage: File | null;
-  previewUrl: string | null;
-  handleStartGenerator: () => void;
-  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
-}) {
+function HeroBundleSection() {
   const avatarVariationText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
   const pricingText = PRICING_TEXT[CURRENT_LOCALE];
 
   return (
     <section
-      id="upload"
       className="bg-[linear-gradient(180deg,#f7efe5_0%,#f9f2e9_100%)] px-5 pb-14 pt-12 md:px-8 xl:px-10"
     >
       <div className="mx-auto max-w-[1560px]">
@@ -351,76 +301,35 @@ function HeroBundleSection({
               <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    Upload start
+                    Sample photo
                   </span>
-                  <span className="text-[14px] font-semibold text-[#7B6658]">JPG or PNG</span>
+                  <span className="text-[14px] font-semibold text-[#7B6658]">Demo only</span>
                 </div>
 
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
                   <img
-                    src={previewUrl || "/images/hero-original-demo.png"}
-                    alt="Upload preview"
+                    src="/images/hero-original-demo.png"
+                    alt="Sample original photo"
                     className="h-auto w-full rounded-[20px] bg-white object-contain"
                   />
                 </div>
 
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-
-                <div className="mt-5 flex flex-col gap-3">
-                  <button
-                    type="button"
-                    onClick={handleStartGenerator}
-                    disabled={!uploadRightsConfirmed}
-                    className={`w-full rounded-full px-5 py-4 text-center text-[20px] font-extrabold text-white transition ${
-                      uploadRightsConfirmed
-                        ? "bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] shadow-[0_12px_22px_rgba(157,97,65,0.22)] hover:brightness-95"
-                        : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
-                    }`}
+                <div className="mt-6 flex flex-col gap-3">
+                  <a
+                    href="#pricing"
+                    className="w-full rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-4 text-center text-[20px] font-extrabold text-white shadow-[0_12px_22px_rgba(157,97,65,0.22)] transition hover:brightness-95"
                   >
-                    {selectedImage ? "Change Photo" : "Start Generator"}
-                  </button>
-
+                    Choose Your Bundle
+                  </a>
                   <a
                     href="#examples"
                     className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
                   >
                     View Real Examples
                   </a>
-                </div>
-
-                <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
-                  <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    Photo rights confirmation
+                  <div className="mt-2 text-center text-[17px] font-medium text-[#7B6658]">
+                    You’ll upload your photo after payment.
                   </div>
-
-                  <label className="flex cursor-pointer items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={uploadRightsConfirmed}
-                      onChange={(e) => setUploadRightsConfirmed(e.target.checked)}
-                      className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
-                    />
-                    <span className="text-[15px] leading-relaxed text-[#5b4334]">
-                      I confirm that I own this photo or have permission to use it. Do not upload
-                      celebrity, public figure, fictional character, or internet-downloaded images.
-                    </span>
-                  </label>
-
-                  <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    Orders that violate these rules may be refused or cancelled.
-                  </p>
-                </div>
-
-                <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  {selectedImage
-                    ? `Selected photo: ${selectedImage.name}`
-                    : "No design skills needed. Upload once and get ready-to-download files."}
                 </div>
               </div>
             </div>
@@ -437,111 +346,69 @@ function HeroBundleSection({
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-3">
-                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
-                    {previewUrl && (
-                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
-                        Preview Mockup
-                      </div>
-                    )}
-
+                  <div className="relative flex min-h-[520px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
                     <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
                       {pricingText.coloringTitle}
                     </div>
-
-                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
-                      {previewUrl ? (
-                        <img
-                          src={previewUrl}
-                          alt="Coloring Preview"
-                          className="h-full w-full scale-[1.2] object-contain grayscale contrast-125 mix-blend-multiply opacity-90"
-                        />
-                      ) : (
-                        <img
-                          src="/images/coloringpage.png"
-                          alt="Coloring Default"
-                          className="h-full w-full scale-[1.2] object-contain"
-                        />
-                      )}
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">
+                      AI Preview Mockup
                     </div>
 
-                    {previewUrl && (
-                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
-                        Final high-res line art generated after payment
-                      </div>
-                    )}
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img
+                        src="/images/coloringpage.png"
+                        alt="Coloring Default"
+                        className="h-full w-full scale-[1.2] object-contain"
+                      />
+                    </div>
+
+                    <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                      Clean line art generated after payment
+                    </div>
                   </div>
 
-                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
-                    {previewUrl && (
-                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
-                        Preview Mockup
-                      </div>
-                    )}
-
+                  <div className="relative flex min-h-[520px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
                     <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
                       {pricingText.keepsakeTitle}
                     </div>
-
-                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
-                      {previewUrl ? (
-                        <img
-                          src={previewUrl}
-                          alt="Certificate Preview"
-                          className="h-full w-full scale-[1.2] object-contain"
-                        />
-                      ) : (
-                        <img
-                          src="/images/keepsake-certificate.png"
-                          alt="Certificate Default"
-                          className="h-full w-full scale-[1.2] object-contain"
-                        />
-                      )}
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">
+                      AI Preview Mockup
                     </div>
 
-                    {previewUrl && (
-                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
-                        Custom birthday/memorial layout ready after payment
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img
+                        src="/images/keepsake-certificate.png"
+                        alt="Certificate Default"
+                        className="h-full w-full scale-[1.18] object-contain"
+                      />
+                    </div>
+
+                    <div className="px-2 flex flex-col items-center text-center">
+                      <div className="text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                        Personalized layout created after payment
                       </div>
-                    )}
+                    </div>
                   </div>
 
-                  <div className="relative flex min-h-[520px] flex-col items-center gap-4 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
-                    {previewUrl && (
-                      <div className="absolute left-6 top-6 z-10 rounded bg-black/65 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
-                        Preview Mockup
-                      </div>
-                    )}
-
+                  <div className="relative flex min-h-[560px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
                     <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">
                       {pricingText.avatarTitle}
                     </div>
-
-                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
-                      {previewUrl ? (
-                        <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-3 p-0">
-                          {[1, 2, 3, 4].map((i) => (
-                            <img
-                              key={i}
-                              src={previewUrl}
-                              alt={`Avatar Preview ${i}`}
-                              className="h-full w-full scale-[1.2] rounded-[15px] object-contain"
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <img
-                          src="/images/avatarpack.png"
-                          alt="Avatar Pack Default"
-                          className="h-full w-full scale-[1.2] object-contain"
-                        />
-                      )}
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">
+                      AI Preview Mockup
                     </div>
 
-                    {previewUrl && (
-                      <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
-                        12 unique AI variation styles generated after payment
-                      </div>
-                    )}
+                    <div className="flex h-[432px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img
+                        src="/images/avatarpack.png"
+                        alt="Avatar Pack Default"
+                        className="h-full w-full scale-[1.18] object-contain"
+                      />
+                    </div>
+
+                    <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">
+                      12 unique avatar styles created after payment
+                    </div>
                   </div>
                 </div>
               </div>
@@ -689,21 +556,21 @@ function HowItWorksSection() {
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <HowCard
             number="1"
-            icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="Upload your photo"
-            text="Start with one clear photo of your pet with a visible face."
+            icon={<ShoppingBag className="h-10 w-10" strokeWidth={2.4} />}
+            title="Choose your bundle"
+            text="Pick the keepsake bundle you want and complete payment first."
           />
           <HowCard
             number="2"
             icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="Create your bundle"
-            text="Get a coloring page, a keepsake certificate, and a 12-avatar pack."
+            title="Upload after payment"
+            text="After checkout, upload one clear photo of your pet and add details if needed."
           />
           <HowCard
             number="3"
             icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="Download and keep"
-            text="Print, save, share, or gift your personalized digital files."
+            title="Receive your files"
+            text="We generate your personalized digital keepsakes for download."
           />
         </div>
       </div>
@@ -946,15 +813,14 @@ function FinalCTASection() {
           Ready to turn your pet photo into something worth keeping?
         </h2>
         <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          Upload once and get a personalized coloring page, keepsake certificate, and avatar pack
-          made from your own photo.
+          Choose your bundle first. You’ll upload your photo after payment.
         </p>
         <div className="mt-8">
           <a
-            href="#upload"
+            href="#pricing"
             className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
           >
-            Upload Your Photo
+            Choose Your Bundle
           </a>
         </div>
         <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
