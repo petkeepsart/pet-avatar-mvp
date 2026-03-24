@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/es",
   updatedAt: "11 de marzo de 2026",
 };
@@ -23,7 +23,7 @@ const SECTIONS = [
   {
     icon: Receipt,
     title: "1. Resumen general",
-    body: "En Pet Keepsake Studio, vendemos únicamente productos digitales personalizados. Dado que tu pedido se entrega de forma electrónica y puede crearse mediante flujos automatizados de procesamiento de imágenes después de la compra, los reembolsos, devoluciones, cambios y cancelaciones suelen estar limitados una vez que el procesamiento o la entrega han comenzado.",
+    body: "En Pet Keeps Art, vendemos únicamente productos digitales personalizados. Dado que tu pedido se entrega de forma electrónica y puede crearse mediante flujos automatizados de procesamiento de imágenes después de la compra, los reembolsos, devoluciones, cambios y cancelaciones suelen estar limitados una vez que el procesamiento o la entrega han comenzado.",
   },
   {
     icon: Download,
@@ -62,12 +62,17 @@ const SECTIONS = [
   },
   {
     icon: Scale,
-    title: "9. Derechos legales",
+    title: "9. Consumidores de la UE — Derecho de desistimiento",
+    body: "Si eres un consumidor de la UE, tienes derecho a desistir de este contrato en un plazo de 14 días sin necesidad de justificación. Sin embargo, al realizar tu pedido y confirmar el pago, consientes expresamente que la entrega del contenido digital comience de inmediato y reconoces que, por ello, pierdes tu derecho de desistimiento una vez iniciada la entrega de tus archivos digitales, de conformidad con el artículo 16(m) de la Directiva UE 2011/83/UE. Dado que nuestros archivos digitales se generan y quedan disponibles para su descarga inmediatamente después de procesar tu pedido, el derecho de desistimiento queda extinguido desde el momento en que comienza la entrega. Si tienes preguntas sobre tus derechos antes de realizar la compra, contáctanos en info@petkeepsart.com.",
+  },
+  {
+    icon: Scale,
+    title: "10. Derechos legales",
     body: "Nada de lo dispuesto en esta Política de Reembolsos limita o excluye cualquier derecho obligatorio que puedas tener en virtud de la legislación aplicable de protección al consumidor. Cuando la ley local exija un reembolso, derecho de cancelación, reparación, reemplazo, reducción de precio u otra compensación, respetaremos esos derechos.",
   },
   {
     icon: Mail,
-    title: "10. Contáctanos",
+    title: "11. Contáctanos",
     body: `Si crees que ha habido un problema de facturación, un problema de entrega, un cargo duplicado o un error técnico con tu pedido, contáctanos en ${BRAND.email} e incluye los detalles de tu pedido para que podamos revisar el caso.`,
   },
 ];

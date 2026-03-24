@@ -1,53 +1,37 @@
 "use client";
 
+
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, X, Upload, PawPrint, Sparkles, Globe } from "lucide-react";
+import Image from "next/image";
+import { Check, X, PawPrint, Sparkles, ShoppingBag } from "lucide-react";
 
-const BRAND = {
-  name: "Pet Keepsake Studio",
-  year: 2026,
-  email: "support@petkeepsake.com",
-};
 
-type LocaleKey =
-  | "en"
-  | "zh-hk"
-  | "zh-cn"
-  | "ja"
-  | "ko"
-  | "es"
-  | "de"
-  | "ar";
+type PlanId = "bundle" | "coloring" | "keepsake" | "avatar";
+type LocaleKey = "en" | "zh-hk" | "zh-cn" | "ja" | "ko" | "es" | "de" | "ar";
+type LegalLinks = { terms: string; privacy: string; refunds: string; };
+type LegalText = { terms: string; privacy: string; refunds: string; contact: string; };
+type AvatarVariationText = { line1: string; line2: string; };
+type PricingTextSet = { bundleTitle: string; bundleSub: string; bundleBadge: string; bundleSave: string; coloringTitle: string; keepsakeTitle: string; avatarTitle: string; singleSub: string; };
+type FooterText = { footerDisclaimer: string; footerDisclaimer2: string; footerDisclaimer3: string; };
 
+
+const BRAND = { name: "Pet Keeps Art", year: 2026, email: "info@petkeepsart.com" };
 const CURRENT_LOCALE: LocaleKey = "es";
 
+
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
-  { key: "en", label: "ENG", href: "/" },
-  { key: "zh-hk", label: "繁體中文", href: "/zh-hk" },
-  { key: "zh-cn", label: "简中", href: "/zh-cn" },
-  { key: "ja", label: "日本語", href: "/ja" },
-  { key: "ko", label: "한국어", href: "/ko" },
-  { key: "es", label: "Español", href: "/es" },
-  { key: "de", label: "Deutsch", href: "/de" },
-  { key: "ar", label: "العربية", href: "/ar" },
+  { key: "en", label: "ENG", href: "/" }, { key: "zh-hk", label: "繁中", href: "/zh-hk" },
+  { key: "zh-cn", label: "简中", href: "/zh-cn" }, { key: "ja", label: "日本語", href: "/ja" },
+  { key: "ko", label: "한국어", href: "/ko" }, { key: "es", label: "Español", href: "/es" },
+  { key: "de", label: "Deutsch", href: "/de" }, { key: "ar", label: "العربية", href: "/ar" },
 ];
 
-const LEGAL_LINKS: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string }
-> = {
+
+const LEGAL_LINKS: Record<LocaleKey, LegalLinks> = {
   en: { terms: "/terms", privacy: "/privacy", refunds: "/refund-policy" },
-  "zh-hk": {
-    terms: "/terms-zh-hk",
-    privacy: "/privacy-zh-hk",
-    refunds: "/refund-policy-zh-hk",
-  },
-  "zh-cn": {
-    terms: "/terms-zh-cn",
-    privacy: "/privacy-zh-cn",
-    refunds: "/refund-policy-zh-cn",
-  },
+  "zh-hk": { terms: "/terms-zh-hk", privacy: "/privacy-zh-hk", refunds: "/refund-policy-zh-hk" },
+  "zh-cn": { terms: "/terms-zh-cn", privacy: "/privacy-zh-cn", refunds: "/refund-policy-zh-cn" },
   ja: { terms: "/terms-ja", privacy: "/privacy-ja", refunds: "/refund-policy-ja" },
   ko: { terms: "/terms-ko", privacy: "/privacy-ko", refunds: "/refund-policy-ko" },
   es: { terms: "/terms-es", privacy: "/privacy-es", refunds: "/refund-policy-es" },
@@ -55,554 +39,302 @@ const LEGAL_LINKS: Record<
   ar: { terms: "/terms-ar", privacy: "/privacy-ar", refunds: "/refund-policy-ar" },
 };
 
-const LEGAL_TEXT: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string; contact: string }
-> = {
-  en: {
-    terms: "Terms",
-    privacy: "Privacy",
-    refunds: "Refund Policy",
-    contact: "Contact Us",
-  },
-  "zh-hk": {
-    terms: "條款",
-    privacy: "私隱政策",
-    refunds: "退款政策",
-    contact: "聯絡我們",
-  },
-  "zh-cn": {
-    terms: "条款",
-    privacy: "隐私政策",
-    refunds: "退款政策",
-    contact: "联系我们",
-  },
-  ja: {
-    terms: "利用規約",
-    privacy: "プライバシー",
-    refunds: "返金ポリシー",
-    contact: "お問い合わせ",
-  },
-  ko: {
-    terms: "이용약관",
-    privacy: "개인정보처리방침",
-    refunds: "환불정책",
-    contact: "문의하기",
-  },
-  es: {
-    terms: "Términos",
-    privacy: "Privacidad",
-    refunds: "Política de Reembolsos",
-    contact: "Contáctanos",
-  },
-  de: {
-    terms: "AGB",
-    privacy: "Datenschutz",
-    refunds: "Rückerstattung",
-    contact: "Kontakt",
-  },
-  ar: {
-    terms: "الشروط",
-    privacy: "الخصوصية",
-    refunds: "الاسترداد",
-    contact: "اتصل بنا",
-  },
+
+const LEGAL_TEXT: Record<LocaleKey, LegalText> = {
+  en: { terms: "Terms", privacy: "Privacy", refunds: "Refund Policy", contact: "Contact Us" },
+  "zh-hk": { terms: "條款", privacy: "私隱政策", refunds: "退款政策", contact: "聯絡我們" },
+  "zh-cn": { terms: "条款", privacy: "隐私政策", refunds: "退款政策", contact: "联系我们" },
+  ja: { terms: "利用規約", privacy: "プライバシー", refunds: "返金ポリシー", contact: "お問い合わせ" },
+  ko: { terms: "이용약관", privacy: "개인정보처리방침", refunds: "환불정책", contact: "문의하기" },
+  es: { terms: "Términos", privacy: "Privacidad", refunds: "Reembolsos", contact: "Contacto" },
+  de: { terms: "AGB", privacy: "Datenschutz", refunds: "Rückerstattung", contact: "Kontakt" },
+  ar: { terms: "الشروط", privacy: "الخصوصية", refunds: "الاسترداد", contact: "اتصل بنا" },
 };
 
-const AVATAR_VARIATION_TEXT: Record<
-  LocaleKey,
-  { line1: string; line2: string }
-> = {
-  en: {
-    line1: "Unique AI variations",
-    line2: "in every avatar pack",
-  },
-  "zh-hk": {
-    line1: "每個貼圖包都有獨特的",
-    line2: "AI 生成變化款式",
-  },
-  "zh-cn": {
-    line1: "每个贴图包都有独特的",
-    line2: "AI 生成变化款式",
-  },
-  ja: {
-    line1: "各アバターパックに",
-    line2: "AI生成のユニークな変化を収録",
-  },
-  ko: {
-    line1: "각 아바타 팩마다",
-    line2: "AI 생성 고유 변형이 포함됩니다",
-  },
-  es: {
-    line1: "Cada pack incluye",
-    line2: "variaciones únicas generadas por IA",
-  },
-  de: {
-    line1: "Jedes Paket enthält",
-    line2: "einzigartige KI-Varianten",
-  },
-  ar: {
-    line1: "تتضمن كل حزمة",
-    line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي",
-  },
+
+const AVATAR_VARIATION_TEXT: Record<LocaleKey, AvatarVariationText> = {
+  en: { line1: "Unique AI variations", line2: "in every avatar pack" },
+  "zh-hk": { line1: "每個貼圖包都有獨特的", line2: "AI 生成變化款式" },
+  "zh-cn": { line1: "每个贴图包都有独特的", line2: "AI 生成变化款式" },
+  ja: { line1: "各アバターパックに", line2: "AI生成のユニークな変化を収録" },
+  ko: { line1: "각 아바타 팩에는", line2: "AI 생성 고유 변형이 포함됩니다" },
+  es: { line1: "Cada pack incluye", line2: "variaciones únicas generadas por IA" },
+  de: { line1: "Jedes Paket enthält", line2: "einzigartige KI-Varianten" },
+  ar: { line1: "تتضمن كل حزمة", line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي" },
 };
 
-const PRICING_TEXT: Record<
-  LocaleKey,
-  {
-    bundleTitle: string;
-    bundleSub: string;
-    bundleBadge: string;
-    bundleSave: string;
-    coloringTitle: string;
-    keepsakeTitle: string;
-    avatarTitle: string;
-    singleSub: string;
-  }
-> = {
-  en: {
-    bundleTitle: "Bundle Deal",
-    bundleSub: "All 3 keepsakes",
-    bundleBadge: "Best Value",
-    bundleSave: "Save 49%",
-    coloringTitle: "Coloring Page",
-    keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "Avatar Pack (12 Designs)",
-    singleSub: "Single purchase",
-  },
-  "zh-hk": {
-    bundleTitle: "超值套裝",
-    bundleSub: "包含全部 3 款",
-    bundleBadge: "最抵買",
-    bundleSave: "現省 49%",
-    coloringTitle: "填色畫",
-    keepsakeTitle: "寵物紀念證書",
-    avatarTitle: "頭像包（12款設計）",
-    singleSub: "單獨購買",
-  },
-  "zh-cn": {
-    bundleTitle: "超值套装",
-    bundleSub: "包含全部 3 款纪念品",
-    bundleBadge: "超值首选",
-    bundleSave: "立省 49%",
-    coloringTitle: "填色画",
-    keepsakeTitle: "纪念证书",
-    avatarTitle: "头像包（12款设计）",
-    singleSub: "单独购买",
-  },
-  ja: {
-    bundleTitle: "バンドルセット",
-    bundleSub: "3点すべて込み",
-    bundleBadge: "いちばんお得",
-    bundleSave: "49% OFF",
-    coloringTitle: "塗り絵",
-    keepsakeTitle: "記念証書",
-    avatarTitle: "アバターパック（全12種）",
-    singleSub: "単品購入",
-  },
-  ko: {
-    bundleTitle: "번들 특가",
-    bundleSub: "3가지 기념품 모두 포함",
-    bundleBadge: "가장 인기",
-    bundleSave: "49% 절약",
-    coloringTitle: "컬러링 페이지",
-    keepsakeTitle: "기념 증서",
-    avatarTitle: "아바타 팩 (12종 디자인)",
-    singleSub: "단품 구매",
-  },
-  es: {
-    bundleTitle: "Oferta de Paquete",
-    bundleSub: "Los 3 recuerdos",
-    bundleBadge: "Mejor valor",
-    bundleSave: "Ahorra 49%",
-    coloringTitle: "Página para Colorear",
-    keepsakeTitle: "Certificado Conmemorativo",
-    avatarTitle: "Pack de Avatares (12 Diseños)",
-    singleSub: "Compra individual",
-  },
-  de: {
-    bundleTitle: "Paketangebot",
-    bundleSub: "Alle 3 Andenken",
-    bundleBadge: "Bestes Angebot",
-    bundleSave: "49% sparen",
-    coloringTitle: "Ausmalbild",
-    keepsakeTitle: "Erinnerungszertifikat",
-    avatarTitle: "Avatar-Paket (12 Designs)",
-    singleSub: "Einzelkauf",
-  },
-  ar: {
-    bundleTitle: "عرض الحزمة",
-    bundleSub: "جميع التذكارات الثلاثة",
-    bundleBadge: "أفضل قيمة",
-    bundleSave: "وفّر 49٪",
-    coloringTitle: "صفحة تلوين",
-    keepsakeTitle: "شهادة تذكارية",
-    avatarTitle: "حزمة الصور الرمزية (12 تصميماً)",
-    singleSub: "شراء فردي",
-  },
+
+const PRICING_TEXT: Record<LocaleKey, PricingTextSet> = {
+  en: { bundleTitle: "Bundle Deal", bundleSub: "All 3 keepsakes", bundleBadge: "Best Value", bundleSave: "Save 49%", coloringTitle: "Coloring Page", keepsakeTitle: "Keepsake Certificate", avatarTitle: "12 Avatar Pack", singleSub: "Single purchase" },
+  "zh-hk": { bundleTitle: "超值套裝", bundleSub: "包含全部 3 款", bundleBadge: "最抵買", bundleSave: "現省 49%", coloringTitle: "填色畫", keepsakeTitle: "寵物紀念證書", avatarTitle: "12 款頭像包", singleSub: "單獨購買" },
+  "zh-cn": { bundleTitle: "超值套餐", bundleSub: "包含全部 3 款", bundleBadge: "超值首选", bundleSave: "立省 49%", coloringTitle: "填色画", keepsakeTitle: "宠物纪念证书", avatarTitle: "12 款头像包", singleSub: "单独购买" },
+  ja: { bundleTitle: "バンドルセット", bundleSub: "3点すべて込み", bundleBadge: "いちばんお得", bundleSave: "49% OFF", coloringTitle: "塗り絵", keepsakeTitle: "記念証書", avatarTitle: "アバター12種パック", singleSub: "単品購入" },
+  ko: { bundleTitle: "번들 특가", bundleSub: "3가지 기념품 모두 포함", bundleBadge: "가장 인기", bundleSave: "49% 할인", coloringTitle: "컬러링 페이지", keepsakeTitle: "기념 증서", avatarTitle: "12종 아바타 팩", singleSub: "단품 구매" },
+  es: { bundleTitle: "Oferta de Paquete", bundleSub: "Los 3 recuerdos", bundleBadge: "Mejor valor", bundleSave: "Ahorra 49%", coloringTitle: "Página para Colorear", keepsakeTitle: "Certificado Conmemorativo", avatarTitle: "Pack de 12 Avatares", singleSub: "Compra individual" },
+  de: { bundleTitle: "Paketangebot", bundleSub: "Alle 3 Andenken", bundleBadge: "Bestes Angebot", bundleSave: "49% sparen", coloringTitle: "Ausmalbild", keepsakeTitle: "Erinnerungszertifikat", avatarTitle: "12er Avatar-Paket", singleSub: "Einzelkauf" },
+  ar: { bundleTitle: "عرض الحزمة", bundleSub: "جميع التذكارات الثلاثة", bundleBadge: "أفضل قيمة", bundleSave: "وفّر 49٪", coloringTitle: "صفحة تلوين", keepsakeTitle: "شهادة تذكارية", avatarTitle: "حزمة ١٢ صورة رمزية", singleSub: "شراء فردي" },
 };
 
-const MACHINE_TRANSLATE_OPTIONS = [
-  { label: "Français", tl: "fr" },
-  { label: "Italiano", tl: "it" },
-  { label: "Português", tl: "pt" },
-  { label: "Nederlands", tl: "nl" },
-  { label: "Русский", tl: "ru" },
-  { label: "ไทย", tl: "th" },
+
+const CANADIAN_PROVINCES = [
+  { value: "AB", label: "Alberta" }, { value: "BC", label: "British Columbia" }, { value: "MB", label: "Manitoba" },
+  { value: "NB", label: "New Brunswick" }, { value: "NL", label: "Newfoundland and Labrador" }, { value: "NS", label: "Nova Scotia" },
+  { value: "ON", label: "Ontario" }, { value: "PE", label: "Prince Edward Island" }, { value: "QC", label: "Québec" },
+  { value: "SK", label: "Saskatchewan" }, { value: "NT", label: "Northwest Territories" }, { value: "NU", label: "Nunavut" }, { value: "YT", label: "Yukon" },
 ];
+
+
+const GUARANTEES = [
+  { icon: "🔒", title: "Pago seguro con Stripe", text: "Los pagos son procesados de forma segura por Stripe — el mismo sistema utilizado por Amazon y Apple. Nunca vemos los datos de tu tarjeta." },
+  { icon: "⚡", title: "Entrega digital instantánea", text: "Los archivos se generan y se envían por correo en minutos tras subir tu foto. Sin envío, sin esperar días." },
+  { icon: "🎨", title: "Tú personalizas todo", text: "Tras el pago, elige texto, fuente, colores y diseño antes de crear los archivos finales — nada se confirma hasta que estés satisfecho." },
+  { icon: "📧", title: "Archivos enviados a tu correo", text: "Tu PDF y ZIP personalizados se entregan directamente al correo usado en el pago, listos para descargar cuando quieras." },
+  { icon: "🐾", title: "Cualquier mascota, cualquier ocasión", text: "Perros, gatos, conejos, pájaros — cualquier mascota querida. Diseños para cumpleaños, memoriales, regalos y diversión cotidiana." },
+  { icon: "💬", title: "Entrega Rápida · Compra Tranquila", text: "Entrega digital instantánea, sin esperas. Si tienes alguna pregunta, estamos aquí para ayudarte." },
+];
+
 
 export default function PetKeepsakeLanding() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
-  const [msgCopied, setMsgCopied] = useState(false);
-
   const [name, setName] = useState("");
   const [supportSubject, setSupportSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [loadingPlan, setLoadingPlan] = useState<PlanId | null>(null);
+  const [customerCountry, setCustomerCountry] = useState("United States");
+  const [customerProvince, setCustomerProvince] = useState("");
+  const isCanada = customerCountry === "Canada";
+  const normalizedProvince = customerProvince.trim().toLowerCase();
+  const missingProvince = isCanada && !customerProvince.trim();
+  const isQuebecBlocked = isCanada && ["qc", "quebec", "québec"].includes(normalizedProvince);
+
+
+  const startCheckout = async (plan: PlanId) => {
+    try {
+      setLoadingPlan(plan);
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("petkeepsart_selected_plan", plan);
+        window.sessionStorage.setItem("petkeepsart_customer_country", customerCountry);
+        window.sessionStorage.setItem("petkeepsart_customer_province", customerProvince);
+      }
+      const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan, customerCountry, customerProvince }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status === 403) { window.location.assign(`/customize?plan=${plan}&blocked=qc`); return; }
+        if (res.status === 400) { window.location.assign(`/customize?plan=${plan}&missing_province=1`); return; }
+        throw new Error(data?.error || "Checkout failed. Please try again.");
+      }
+      if (!data?.url) throw new Error("No checkout URL returned.");
+      window.location.assign(data.url);
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setLoadingPlan(null);
+    }
+  };
+
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(window.location.href);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 1800);
+    try {
+      if (typeof window === "undefined") return;
+      if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(window.location.href); }
+      else {
+        const t = document.createElement("textarea"); t.value = window.location.href; t.style.position = "fixed"; t.style.opacity = "0";
+        document.body.appendChild(t); t.focus(); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+      }
+      setLinkCopied(true); setTimeout(() => setLinkCopied(false), 1800);
+    } catch (e) { alert("Unable to copy the link. Please try again."); }
   };
 
-  const t = {
-    footerDisclaimer: "Solo archivos digitales. No se envían productos físicos.",
-    footerDisclaimer2: "Disponible en todo el mundo. Excluye Quebec, Canadá.",
-    footerDisclaimer3: "Los precios están en dólares estadounidenses (USD).",
-  };
+
+  const footerT: FooterText = { footerDisclaimer: "Solo archivos digitales. No se envían productos físicos.", footerDisclaimer2: "Disponible en todo el mundo. Excluye Québec, Canadá.", footerDisclaimer3: "Precios en USD." };
+
 
   return (
     <main className="min-h-screen bg-[#F5EFE6] text-[#422B1E] selection:bg-orange-100">
       <div className="mx-auto max-w-[1600px] px-2 py-2 md:px-3 md:py-3">
         <div className="overflow-hidden rounded-[28px] border border-[#d8cdbf] bg-[#FAF6F0] shadow-[0_24px_60px_rgba(72,51,36,0.14)]">
           <Header currentLocale={CURRENT_LOCALE} />
-
-          <HeroBundleSection />
-
+          <HeroBundleSection startCheckout={startCheckout} loadingPlan={loadingPlan} customerCountry={customerCountry} setCustomerCountry={setCustomerCountry} customerProvince={customerProvince} setCustomerProvince={setCustomerProvince} isCanada={isCanada} missingProvince={missingProvince} isQuebecBlocked={isQuebecBlocked} />
           <HowItWorksSection />
-
           <ExamplesGallerySection />
-
+          <ReviewsSection />
           <PhotoGuideSection />
-
           <FinalCTASection />
-
-          <Footer
-            currentLocale={CURRENT_LOCALE}
-            linkCopied={linkCopied}
-            copyLink={copyLink}
-            openContact={() => setIsContactOpen(true)}
-            t={t}
-          />
+          <Footer currentLocale={CURRENT_LOCALE} linkCopied={linkCopied} copyLink={copyLink} openContact={() => setIsContactOpen(true)} t={footerT} />
         </div>
       </div>
-
-      {isContactOpen && (
-        <ContactModal
-          name={name}
-          setName={setName}
-          supportSubject={supportSubject}
-          setSupportSubject={setSupportSubject}
-          message={message}
-          setMessage={setMessage}
-          msgCopied={msgCopied}
-          setMsgCopied={setMsgCopied}
-          close={() => setIsContactOpen(false)}
-        />
-      )}
+      {isContactOpen && <ContactModal name={name} setName={setName} supportSubject={supportSubject} setSupportSubject={setSupportSubject} message={message} setMessage={setMessage} close={() => setIsContactOpen(false)} />}
     </main>
   );
 }
 
+
 function Header({ currentLocale }: { currentLocale: LocaleKey }) {
+  const [isLangOpen, setIsLangOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-50 border-b border-[#e3d8cb] bg-white/82 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-3 px-5 py-4">
-        <div className="flex shrink-0 items-center gap-3">
-          <div className="text-[18px]">🐾</div>
-          <span className="whitespace-nowrap text-[16px] font-extrabold tracking-tight text-[#3A2418] xl:text-[17px]">
-            Pet Keepsake Studio
-          </span>
+      <div className="relative mx-auto flex max-w-[1680px] items-center justify-between gap-3 px-3 py-2.5">
+        <Link href="/es" className="flex shrink-0 items-center gap-2">
+          <Image src="/images/petkeepsart_logo.png" alt="Pet Keeps Art" width={120} height={120} className="h-auto w-[105px] md:w-[120px]" priority />
+          <span className="text-[20px] font-extrabold text-[#4A3428]">Pet Keeps Art</span>
+        </Link>
+        <div className="pointer-events-none absolute left-1/2 hidden -translate-x-[97%] lg:flex">
+          <div className="pointer-events-auto flex items-center gap-5">
+            <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">Paquete</a>
+            <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">Precios</a>
+            <a href="#guide" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">Preguntas</a>
+            <a href="#examples" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">Ver Ejemplos</a>
+          </div>
         </div>
-
-        <div className="hidden items-center gap-5 lg:flex">
-          <a
-            href="#upload"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            Subir
-          </a>
-          <a
-            href="#pricing"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            Precios
-          </a>
-          <a
-            href="#guide"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            FAQ
-          </a>
-          <a
-            href="#examples"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            Ver Ejemplos
-          </a>
-          <a
-            href="#upload"
-            className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
-          >
-            Crea el Tuyo
-          </a>
+        <div className="hidden items-center gap-2 md:flex mr-12">
+          {LANGUAGE_HOME_LINKS.map((lang) => <LangButton key={lang.key} href={lang.href} active={lang.key === currentLocale}>{lang.label}</LangButton>)}
         </div>
-
-        <div className="hidden items-center gap-2 md:flex">
-          {LANGUAGE_HOME_LINKS.map((lang) => (
-            <LangButton
-              key={lang.key}
-              href={lang.href}
-              active={lang.key === currentLocale}
-            >
-              {lang.label}
-            </LangButton>
-          ))}
-        </div>
-
-        <div className="relative block md:hidden">
-          <details className="group relative">
-            <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 Idioma
-            </summary>
-
-            <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
-              {LANGUAGE_HOME_LINKS.map((lang) => (
-                <LangButton
-                  key={lang.key}
-                  href={lang.href}
-                  active={lang.key === currentLocale}
-                >
-                  {lang.label}
-                </LangButton>
-              ))}
+        <div className="relative md:hidden mr-3">
+          <button type="button" onClick={() => setIsLangOpen(!isLangOpen)} className="flex items-center gap-1 rounded-full border border-[#d9cbbc] bg-white px-3 py-1.5 text-[12px] font-bold text-[#4A3428] shadow-sm">
+            🌐 {LANGUAGE_HOME_LINKS.find((l) => l.key === currentLocale)?.label ?? "ENG"} ▾
+          </button>
+          {isLangOpen && (<>
+            <div className="fixed inset-0 z-40" onClick={() => setIsLangOpen(false)} />
+            <div className="absolute right-0 top-full z-50 mt-2 min-w-[140px] rounded-[16px] border border-[#e3d8cb] bg-white py-2 shadow-xl">
+              {LANGUAGE_HOME_LINKS.map((lang) => <Link key={lang.key} href={lang.href} onClick={() => setIsLangOpen(false)} className={`block px-4 py-2 text-[14px] font-semibold transition hover:bg-[#faf3eb] ${lang.key === currentLocale ? "text-[#D98962]" : "text-[#4A3428]"}`}>{lang.label}</Link>)}
             </div>
-          </details>
+          </>)}
         </div>
       </div>
     </nav>
   );
 }
 
-function HeroBundleSection() {
-  const avatarVariationText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
-  const pricingText = PRICING_TEXT[CURRENT_LOCALE];
-  const [uploadRightsConfirmed, setUploadRightsConfirmed] = useState(false);
 
+function LangButton({ children, href, active = false }: { children: React.ReactNode; href: string; active?: boolean }) {
+  return <Link href={href} className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[16px] border px-3 py-1.5 text-[12px] font-bold transition ${active ? "border-[#3A2418] bg-[#3A2418] text-white" : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"}`}>{children}</Link>;
+}
+
+
+function HeroBundleSection({ startCheckout, loadingPlan, customerCountry, setCustomerCountry, customerProvince, setCustomerProvince, isCanada, missingProvince, isQuebecBlocked }: { startCheckout: (plan: PlanId) => void; loadingPlan: PlanId | null; customerCountry: string; setCustomerCountry: React.Dispatch<React.SetStateAction<string>>; customerProvince: string; setCustomerProvince: React.Dispatch<React.SetStateAction<string>>; isCanada: boolean; missingProvince: boolean; isQuebecBlocked: boolean; }) {
+  const avatarText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
+  const pt = PRICING_TEXT[CURRENT_LOCALE];
+  const disabled = loadingPlan !== null || missingProvince || isQuebecBlocked;
   return (
-    <section
-      id="upload"
-      className="bg-[linear-gradient(180deg,#f7efe5_0%,#f9f2e9_100%)] px-5 pb-14 pt-12 md:px-8 xl:px-10"
-    >
+    <section className="bg-[linear-gradient(180deg,#f7efe5_0%,#f9f2e9_100%)] px-5 pb-14 pt-12 md:px-8 xl:px-10">
       <div className="mx-auto max-w-[1560px]">
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[1480px] text-center">
-            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold tracking-[0.02em] text-[#7B5B47] shadow-sm">
-              Recuerdos digitales personalizados creados a partir de la foto de tu mascota
-            </div>
-
-           <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)]">
-  <span className="block">1 Foto → 3 Recuerdos</span>
-  <span className="block">Personalizados de tu Mascota</span>
-</h1>
-
-            <p className="mx-auto mt-5 max-w-[1500px] text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-  <span className="block">
-    Convierte una foto de tu mascota en una página para colorear imprimible,
-  </span>
-  <span className="block">
-    un certificado conmemorativo y un pack de 12 avatares — listos para descargar, imprimir, regalar y conservar.
-  </span>
-</p>
-
+            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">Recuerdos digitales personalizados a partir de tu foto de mascota o mascota + dueño</div>
+            <h1 className="mx-auto mt-6 max-w-[1200px] text-center font-serif font-black leading-[1.02] tracking-[-0.04em] text-[#23150F] text-[clamp(2rem,3.6vw,4rem)]">1 Foto → 3 Recuerdos Personalizados</h1>
+            <p className="mx-auto mt-5 max-w-[1080px] px-2 text-[clamp(1rem,1.2vw,1.3rem)] leading-[1.55] text-stone-700">Convierte tu foto de mascota o mascota + dueño en una página para colorear imprimible, un certificado conmemorativo y un pack de 12 avatares — para descargar, imprimir, regalar y atesorar.</p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <HeroPill>Hecho a partir de tu propia foto</HeroPill>
-              <HeroPill>Ideal para cumpleaños o recuerdo</HeroPill>
+              <HeroPill>Hecho con tu propia foto</HeroPill>
+              <HeroPill>Solo mascota o mascota + dueño</HeroPill>
+              <HeroPill>Personalizado, cumpleaños o memorial</HeroPill>
               <HeroPill>Solo descarga digital</HeroPill>
             </div>
           </div>
-
-          <div className="mt-10 grid w-full gap-8 xl:grid-cols-[470px_minmax(0,1fr)] xl:items-start">
+          <div className="mt-8 grid w-full gap-6 xl:grid-cols-[420px_minmax(0,1fr)] xl:items-start">
             <div className="flex flex-col items-center">
-              <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
+              <div className="w-full max-w-[420px] rounded-[30px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    Comenzar subida
-                  </span>
-                  <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG o PNG
-                  </span>
+                  <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">Foto de muestra</span>
+                  <span className="text-[14px] font-semibold text-[#7B6658]">Solo demo</span>
                 </div>
-
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
-                  <img
-                    src="/images/hero-original-demo.png"
-                    alt="Vista previa de subida"
-                    className="h-auto w-full rounded-[20px] bg-white object-contain"
-                  />
+                  <img src="/images/hero-original-demo.png" alt="Sample original photo" className="h-auto w-full rounded-[20px] bg-white object-contain" />
                 </div>
-
-                <div className="mt-5 flex flex-col gap-3">
-                  <button
-                    disabled={!uploadRightsConfirmed}
-                    className={`w-full rounded-full px-5 py-4 text-[20px] font-extrabold text-white transition ${
-                      uploadRightsConfirmed
-                        ? "bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] shadow-[0_12px_22px_rgba(157,97,65,0.22)] hover:brightness-95"
-                        : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
-                    }`}
-                  >
-                    Sube Tu Foto
-                  </button>
-
-                  <a
-                    href="#examples"
-                    className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
-                  >
-                    Ver Ejemplos Reales
-                  </a>
-                </div>
-
-                <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
-                  <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    Confirmación de derechos de la foto
+                <div className="mt-6 flex flex-col gap-3">
+                  <a href="#pricing" className="w-full rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-4 text-center text-[20px] font-extrabold text-white shadow-[0_12px_22px_rgba(157,97,65,0.22)] transition hover:brightness-95">Elige tu paquete</a>
+                  <a href="#examples" className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]">Ver ejemplos reales</a>
+                  <div className="mt-2 rounded-[18px] border border-[#eadfd2] bg-[#fffaf4] px-4 py-4 text-center text-[16px] leading-7 text-[#7B6658]">
+                    <div>Subirás la foto después del pago.</div>
+                    <div className="mt-2 font-semibold text-[#6E5546]">Los archivos se enviarán al correo introducido en el pago de Stripe.</div>
+                    <div className="mt-1 font-semibold text-[#6E5546]">Ese correo de entrega no se puede cambiar después en la página de personalización.</div>
                   </div>
-
-                  <label className="flex cursor-pointer items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={uploadRightsConfirmed}
-                      onChange={(e) => setUploadRightsConfirmed(e.target.checked)}
-                      className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
-                    />
-                    <span className="text-[15px] leading-7 text-[#5b4334]">
-                      Confirmo que esta foto es mía o que tengo permiso para usarla.
-                      No subas imágenes de celebridades, figuras públicas,
-                      personajes ficticios o imágenes descargadas de internet.
-                    </span>
-                  </label>
-
-                  <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    Los pedidos que incumplan estas reglas pueden ser rechazados o cancelados.
-                  </p>
                 </div>
-
-                <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  No necesitas habilidades de diseño. Sube una vez y recibe archivos listos para descargar.
+              </div>
+              <div className="mt-6 w-full max-w-[420px] rounded-[28px] border border-[#e1d3c5] bg-white p-6 shadow-[0_10px_22px_rgba(84,58,39,0.06)]">
+                <div className="text-[24px] font-black text-[#4B3427]">Ubicación de facturación</div>
+                <div className="mt-3 rounded-[16px] border border-[#e6d8ca] bg-[#fffaf4] px-4 py-3 text-[14px] leading-6 text-[#7B6658]">Los clientes de Canadá deben seleccionar provincia o territorio. No se aceptan pedidos de Québec.</div>
+                <div className="mt-5 space-y-4">
+                  <div>
+                    <label className="mb-2 block text-[14px] font-bold text-[#6B5345]">País</label>
+                    <select value={customerCountry} onChange={(e) => { setCustomerCountry(e.target.value); if (e.target.value !== "Canada") setCustomerProvince(""); }} className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none">
+                      <option value="United States">Estados Unidos</option><option value="Canada">Canadá</option><option value="United Kingdom">Reino Unido</option><option value="Australia">Australia</option><option value="Other">Otro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-[14px] font-bold text-[#6B5345]">{isCanada ? "Provincia / Territorio" : "Estado / Provincia"}</label>
+                    {isCanada ? (
+                      <select value={customerProvince} onChange={(e) => setCustomerProvince(e.target.value)} className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none">
+                        <option value="">Selecciona una provincia...</option>
+                        {CANADIAN_PROVINCES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+                      </select>
+                    ) : (
+                      <input type="text" value={customerProvince} onChange={(e) => setCustomerProvince(e.target.value)} placeholder="Opcional" className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none" />
+                    )}
+                  </div>
+                  {missingProvince && <div className="rounded-[16px] border border-amber-200 bg-amber-50 px-4 py-3 text-[15px] font-semibold text-amber-700">Por favor selecciona una provincia para continuar.</div>}
+                  {isQuebecBlocked && <div className="rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-[15px] font-semibold text-red-700">Lo sentimos, este servicio no está disponible para clientes ubicados en Québec.</div>}
                 </div>
               </div>
             </div>
-
             <div className="flex flex-col items-center xl:items-start">
-              <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    Vista previa del paquete
-                  </span>
-                  <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1 subida • 3 recuerdos
-                  </span>
+              <div className="w-full max-w-[980px] rounded-[32px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)]">
+                <div className="mb-5 flex flex-wrap items-center justify-between gap-3 px-2">
+                  <span className="rounded-full bg-white px-5 py-2 text-[14px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">Vista previa en vivo</span>
+                  <span className="text-[16px] font-semibold text-[#7B6658]">1 subida • 3 productos</span>
                 </div>
-
-                <div className="relative">
-                  <img
-                    src="/images/hero-keepsake-3-products.png"
-                    alt="Vista previa de página para colorear, certificado conmemorativo y pack de avatares"
-                    className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
-                <HeroSubPill>Cumpleaños</HeroSubPill>
-                <HeroSubPill>En memoria</HeroSubPill>
-                <HeroSubPill>Imprimible</HeroSubPill>
-                <HeroSubPill>Compartible</HeroSubPill>
-                <HeroSubPill>
-                  {avatarVariationText.line1} {avatarVariationText.line2}
-                </HeroSubPill>
-              </div>
-
-              <div
-                id="pricing"
-                className="mt-8 grid w-full max-w-[1000px] gap-4 sm:grid-cols-2 xl:grid-cols-4"
-              >
-                <button className="relative flex min-h-[258px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[28px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95">
-                  <div className="absolute left-4 top-4 rounded-full bg-white/18 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em]">
-                    {pricingText.bundleBadge}
-                  </div>
-
-                  <div className="mt-6 text-[18px] font-extrabold uppercase tracking-[0.04em]">
-                    {pricingText.bundleTitle}
-                  </div>
-
-                  <PriceCurrencyBadge bundle>USD</PriceCurrencyBadge>
-
-                  <div className="mt-3 text-[46px] font-black">$19.99</div>
-                  <div className="mt-2 text-[18px] opacity-95">
-                    {pricingText.bundleSub}
-                  </div>
-                  <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
-                    {pricingText.bundleSave} frente a comprar por separado
-                  </div>
-                </button>
-
-                <PricingCard
-                  title={pricingText.coloringTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                />
-
-                <PricingCard
-                  title={pricingText.keepsakeTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                  extra={
-                    <div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]">
-                      <div>Feliz Cumpleaños /</div>
-                      <div>En Memoria</div>
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.coloringTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">Vista previa IA</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/coloringpage.png" alt="Coloring Default" className="h-full w-full scale-[1.06] object-contain" />
                     </div>
-                  }
-                />
-
-                <PricingCard
-                  title={pricingText.avatarTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                />
-              </div>
-
-              <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
-                <TrustPill>Pago seguro</TrustPill>
-                <TrustPill>Solo archivos digitales</TrustPill>
-                <TrustPill>Sin envío</TrustPill>
-              </div>
-
-              <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
-                <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
-                  <TrustMiniItem
-                    title="Personalizado"
-                    text="Hecho a partir de la foto de tu mascota"
-                  />
-                  <TrustMiniItem
-                    title="Digital"
-                    text="Formato listo para descargar al instante"
-                  />
-                  <TrustMiniItem
-                    title="Ideal para regalar"
-                    text="Perfecto para cumpleaños y recuerdos"
-                  />
+                    <div className="px-2 text-center text-[11px] font-bold leading-tight text-[#8A5A3D]">Línea de arte generada<br />tras el pago</div>
+                  </div>
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.keepsakeTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">Vista previa IA</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/keepsake-certificate.png" alt="Certificate Default" className="h-full w-full scale-[1.04] object-contain" />
+                    </div>
+                    <div className="px-2 flex flex-col items-center text-center">
+                      <div className="whitespace-nowrap text-[10px] font-bold leading-none text-[#8A5A3D]">Diseño personalizado creado tras el pago</div>
+                      <div className="mt-1 text-[10px] font-semibold leading-tight text-[#8A5A3D]">Personalizado, cumpleaños o memorial</div>
+                    </div>
+                  </div>
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.avatarTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">Vista previa IA</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/avatarpack.png" alt="Avatar Pack Default" className="h-full w-full scale-[1.04] object-contain" />
+                    </div>
+                    <div className="px-2 text-center text-[11px] font-bold leading-tight text-[#8A5A3D]">12 estilos de avatar únicos<br />creados tras el pago</div>
+                  </div>
                 </div>
+              </div>
+              <div className="mt-6 flex w-full max-w-[980px] flex-wrap items-center justify-center gap-3">
+                <HeroSubPill>Cumpleaños</HeroSubPill><HeroSubPill>Memorial</HeroSubPill><HeroSubPill>Imprimible</HeroSubPill><HeroSubPill>Compartible</HeroSubPill>
+                <HeroSubPill>{avatarText.line1} {avatarText.line2}</HeroSubPill>
+              </div>
+              <div id="pricing" className="mt-8 grid w-full max-w-[980px] gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                <button type="button" onClick={() => startCheckout("bundle")} disabled={disabled} className="relative flex min-h-[280px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70">
+                  <div className="absolute left-4 top-4 rounded-full bg-white/18 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em]">{pt.bundleBadge}</div>
+                  <div className="mt-6 text-[20px] font-black uppercase tracking-[0.04em]">{pt.bundleTitle}</div>
+                  <PriceCurrencyBadge bundle>USD Dólares</PriceCurrencyBadge>
+                  <div className="mt-3 text-[40px] font-black">$19.99</div>
+                  <div className="mt-1 text-[18px] font-bold opacity-95">{pt.bundleSub}</div>
+                  <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">{loadingPlan === "bundle" ? "Redirigiendo..." : pt.bundleSave}</div>
+                  <div className="mt-4 text-[13px] font-semibold leading-5 text-white/90">Al mismo correo de Stripe</div>
+                </button>
+                <PricingCard title={pt.coloringTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("coloring")} isLoading={loadingPlan === "coloring"} isDisabled={disabled} />
+                <PricingCard title={pt.keepsakeTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("keepsake")} isLoading={loadingPlan === "keepsake"} isDisabled={disabled}
+                  extra={<div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]"><div>Personalizado /</div><div>Feliz Cumpleaños O</div><div>En Memoria</div></div>}
+                />
+                <PricingCard title={pt.avatarTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("avatar")} isLoading={loadingPlan === "avatar"} isDisabled={disabled} />
+              </div>
+              <div className="mt-6 flex w-full max-w-[980px] flex-wrap items-center justify-center gap-3">
+                <TrustPill>Pago seguro</TrustPill><TrustPill>Solo archivos digitales</TrustPill><TrustPill>Sin envío</TrustPill><TrustPill>Mismo correo del pago</TrustPill><TrustPill>No se puede cambiar después</TrustPill>
               </div>
             </div>
           </div>
@@ -612,704 +344,221 @@ function HeroBundleSection() {
   );
 }
 
-function PriceCurrencyBadge({
-  children,
-  bundle = false,
-}: {
-  children: React.ReactNode;
-  bundle?: boolean;
-}) {
-  return (
-    <div
-      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold tracking-[0.02em] shadow-sm ${
-        bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"
-      }`}
-    >
-      {children}
-    </div>
-  );
-}
 
-function PricingCard({
-  title,
-  price,
-  subtitle,
-  extra,
-}: {
-  title: string;
-  price: string;
-  subtitle: string;
-  extra?: React.ReactNode;
-}) {
+function PriceCurrencyBadge({ children, bundle = false }: { children: React.ReactNode; bundle?: boolean }) {
+  return <div className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold uppercase tracking-[0.14em] shadow-sm ${bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"}`}>{children}</div>;
+}
+function PricingCard({ title, price, subtitle, extra, onClick, isLoading, isDisabled }: { title: string; price: string; subtitle: string; extra?: React.ReactNode; onClick?: () => void; isLoading?: boolean; isDisabled?: boolean }) {
   return (
-    <button className="flex min-h-[258px] flex-col items-center justify-center rounded-[28px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
-      <div className="text-[18px] font-extrabold text-[#4B3427]">{title}</div>
-      {extra}
-      <PriceCurrencyBadge>USD</PriceCurrencyBadge>
-      <div className="mt-3 text-[42px] font-black text-[#2E1D16]">{price}</div>
-      <div className="mt-2 text-[18px] text-stone-600">{subtitle}</div>
+    <button type="button" onClick={onClick} disabled={isDisabled} className="flex min-h-[280px] flex-col items-center justify-center rounded-[32px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb] disabled:cursor-not-allowed disabled:opacity-70">
+      <div className="text-[19px] leading-tight font-black text-[#4B3427]">{isLoading ? "Redirigiendo..." : title}</div>
+      {!isLoading && extra}
+      <PriceCurrencyBadge>USD Dólares</PriceCurrencyBadge>
+      <div className="mt-3 text-[40px] font-black text-[#2E1D16]">{price}</div>
+      <div className="mt-1 text-[17px] font-medium text-stone-600">{subtitle}</div>
+      <div className="mt-3 text-[13px] font-semibold leading-5 text-[#8D6A50]">Solo al correo del pago</div>
     </button>
   );
 }
+function HeroPill({ children }: { children: React.ReactNode }) { return <div className="rounded-full border border-[#decfbe] bg-white/85 px-5 py-2.5 text-[17px] font-semibold text-[#6B5345] shadow-sm">{children}</div>; }
+function HeroSubPill({ children }: { children: React.ReactNode }) { return <div className="rounded-full bg-[#fff8ef] px-5 py-2.5 text-[17px] font-semibold text-[#7A5B47] shadow-sm ring-1 ring-[#eadacd]">{children}</div>; }
+function TrustPill({ children }: { children: React.ReactNode }) { return <span className="rounded-full border border-[#dfd0c1] bg-white/70 px-4 py-2 text-[16px] font-medium text-[#7B6658]">{children}</span>; }
 
-function HeroPill({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-full border border-[#decfbe] bg-white/85 px-5 py-2.5 text-[17px] font-semibold text-[#6B5345] shadow-sm">
-      {children}
-    </div>
-  );
-}
-
-function HeroSubPill({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-full bg-[#fff8ef] px-5 py-2.5 text-[17px] font-semibold text-[#7A5B47] shadow-sm ring-1 ring-[#eadacd]">
-      {children}
-    </div>
-  );
-}
-
-function TrustPill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="rounded-full border border-[#dfd0c1] bg-white/70 px-4 py-2 text-[16px] font-medium text-[#7B6658]">
-      {children}
-    </span>
-  );
-}
-
-function TrustMiniItem({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="flex min-h-[128px] flex-col items-center justify-center px-6 py-5 text-center">
-      <span className="text-[19px] font-extrabold text-[#3E2B1F]">{title}</span>
-      <span className="mt-2 text-[17px] leading-7 text-[#7B6658]">{text}</span>
-    </div>
-  );
-}
 
 function HowItWorksSection() {
   return (
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1380px]">
-        <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          Cómo Funciona
-        </h2>
-
-        <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          Una foto clara de tu mascota se convierte en un paquete de recuerdos imprimibles en solo unos pasos.
-        </p>
-
+        <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">Cómo funciona</h2>
+        <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">Una foto clara de tu mascota o mascota + dueño se convierte en un pack de recuerdos imprimibles en pocos pasos.</p>
         <div className="mt-10 grid gap-8 md:grid-cols-3">
-          <HowCard
-            number="1"
-            icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="Sube tu foto"
-            text="Empieza con una foto clara de tu mascota donde se vea bien la cara."
-          />
-          <HowCard
-            number="2"
-            icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="Crea tu paquete"
-            text="Recibe una página para colorear, un certificado conmemorativo y un pack de 12 avatares."
-          />
-          <HowCard
-            number="3"
-            icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="Descarga y conserva"
-            text="Imprime, guarda, comparte o regala tus archivos digitales personalizados."
-          />
+          <HowCard number="1" icon={<ShoppingBag className="h-10 w-10" strokeWidth={2.4} />} title="Elige tu recuerdo" text="Selecciona el paquete o el recuerdo individual que quieras y completa el pago primero." />
+          <HowCard number="2" icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />} title="Sube la foto tras el pago" text="Después del pago, sube una foto clara de tu mascota o mascota + dueño y añade los detalles necesarios." />
+          <HowCard number="3" icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />} title="Recibe tus archivos" text="Generamos tus recuerdos digitales personalizados y los enviamos al correo del pago." />
         </div>
       </div>
     </section>
   );
 }
-
-function HowCard({
-  number,
-  icon,
-  title,
-  text,
-}: {
-  number: string;
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
+function HowCard({ number, icon, title, text }: { number: string; icon: React.ReactNode; title: string; text: string }) {
   return (
     <div className="rounded-[28px] border border-[#eadfd2] bg-white/85 px-6 py-10 text-center shadow-[0_12px_22px_rgba(84,58,39,0.05)]">
-      <div className="flex items-end justify-center gap-3">
-        <span className="text-[82px] font-black leading-none text-[#A6825D]">
-          {number}
-        </span>
-        <span className="mb-2 text-[#A6825D]">{icon}</span>
-      </div>
-
+      <div className="flex items-end justify-center gap-3"><span className="text-[82px] leading-none font-black text-[#A6825D]">{number}</span><span className="mb-2 text-[#A6825D]">{icon}</span></div>
       <div className="mt-5 text-[25px] font-black text-[#35241A]">{title}</div>
-      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">
-        {text}
-      </p>
+      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">{text}</p>
     </div>
   );
 }
+
 
 function ExamplesGallerySection() {
   return (
-    <section
-      id="examples"
-      className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fffdfa_0%,#fff7ef_100%)] px-6 py-16 md:px-10 xl:px-12"
-    >
+    <section id="examples" className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fffdfa_0%,#fff7ef_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
-          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            Vista Previa del Estilo Real del Producto
-          </h2>
-
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">Vista Previa Real del Producto</h2>
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            <span className="block">
-              Mira cómo una sola foto de tu mascota puede convertirse en una página para colorear imprimible,
-            </span>
-            <span className="block">
-              un certificado conmemorativo personalizado y un divertido pack de 12 avatares.
-            </span>
+            <span className="block">Mira cómo una foto de mascota o mascota + dueño se convierte en una página para colorear imprimible,</span>
+            <span className="block">un certificado conmemorativo personalizado y un divertido pack de 12 avatares.</span>
           </p>
         </div>
-
         <div className="mx-auto mt-10 max-w-[1450px] rounded-[36px] border border-[#e8ddd1] bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(255,251,246,0.98)_100%)] p-6 shadow-[0_18px_40px_rgba(84,58,39,0.08)] md:p-8 xl:p-10">
-          <div className="mb-7 hidden items-center justify-center gap-8 md:flex">
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-            <div className="text-[48px] leading-none text-[#c8b6a0]">→</div>
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            <ExampleFlowCard
-              img="/images/avatar_example.jpg"
-              title="Foto Original"
-              badge="Original"
-              description="La foto de tu mascota que subes"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/coloring_result.jpg"
-              title="Página para Colorear"
-              badge="Vista previa IA"
-              description="Arte lineal en blanco y negro para imprimir"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/keepsake-certificate.png"
-              title="Certificado Conmemorativo"
-              badge="Vista previa IA"
-              description="Recuerdo ideal para cumpleaños o memoria"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/avatar_pack_preview.png"
-              title="Pack de Avatares"
-              badge="Vista previa IA"
-              description="12 estilos de avatar únicos para compartir"
-              badgeTone="gold"
-              contain
-            />
+            <EFC img="/images/avatar_example.jpg" title="Foto Original" badge="Original" description="La foto de mascota que subirás" />
+            <EFC img="/images/coloring_result.jpg" title="Página para Colorear" badge="Vista IA" description="Arte lineal en blanco y negro imprimible" />
+            <EFC img="/images/keepsake-certificate.png" title="Certificado Conmemorativo" badge="Vista IA" description="Personalizado, cumpleaños o diseño memorial" />
+            <EFC img="/images/avatar_pack_preview.png" title="Pack de Avatares" badge="Vista IA" description="12 estilos de avatar únicos para compartir" contain />
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-function ExampleFlowCard({
-  img,
-  title,
-  badge,
-  description,
-  contain = false,
-  badgeTone = "gold",
-}: {
-  img: string;
-  title: string;
-  badge: string;
-  description: string;
-  contain?: boolean;
-  badgeTone?: "gold" | "orange";
-}) {
-  const badgeClass =
-    badgeTone === "orange"
-      ? "bg-[linear-gradient(180deg,#D8A483_0%,#C98560_100%)] text-white"
-      : "bg-[#E5D394] text-[#6B5328]";
-
+function EFC({ img, title, badge, description, contain = false }: { img: string; title: string; badge: string; description: string; contain?: boolean }) {
   return (
     <div className="rounded-[26px] border border-[#e4d7ca] bg-white p-4 shadow-[0_12px_24px_rgba(84,58,39,0.07)]">
       <div className="relative overflow-hidden rounded-[20px] border border-[#ece0d4] bg-[#fffdfa]">
-        <span
-          className={`absolute right-3 top-3 z-10 rounded-full px-4 py-1.5 text-[12px] font-extrabold shadow-sm ${badgeClass}`}
-        >
-          {badge}
-        </span>
-
-        <img
-          src={img}
-          alt={title}
-          className={`h-[360px] w-full bg-white object-contain ${
-            contain ? "p-4" : "p-3"
-          }`}
-        />
+        <span className="absolute right-3 top-3 z-10 rounded-full bg-[#E5D394] px-4 py-1.5 text-[12px] font-extrabold text-[#6B5328] shadow-sm">{badge}</span>
+        <img src={img} alt={title} className={`h-[360px] w-full bg-white object-contain ${contain ? "p-4" : "p-3"}`} />
       </div>
-
       <div className="pt-5 text-center">
-        <div className="font-serif text-[28px] font-black leading-tight text-[#2F1C13]">
-          {title}
-        </div>
-        <div className="mt-2 text-[18px] leading-8 text-stone-600">
-          {description}
-        </div>
+        <div className="font-serif text-[28px] font-black text-[#2F1C13]">{title}</div>
+        <div className="mt-2 text-[18px] leading-8 text-stone-600">{description}</div>
       </div>
     </div>
   );
 }
 
-function PhotoGuideSection() {
+
+function ReviewsSection() {
   return (
-    <section
-      id="guide"
-      className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12"
-    >
+    <section className="border-t border-[#eadfd2] bg-[#fffaf5] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
-          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            Cómo Elegir la Mejor Foto
-          </h2>
-          <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            Una foto clara y luminosa da los mejores resultados.
-          </p>
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">Por Qué las Familias con Mascotas Nos Eligen</h2>
+          <p className="mx-auto mt-4 max-w-[780px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">Todo está diseñado para que tu experiencia sea simple, segura y especial.</p>
         </div>
-
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
-          <GuidePanel
-            good
-            title="✓ Buena"
-            bullets={[
-              "Luz natural sobre la cara de la mascota",
-              "La cara se ve claramente y está centrada",
-              "La mascota ocupa suficiente espacio en la foto",
-            ]}
-            images={[
-              "/images/good_1_bird_girl.png",
-              "/images/good_2_rabbit.png",
-              "/images/good_3_hedgehog_girl.png",
-            ]}
-          />
-
-          <GuidePanel
-            title="✕ Evitar"
-            bullets={[
-              "Foto borrosa o desenfocada",
-              "Demasiado oscura o con sombras fuertes",
-              "Cara recortada o girada hacia otro lado",
-            ]}
-            images={[
-              "/images/avoid_1_blurry_cat.png",
-              "/images/avoid_2_dark_cat.png",
-              "/images/avoid_3_turned_away_bird.png",
-            ]}
-          />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {GUARANTEES.map((g) => (
+            <div key={g.title} className="flex flex-col gap-3 rounded-[26px] border border-[#e8ddd1] bg-white p-7 shadow-[0_8px_20px_rgba(84,58,39,0.06)]">
+              <div className="text-[36px] leading-none">{g.icon}</div>
+              <div className="text-[19px] font-black text-[#35241A]">{g.title}</div>
+              <p className="text-[16px] leading-[1.65] text-[#5e4a3c]">{g.text}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function GuidePanel({
-  title,
-  bullets,
-  images,
-  good = false,
-}: {
-  title: string;
-  bullets: string[];
-  images: string[];
-  good?: boolean;
-}) {
+
+function PhotoGuideSection() {
+  return (
+    <section id="guide" className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12">
+      <div className="mx-auto max-w-[1500px]">
+        <div className="text-center">
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">Cómo Elegir la Mejor Foto</h2>
+          <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">Una foto clara y bien iluminada da los mejores resultados.</p>
+        </div>
+        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+          <GuidePanel good title="✓ Ideal" bullets={["Luz natural en la cara de la mascota", "Cara claramente visible y centrada", "La mascota ocupa suficiente espacio en el encuadre"]} images={["/images/good_1_bird_girl.png", "/images/good_2_rabbit.png", "/images/good_3_hedgehog_girl.png"]} />
+          <GuidePanel title="✕ Evitar" bullets={["Foto borrosa o desenfocada", "Demasiado oscura o con sombras fuertes", "Cara cortada o mirando hacia otro lado"]} images={["/images/avoid_1_blurry_cat.png", "/images/avoid_2_dark_cat.png", "/images/avoid_3_turned_away_bird.png"]} />
+        </div>
+      </div>
+    </section>
+  );
+}
+function GuidePanel({ title, bullets, images, good = false }: { title: string; bullets: string[]; images: string[]; good?: boolean }) {
   return (
     <div className="overflow-hidden rounded-[26px] border border-[#eadfd4] bg-white shadow-[0_12px_24px_rgba(70,45,25,0.06)]">
-      <div
-        className={`px-6 py-5 text-center text-[24px] font-black ${
-          good ? "bg-[#edf5e6] text-[#2f6c39]" : "bg-[#fde9e2] text-[#b33a3a]"
-        }`}
-      >
-        {title}
-      </div>
-
+      <div className={`px-6 py-5 text-center text-[24px] font-black ${good ? "bg-[#edf5e6] text-[#2f6c39]" : "bg-[#fde9e2] text-[#b33a3a]"}`}>{title}</div>
       <div className="px-7 py-7">
         <div className="space-y-3 text-[19px] font-medium text-[#5f4c40]">
-          {bullets.map((item) => (
-            <div key={item} className="flex items-center gap-3">
-              {good ? (
-                <Check className="h-6 w-6 text-[#4f9b5d]" strokeWidth={2.6} />
-              ) : (
-                <X className="h-6 w-6 text-[#d64545]" strokeWidth={2.6} />
-              )}
-              <span>{item}</span>
-            </div>
-          ))}
+          {bullets.map((item) => (<div key={item} className="flex items-center gap-3">{good ? <Check className="h-6 w-6 text-[#4f9b5d]" strokeWidth={2.6} /> : <X className="h-6 w-6 text-[#d64545]" strokeWidth={2.6} />}<span>{item}</span></div>))}
         </div>
-
         <div className="mt-7 grid grid-cols-3 gap-4">
-          {images.map((img) => (
-            <div
-              key={img}
-              className={`overflow-hidden rounded-[12px] bg-white p-2 shadow-sm ${
-                good ? "border border-[#e9ddd1]" : "border border-[#f2d4d4]"
-              }`}
-            >
-              <img
-                src={img}
-                alt={title}
-                className="aspect-[4/5] h-full w-full rounded-[8px] bg-white object-contain"
-              />
-            </div>
-          ))}
+          {images.map((img) => (<div key={img} className={`overflow-hidden rounded-[12px] bg-white p-2 shadow-sm ${good ? "border border-[#e9ddd1]" : "border border-[#f2d4d4]"}`}><img src={img} alt={title} className="aspect-[4/5] h-full w-full rounded-[8px] bg-white object-contain" /></div>))}
         </div>
       </div>
     </div>
   );
 }
+
 
 function FinalCTASection() {
   return (
     <section className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fff8f0_0%,#f8eee3_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto flex max-w-[1320px] flex-col items-center text-center">
-        <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          ¿Listo para convertir la foto de tu mascota en algo que valga la pena conservar?
-        </h2>
-
-        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-  <span className="block">
-    Sube una vez y recibe una página para colorear personalizada,
-  </span>
-  <span className="block">
-    un certificado conmemorativo y un pack de avatares creados a partir de tu propia foto.
-  </span>
-</p>
-
-        <div className="mt-8">
-          <a
-            href="#upload"
-            className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
-          >
-            Sube Tu Foto
-          </a>
-        </div>
-
-        <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
-          Entrega digital • Sin envío • Ideal para regalos y recuerdos
-        </div>
+        <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">¿Listo para convertir la foto de tu mascota o mascota + dueño en algo para guardar?</h2>
+        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">Elige tu paquete primero. Subirás la foto después del pago.</p>
+        <p className="mx-auto mt-2 max-w-[980px] text-center text-[17px] leading-8 text-[#7B6658]">Los archivos finales se entregarán al mismo correo introducido en el pago. No se puede seleccionar un correo de entrega diferente después.</p>
+        <div className="mt-8"><a href="#pricing" className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95">Elige tu paquete</a></div>
+        <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">Entrega digital • Sin envío • Ideal para regalos y recuerdos</div>
       </div>
     </section>
   );
 }
 
-function Footer({
-  currentLocale,
-  linkCopied,
-  copyLink,
-  openContact,
-  t,
-}: {
-  currentLocale: LocaleKey;
-  linkCopied: boolean;
-  copyLink: () => void;
-  openContact: () => void;
-  t: {
-    footerDisclaimer: string;
-    footerDisclaimer2: string;
-    footerDisclaimer3: string;
-  };
-}) {
-  const legalLinks = LEGAL_LINKS[currentLocale];
-  const legalText = LEGAL_TEXT[currentLocale];
 
-  const openMachineTranslatedSite = (targetLang: string) => {
-    const currentUrl = window.location.href;
-    const hostname = window.location.hostname;
-
-    const isLocal =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.endsWith(".local");
-
-    if (isLocal) {
-      alert(
-        "La traducción de Google normalmente no funciona en localhost. Pruébala en tu dominio en vivo o usa la traducción de Chrome en la página actual."
-      );
-      return;
-    }
-
-    const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${targetLang}&u=${encodeURIComponent(
-      currentUrl
-    )}`;
-
-    window.location.href = translateUrl;
-  };
-
+function Footer({ currentLocale, linkCopied, copyLink, openContact, t }: { currentLocale: LocaleKey; linkCopied: boolean; copyLink: () => void; openContact: () => void; t: FooterText }) {
+  const ll = LEGAL_LINKS[currentLocale]; const lt = LEGAL_TEXT[currentLocale];
+  const si = [{ key: "facebook", alt: "Facebook" }, { key: "instagram", alt: "Instagram" }, { key: "tiktok", alt: "TikTok" }, { key: "pinterest", alt: "Pinterest" }, { key: "link", alt: "Copy link" }];
   return (
     <footer className="border-t border-black/5 bg-[#efe5d8]">
-      <div className="mx-auto max-w-[1320px] px-5 py-8 sm:px-8">
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {["email", "facebook", "instagram", "tiktok", "pinterest", "link"].map(
-              (p) => (
-                <button
-                  key={p}
-                  onClick={p === "link" ? copyLink : undefined}
-                  className="relative transition hover:opacity-75"
-                >
-                  <img
-                    src={`/social/${p}.png`}
-                    alt={p}
-                    className="h-10 w-10 object-contain"
-                  />
-                  {p === "link" && linkCopied && (
-                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      COPIADO
-                    </span>
-                  )}
-                </button>
-              )
-            )}
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
-            <Link href={legalLinks.terms} className="hover:underline">
-              {legalText.terms}
-            </Link>
-            <Link href={legalLinks.privacy} className="hover:underline">
-              {legalText.privacy}
-            </Link>
-            <Link href={legalLinks.refunds} className="hover:underline">
-              {legalText.refunds}
-            </Link>
-            <button onClick={openContact} className="hover:underline">
-              {legalText.contact}
+      <div className="mx-auto flex max-w-[1320px] flex-col items-center px-5 py-8 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {si.map((item) => (
+            <button key={item.key} type="button" onClick={item.key === "link" ? copyLink : undefined} aria-label={item.alt} className="relative transition hover:opacity-75">
+              <img src={`/social/${item.key}.png`} alt={item.alt} className="h-10 w-10 object-contain" />
+              {item.key === "link" && linkCopied && <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">Copiado</span>}
             </button>
-          </div>
-
-          <div className="mt-5 flex flex-col items-center gap-4 md:flex-row md:gap-6">
-            <div className="text-[17px] font-medium text-[#1f1a16]">
-              © {BRAND.year} {BRAND.name}
-            </div>
-
-            <div className="flex items-center gap-2">
-              {["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => (
-                <img
-                  key={p}
-                  src={`/payments/${p}.png`}
-                  alt={p}
-                  className="h-7 w-auto object-contain"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-3 text-center">
-            <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
-              <Globe className="h-4 w-4" />
-              Más idiomas (traducción automática)
-            </div>
-
-            <select
-              defaultValue=""
-              onChange={(e) => {
-                const value = e.target.value;
-                if (!value) return;
-                openMachineTranslatedSite(value);
-                e.target.value = "";
-              }}
-              className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
-            >
-              <option value="" disabled>
-                Elige otro idioma...
-              </option>
-              {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
-                <option key={lang.tl} value={lang.tl}>
-                  {lang.label}
-                </option>
-              ))}
-            </select>
-
-            <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              La traducción automática se ofrece solo por comodidad. Las versiones oficiales son las páginas de idioma publicadas en este sitio.
-            </p>
-          </div>
-
-          <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
-            <span>{t.footerDisclaimer}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer2}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer3}</span>
-          </div>
+          ))}
+        </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
+          <Link href={ll.terms} className="hover:underline">{lt.terms}</Link>
+          <Link href={ll.privacy} className="hover:underline">{lt.privacy}</Link>
+          <Link href={ll.refunds} className="hover:underline">{lt.refunds}</Link>
+          <button type="button" onClick={openContact} className="hover:underline">{lt.contact}</button>
+        </div>
+        <div className="mt-5 text-[17px] font-medium text-[#1f1a16]">© {BRAND.year} {BRAND.name}</div>
+        <div className="mt-5 flex items-center gap-2">{["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => <img key={p} src={`/payments/${p}.png`} alt={p} className="h-7 w-auto object-contain" />)}</div>
+        <div className="mt-8 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
+          <span>{t.footerDisclaimer}</span><span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer2}</span><span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer3}</span>
         </div>
       </div>
     </footer>
   );
 }
 
-function ContactModal({
-  name,
-  setName,
-  supportSubject,
-  setSupportSubject,
-  message,
-  setMessage,
-  msgCopied,
-  setMsgCopied,
-  close,
-}: {
-  name: string;
-  setName: (v: string) => void;
-  supportSubject: string;
-  setSupportSubject: (v: string) => void;
-  message: string;
-  setMessage: (v: string) => void;
-  msgCopied: boolean;
-  setMsgCopied: (v: boolean) => void;
-  close: () => void;
-}) {
+
+function ContactModal({ name, setName, supportSubject, setSupportSubject, message, setMessage, close }: { name: string; setName: React.Dispatch<React.SetStateAction<string>>; supportSubject: string; setSupportSubject: React.Dispatch<React.SetStateAction<string>>; message: string; setMessage: React.Dispatch<React.SetStateAction<string>>; close: () => void }) {
+  const buildMailto = () => {
+    const s = supportSubject || "Support Request";
+    const b = [name ? `Name: ${name}` : "", "", message || "How can we help?"].filter(Boolean);
+    return `mailto:${BRAND.email}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b.join("\n"))}`;
+  };
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-sm"
-      onClick={close}
-    >
-      <div
-        className="relative w-full max-w-[560px] rounded-[24px] border border-[#e3d8cb] bg-[#FAF6F0] p-6 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white shadow-sm hover:bg-neutral-50"
-          onClick={close}
-        >
-          ✕
-        </button>
-
-        <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          Solicitud de Soporte
-        </h3>
-        <p className="mt-1 text-sm text-stone-600">
-          Esto abrirá tu aplicación de correo con un mensaje ya preparado.
-        </p>
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-sm" onClick={close}>
+      <div className="relative w-full max-w-[560px] rounded-[24px] border border-[#e3d8cb] bg-[#FAF6F0] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white shadow-sm hover:bg-neutral-50" onClick={close}>✕</button>
+        <h3 className="pr-10 font-serif text-[28px] font-black text-[#24140D]">Soporte</h3>
         <div className="mt-6 space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Tu Nombre
-            </label>
-            <input
-              type="text"
-              placeholder="Nombre (opcional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Asunto / Tipo de Consulta
-            </label>
-            <select
-              value={supportSubject}
-              onChange={(e) => setSupportSubject(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            >
-              <option value="" disabled>
-                Selecciona un tipo de consulta...
-              </option>
-              <option value="Soporte de Pedido">Soporte de Pedido</option>
-              <option value="Acceso a Archivos">Acceso a Archivos</option>
-              <option value="Problema de Subida de Foto">Problema de Subida de Foto</option>
-              <option value="Consulta General">Consulta General</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              Mensaje
-            </label>
-            <textarea
-              rows={4}
-              placeholder="¿Cómo podemos ayudarte hoy?"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
-
-          <button
-            className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
-            onClick={() => {
-              const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "Consulta"
-              }`;
-              const bodyLines = [
-                `Nombre del cliente: ${name || "No indicado"}`,
-                `Mensaje: ${message}`,
-              ].join("\n");
-
-              window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent(
-                finalSubject
-              )}&body=${encodeURIComponent(bodyLines)}`;
-            }}
-          >
-            Abrir Aplicación de Correo
-          </button>
-
-          <button
-            onClick={async () => {
-              const textToCopy = `Asunto: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "Consulta"
-              }\n\nNombre del cliente: ${name || "No indicado"}\nMensaje: ${message}`;
-
-              await navigator.clipboard.writeText(textToCopy);
-              setMsgCopied(true);
-              setTimeout(() => setMsgCopied(false), 1500);
-            }}
-            className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
-          >
-            {msgCopied ? "¡Copiado al portapapeles! ✓" : "Alternativa: Copiar el texto del mensaje"}
-          </button>
+          <input type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none" />
+          <select value={supportSubject} onChange={(e) => setSupportSubject(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none">
+            <option value="" disabled>Selecciona el tipo de consulta...</option>
+            <option value="Order Support">Soporte de pedido</option>
+            <option value="General Question">Pregunta general</option>
+          </select>
+          <textarea rows={4} placeholder="¿En qué podemos ayudarte?" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none" />
+          <button type="button" className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]" onClick={() => { window.location.href = buildMailto(); }}>Abrir app de correo</button>
         </div>
       </div>
     </div>
   );
 }
 
-function LangButton({
-  children,
-  href,
-  active = false,
-}: {
-  children: React.ReactNode;
-  href: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[12px] border px-3 py-1.5 text-[11px] font-bold leading-none transition ${
-        active
-          ? "border-[#3A2418] bg-[#3A2418] text-white"
-          : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
-      }`}
-    >
-      {children}
-    </Link>
-  );
-}
+
+

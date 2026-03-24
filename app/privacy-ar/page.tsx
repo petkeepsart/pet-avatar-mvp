@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/ar",
   updatedAt: "11 مارس 2026",
 };
@@ -24,7 +24,7 @@ const SECTIONS = [
   {
     icon: ShieldCheck,
     title: "1. نظرة عامة",
-    body: "توضح سياسة الخصوصية هذه كيف تقوم Pet Keepsake Studio بجمع معلوماتك الشخصية واستخدامها وتخزينها وحمايتها عند زيارتك لموقعنا الإلكتروني، أو تحميل الصور، أو تقديم طلب، أو التواصل معنا.",
+    body: "توضح سياسة الخصوصية هذه كيف تقوم Pet Keeps Art بجمع معلوماتك الشخصية واستخدامها وتخزينها وحمايتها عند زيارتك لموقعنا الإلكتروني، أو تحميل الصور، أو تقديم طلب، أو التواصل معنا.",
   },
   {
     icon: Cookie,

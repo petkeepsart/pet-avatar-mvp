@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/ko",
   updatedAt: "2026년 3월 11일",
 };
@@ -23,7 +23,7 @@ const SECTIONS = [
   {
     icon: Receipt,
     title: "1. 개요",
-    body: "Pet Keepsake Studio에서는 맞춤형 디지털 상품만 판매합니다. 주문은 전자적으로 전달되며, 구매 후 자동 이미지 처리 워크플로를 통해 생성될 수 있으므로, 처리 또는 전달이 시작된 이후에는 환불, 반품, 교환 및 취소가 일반적으로 제한됩니다.",
+    body: "Pet Keeps Art에서는 맞춤형 디지털 상품만 판매합니다. 주문은 전자적으로 전달되며, 구매 후 자동 이미지 처리 워크플로를 통해 생성될 수 있으므로, 처리 또는 전달이 시작된 이후에는 환불, 반품, 교환 및 취소가 일반적으로 제한됩니다.",
   },
   {
     icon: Download,

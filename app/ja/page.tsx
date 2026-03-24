@@ -2,52 +2,31 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, X, Upload, PawPrint, Sparkles, Globe } from "lucide-react";
+import Image from "next/image";
+import { Check, X, PawPrint, Sparkles, ShoppingBag } from "lucide-react";
 
-const BRAND = {
-  name: "Pet Keepsake Studio",
-  year: 2026,
-  email: "support@petkeepsake.com",
-};
+type PlanId = "bundle" | "coloring" | "keepsake" | "avatar";
+type LocaleKey = "en" | "zh-hk" | "zh-cn" | "ja" | "ko" | "es" | "de" | "ar";
+type LegalLinks = { terms: string; privacy: string; refunds: string; };
+type LegalText = { terms: string; privacy: string; refunds: string; contact: string; };
+type AvatarVariationText = { line1: string; line2: string; };
+type PricingTextSet = { bundleTitle: string; bundleSub: string; bundleBadge: string; bundleSave: string; coloringTitle: string; keepsakeTitle: string; avatarTitle: string; singleSub: string; };
+type FooterText = { footerDisclaimer: string; footerDisclaimer2: string; footerDisclaimer3: string; };
 
-type LocaleKey =
-  | "en"
-  | "zh-hk"
-  | "zh-cn"
-  | "ja"
-  | "ko"
-  | "es"
-  | "de"
-  | "ar";
-
+const BRAND = { name: "Pet Keeps Art", year: 2026, email: "info@petkeepsart.com" };
 const CURRENT_LOCALE: LocaleKey = "ja";
 
 const LANGUAGE_HOME_LINKS: { key: LocaleKey; label: string; href: string }[] = [
-  { key: "en", label: "ENG", href: "/" },
-  { key: "zh-hk", label: "繁體中文", href: "/zh-hk" },
-  { key: "zh-cn", label: "简中", href: "/zh-cn" },
-  { key: "ja", label: "日本語", href: "/ja" },
-  { key: "ko", label: "한국어", href: "/ko" },
-  { key: "es", label: "Español", href: "/es" },
-  { key: "de", label: "Deutsch", href: "/de" },
-  { key: "ar", label: "العربية", href: "/ar" },
+  { key: "en", label: "ENG", href: "/" }, { key: "zh-hk", label: "繁中", href: "/zh-hk" },
+  { key: "zh-cn", label: "简中", href: "/zh-cn" }, { key: "ja", label: "日本語", href: "/ja" },
+  { key: "ko", label: "한국어", href: "/ko" }, { key: "es", label: "Español", href: "/es" },
+  { key: "de", label: "Deutsch", href: "/de" }, { key: "ar", label: "العربية", href: "/ar" },
 ];
 
-const LEGAL_LINKS: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string }
-> = {
+const LEGAL_LINKS: Record<LocaleKey, LegalLinks> = {
   en: { terms: "/terms", privacy: "/privacy", refunds: "/refund-policy" },
-  "zh-hk": {
-    terms: "/terms-zh-hk",
-    privacy: "/privacy-zh-hk",
-    refunds: "/refund-policy-zh-hk",
-  },
-  "zh-cn": {
-    terms: "/terms-zh-cn",
-    privacy: "/privacy-zh-cn",
-    refunds: "/refund-policy-zh-cn",
-  },
+  "zh-hk": { terms: "/terms-zh-hk", privacy: "/privacy-zh-hk", refunds: "/refund-policy-zh-hk" },
+  "zh-cn": { terms: "/terms-zh-cn", privacy: "/privacy-zh-cn", refunds: "/refund-policy-zh-cn" },
   ja: { terms: "/terms-ja", privacy: "/privacy-ja", refunds: "/refund-policy-ja" },
   ko: { terms: "/terms-ko", privacy: "/privacy-ko", refunds: "/refund-policy-ko" },
   es: { terms: "/terms-es", privacy: "/privacy-es", refunds: "/refund-policy-es" },
@@ -55,546 +34,289 @@ const LEGAL_LINKS: Record<
   ar: { terms: "/terms-ar", privacy: "/privacy-ar", refunds: "/refund-policy-ar" },
 };
 
-const LEGAL_TEXT: Record<
-  LocaleKey,
-  { terms: string; privacy: string; refunds: string; contact: string }
-> = {
-  en: {
-    terms: "Terms",
-    privacy: "Privacy",
-    refunds: "Refund Policy",
-    contact: "Contact Us",
-  },
-  "zh-hk": {
-    terms: "條款",
-    privacy: "私隱政策",
-    refunds: "退款政策",
-    contact: "聯絡我們",
-  },
-  "zh-cn": {
-    terms: "条款",
-    privacy: "隐私政策",
-    refunds: "退款政策",
-    contact: "联系我们",
-  },
-  ja: {
-    terms: "利用規約",
-    privacy: "プライバシーポリシー",
-    refunds: "返金ポリシー",
-    contact: "お問い合わせ",
-  },
-  ko: {
-    terms: "이용약관",
-    privacy: "개인정보처리방침",
-    refunds: "환불정책",
-    contact: "문의하기",
-  },
-  es: {
-    terms: "Términos",
-    privacy: "Privacidad",
-    refunds: "Reembolsos",
-    contact: "Contacto",
-  },
-  de: {
-    terms: "AGB",
-    privacy: "Datenschutz",
-    refunds: "Rückerstattung",
-    contact: "Kontakt",
-  },
-  ar: {
-    terms: "الشروط",
-    privacy: "الخصوصية",
-    refunds: "الاسترداد",
-    contact: "اتصل بنا",
-  },
+const LEGAL_TEXT: Record<LocaleKey, LegalText> = {
+  en: { terms: "Terms", privacy: "Privacy", refunds: "Refund Policy", contact: "Contact Us" },
+  "zh-hk": { terms: "條款", privacy: "私隱政策", refunds: "退款政策", contact: "聯絡我們" },
+  "zh-cn": { terms: "条款", privacy: "隐私政策", refunds: "退款政策", contact: "联系我们" },
+  ja: { terms: "利用規約", privacy: "プライバシー", refunds: "返金ポリシー", contact: "お問い合わせ" },
+  ko: { terms: "이용약관", privacy: "개인정보처리방침", refunds: "환불정책", contact: "문의하기" },
+  es: { terms: "Términos", privacy: "Privacidad", refunds: "Reembolsos", contact: "Contacto" },
+  de: { terms: "AGB", privacy: "Datenschutz", refunds: "Rückerstattung", contact: "Kontakt" },
+  ar: { terms: "الشروط", privacy: "الخصوصية", refunds: "الاسترداد", contact: "اتصل بنا" },
 };
 
-const AVATAR_VARIATION_TEXT: Record<
-  LocaleKey,
-  { line1: string; line2: string }
-> = {
-  en: {
-    line1: "Unique AI variations",
-    line2: "in every avatar pack",
-  },
-  "zh-hk": {
-    line1: "每個貼圖包都有獨特的",
-    line2: "AI 生成變化款式",
-  },
-  "zh-cn": {
-    line1: "每个贴图包都有独特的",
-    line2: "AI 生成变化款式",
-  },
-  ja: {
-    line1: "各アバターパックに",
-    line2: "AI生成のユニークなバリエーション入り",
-  },
-  ko: {
-    line1: "각 아바타 팩에는",
-    line2: "AI 생성 고유 변형이 포함됩니다",
-  },
-  es: {
-    line1: "Cada pack incluye",
-    line2: "variaciones únicas generadas por IA",
-  },
-  de: {
-    line1: "Jedes Paket enthält",
-    line2: "einzigartige KI-Varianten",
-  },
-  ar: {
-    line1: "تتضمن كل حزمة",
-    line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي",
-  },
+const AVATAR_VARIATION_TEXT: Record<LocaleKey, AvatarVariationText> = {
+  en: { line1: "Unique AI variations", line2: "in every avatar pack" },
+  "zh-hk": { line1: "每個貼圖包都有獨特的", line2: "AI 生成變化款式" },
+  "zh-cn": { line1: "每个贴图包都有独特的", line2: "AI 生成变化款式" },
+  ja: { line1: "各アバターパックに", line2: "AI生成のユニークな変化を収録" },
+  ko: { line1: "각 아바타 팩에는", line2: "AI 생성 고유 변형이 포함됩니다" },
+  es: { line1: "Cada pack incluye", line2: "variaciones únicas generadas por IA" },
+  de: { line1: "Jedes Paket enthält", line2: "einzigartige KI-Varianten" },
+  ar: { line1: "تتضمن كل حزمة", line2: "تنويعات فريدة تم إنشاؤها بالذكاء الاصطناعي" },
 };
 
-const PRICING_TEXT: Record<
-  LocaleKey,
-  {
-    bundleTitle: string;
-    bundleSub: string;
-    bundleBadge: string;
-    bundleSave: string;
-    coloringTitle: string;
-    keepsakeTitle: string;
-    avatarTitle: string;
-    singleSub: string;
-  }
-> = {
-  en: {
-    bundleTitle: "Bundle Deal",
-    bundleSub: "All 3 keepsakes",
-    bundleBadge: "Best Value",
-    bundleSave: "Save 49%",
-    coloringTitle: "Coloring Page",
-    keepsakeTitle: "Keepsake Certificate",
-    avatarTitle: "Avatar Pack (12 Designs)",
-    singleSub: "Single purchase",
-  },
-  "zh-hk": {
-    bundleTitle: "超值套裝",
-    bundleSub: "包含全部 3 款",
-    bundleBadge: "最抵買",
-    bundleSave: "現省 49%",
-    coloringTitle: "填色畫",
-    keepsakeTitle: "寵物紀念證書",
-    avatarTitle: "頭像包（12款設計）",
-    singleSub: "單獨購買",
-  },
-  "zh-cn": {
-    bundleTitle: "超值套装",
-    bundleSub: "包含全部 3 款纪念品",
-    bundleBadge: "超值首选",
-    bundleSave: "立省 49%",
-    coloringTitle: "填色画",
-    keepsakeTitle: "纪念证书",
-    avatarTitle: "头像包（12款设计）",
-    singleSub: "单独购买",
-  },
-  ja: {
-    bundleTitle: "バンドルセット",
-    bundleSub: "3点すべて込み",
-    bundleBadge: "いちばんお得",
-    bundleSave: "49% OFF",
-    coloringTitle: "塗り絵",
-    keepsakeTitle: "記念証書",
-    avatarTitle: "アバターパック（全12種）",
-    singleSub: "単品購入",
-  },
-  ko: {
-    bundleTitle: "번들 특가",
-    bundleSub: "3가지 기념품 모두 포함",
-    bundleBadge: "가장 인기",
-    bundleSave: "49% 절약",
-    coloringTitle: "컬러링 페이지",
-    keepsakeTitle: "기념 증서",
-    avatarTitle: "아바타 팩 (12종 디자인)",
-    singleSub: "단품 구매",
-  },
-  es: {
-    bundleTitle: "Oferta de Paquete",
-    bundleSub: "Los 3 recuerdos",
-    bundleBadge: "Mejor valor",
-    bundleSave: "Ahorra 49%",
-    coloringTitle: "Página para Colorear",
-    keepsakeTitle: "Certificado Conmemorativo",
-    avatarTitle: "Pack de Avatares (12 Diseños)",
-    singleSub: "Compra individual",
-  },
-  de: {
-    bundleTitle: "Paketangebot",
-    bundleSub: "Alle 3 Andenken",
-    bundleBadge: "Bestes Angebot",
-    bundleSave: "49% sparen",
-    coloringTitle: "Ausmalbild",
-    keepsakeTitle: "Erinnerungszertifikat",
-    avatarTitle: "Avatar-Paket (12 Designs)",
-    singleSub: "Einzelkauf",
-  },
-  ar: {
-    bundleTitle: "عرض الحزمة",
-    bundleSub: "جميع التذكارات الثلاثة",
-    bundleBadge: "أفضل قيمة",
-    bundleSave: "وفّر 49٪",
-    coloringTitle: "صفحة تلوين",
-    keepsakeTitle: "شهادة تذكارية",
-    avatarTitle: "حزمة الصور الرمزية (12 تصميماً)",
-    singleSub: "شراء فردي",
-  },
+const PRICING_TEXT: Record<LocaleKey, PricingTextSet> = {
+  en: { bundleTitle: "Bundle Deal", bundleSub: "All 3 keepsakes", bundleBadge: "Best Value", bundleSave: "Save 49%", coloringTitle: "Coloring Page", keepsakeTitle: "Keepsake Certificate", avatarTitle: "12 Avatar Pack", singleSub: "Single purchase" },
+  "zh-hk": { bundleTitle: "超值套裝", bundleSub: "包含全部 3 款", bundleBadge: "最抵買", bundleSave: "現省 49%", coloringTitle: "填色畫", keepsakeTitle: "寵物紀念證書", avatarTitle: "12 款頭像包", singleSub: "單獨購買" },
+  "zh-cn": { bundleTitle: "超值套餐", bundleSub: "包含全部 3 款", bundleBadge: "超值首选", bundleSave: "立省 49%", coloringTitle: "填色画", keepsakeTitle: "宠物纪念证书", avatarTitle: "12 款头像包", singleSub: "单独购买" },
+  ja: { bundleTitle: "バンドルセット", bundleSub: "3点すべて込み", bundleBadge: "いちばんお得", bundleSave: "49% OFF", coloringTitle: "塗り絵", keepsakeTitle: "記念証書", avatarTitle: "アバター12種パック", singleSub: "単品購入" },
+  ko: { bundleTitle: "번들 특가", bundleSub: "3가지 기념품 모두 포함", bundleBadge: "가장 인기", bundleSave: "49% 할인", coloringTitle: "컬러링 페이지", keepsakeTitle: "기념 증서", avatarTitle: "12종 아바타 팩", singleSub: "단품 구매" },
+  es: { bundleTitle: "Oferta de Paquete", bundleSub: "Los 3 recuerdos", bundleBadge: "Mejor valor", bundleSave: "Ahorra 49%", coloringTitle: "Página para Colorear", keepsakeTitle: "Certificado Conmemorativo", avatarTitle: "Pack de 12 Avatares", singleSub: "Compra individual" },
+  de: { bundleTitle: "Paketangebot", bundleSub: "Alle 3 Andenken", bundleBadge: "Bestes Angebot", bundleSave: "49% sparen", coloringTitle: "Ausmalbild", keepsakeTitle: "Erinnerungszertifikat", avatarTitle: "12er Avatar-Paket", singleSub: "Einzelkauf" },
+  ar: { bundleTitle: "عرض الحزمة", bundleSub: "جميع التذكارات الثلاثة", bundleBadge: "أفضل قيمة", bundleSave: "وفّر 49٪", coloringTitle: "صفحة تلوين", keepsakeTitle: "شهادة تذكارية", avatarTitle: "حزمة ١٢ صورة رمزية", singleSub: "شراء فردي" },
 };
 
-const MACHINE_TRANSLATE_OPTIONS = [
-  { label: "Français", tl: "fr" },
-  { label: "Italiano", tl: "it" },
-  { label: "Português", tl: "pt" },
-  { label: "Nederlands", tl: "nl" },
-  { label: "Русский", tl: "ru" },
-  { label: "ไทย", tl: "th" },
+const CANADIAN_PROVINCES = [
+  { value: "AB", label: "Alberta" }, { value: "BC", label: "British Columbia" }, { value: "MB", label: "Manitoba" },
+  { value: "NB", label: "New Brunswick" }, { value: "NL", label: "Newfoundland and Labrador" }, { value: "NS", label: "Nova Scotia" },
+  { value: "ON", label: "Ontario" }, { value: "PE", label: "Prince Edward Island" }, { value: "QC", label: "Québec" },
+  { value: "SK", label: "Saskatchewan" }, { value: "NT", label: "Northwest Territories" }, { value: "NU", label: "Nunavut" }, { value: "YT", label: "Yukon" },
+];
+
+const GUARANTEES = [
+  { icon: "🔒", title: "安全なStripeチェックアウト", text: "お支払いはStripeにより安全に処理されます — AmazonやAppleも使用する決済システムです。カード情報を私たちが見ることは一切ありません。" },
+  { icon: "⚡", title: "即時デジタル配信", text: "写真をアップロードしてから数分以内にファイルが生成され、メールで送られます。配送なし、数日待つ必要なし。" },
+  { icon: "🎨", title: "すべてをカスタマイズ", text: "お支払い後、最終ファイルが作成される前にテキスト、フォント、色、レイアウトを選択できます — 満足いくまで確定しません。" },
+  { icon: "📧", title: "ファイルをメールで送信", text: "パーソナライズされたPDFおよびZIPファイルが、チェックアウト時のメールアドレスに直接配信されます。いつでもダウンロード可能。" },
+  { icon: "🐾", title: "どんなペットも、どんな場面でも", text: "犬、猫、うさぎ、鳥 — 大切なペットならどれでも。誕生日、追悼、プレゼント、日常の楽しみにも対応。" },
+  { icon: "💬", title: "迅速お届け・安心購入", text: "即時デジタル配信 — 待ち時間なし。ご質問があればいつでもサポートいたします。" },
 ];
 
 export default function PetKeepsakeLanding() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
-  const [msgCopied, setMsgCopied] = useState(false);
-
   const [name, setName] = useState("");
   const [supportSubject, setSupportSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [loadingPlan, setLoadingPlan] = useState<PlanId | null>(null);
+  const [customerCountry, setCustomerCountry] = useState("United States");
+  const [customerProvince, setCustomerProvince] = useState("");
+  const isCanada = customerCountry === "Canada";
+  const normalizedProvince = customerProvince.trim().toLowerCase();
+  const missingProvince = isCanada && !customerProvince.trim();
+  const isQuebecBlocked = isCanada && ["qc", "quebec", "québec"].includes(normalizedProvince);
+
+  const startCheckout = async (plan: PlanId) => {
+    try {
+      setLoadingPlan(plan);
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("petkeepsart_selected_plan", plan);
+        window.sessionStorage.setItem("petkeepsart_customer_country", customerCountry);
+        window.sessionStorage.setItem("petkeepsart_customer_province", customerProvince);
+      }
+      const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan, customerCountry, customerProvince }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status === 403) { window.location.assign(`/customize?plan=${plan}&blocked=qc`); return; }
+        if (res.status === 400) { window.location.assign(`/customize?plan=${plan}&missing_province=1`); return; }
+        throw new Error(data?.error || "Checkout failed. Please try again.");
+      }
+      if (!data?.url) throw new Error("No checkout URL returned.");
+      window.location.assign(data.url);
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setLoadingPlan(null);
+    }
+  };
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(window.location.href);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 1800);
+    try {
+      if (typeof window === "undefined") return;
+      if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(window.location.href); }
+      else {
+        const t = document.createElement("textarea"); t.value = window.location.href; t.style.position = "fixed"; t.style.opacity = "0";
+        document.body.appendChild(t); t.focus(); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+      }
+      setLinkCopied(true); setTimeout(() => setLinkCopied(false), 1800);
+    } catch (e) { alert("Unable to copy the link. Please try again."); }
   };
 
-  const t = {
-    footerDisclaimer: "デジタルファイルのみです。物理商品の発送はありません。",
-    footerDisclaimer2: "世界中でご利用可能。カナダ・ケベック州は対象外です。",
-    footerDisclaimer3: "価格は米ドル（USD）です。",
-  };
+  const footerT: FooterText = { footerDisclaimer: "デジタルファイルのみ。物理的な商品は発送されません。", footerDisclaimer2: "全世界対応。カナダ・ケベック州を除く。", footerDisclaimer3: "価格はUSドル表示です。" };
 
   return (
     <main className="min-h-screen bg-[#F5EFE6] text-[#422B1E] selection:bg-orange-100">
       <div className="mx-auto max-w-[1600px] px-2 py-2 md:px-3 md:py-3">
         <div className="overflow-hidden rounded-[28px] border border-[#d8cdbf] bg-[#FAF6F0] shadow-[0_24px_60px_rgba(72,51,36,0.14)]">
           <Header currentLocale={CURRENT_LOCALE} />
-
-          <HeroBundleSection />
-
+          <HeroBundleSection startCheckout={startCheckout} loadingPlan={loadingPlan} customerCountry={customerCountry} setCustomerCountry={setCustomerCountry} customerProvince={customerProvince} setCustomerProvince={setCustomerProvince} isCanada={isCanada} missingProvince={missingProvince} isQuebecBlocked={isQuebecBlocked} />
           <HowItWorksSection />
-
           <ExamplesGallerySection />
-
+          <ReviewsSection />
           <PhotoGuideSection />
-
           <FinalCTASection />
-
-          <Footer
-            currentLocale={CURRENT_LOCALE}
-            linkCopied={linkCopied}
-            copyLink={copyLink}
-            openContact={() => setIsContactOpen(true)}
-            t={t}
-          />
+          <Footer currentLocale={CURRENT_LOCALE} linkCopied={linkCopied} copyLink={copyLink} openContact={() => setIsContactOpen(true)} t={footerT} />
         </div>
       </div>
-
-      {isContactOpen && (
-        <ContactModal
-          name={name}
-          setName={setName}
-          supportSubject={supportSubject}
-          setSupportSubject={setSupportSubject}
-          message={message}
-          setMessage={setMessage}
-          msgCopied={msgCopied}
-          setMsgCopied={setMsgCopied}
-          close={() => setIsContactOpen(false)}
-        />
-      )}
+      {isContactOpen && <ContactModal name={name} setName={setName} supportSubject={supportSubject} setSupportSubject={setSupportSubject} message={message} setMessage={setMessage} close={() => setIsContactOpen(false)} />}
     </main>
   );
 }
 
 function Header({ currentLocale }: { currentLocale: LocaleKey }) {
+  const [isLangOpen, setIsLangOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-50 border-b border-[#e3d8cb] bg-white/82 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-3 px-5 py-4">
-        <div className="flex shrink-0 items-center gap-3">
-          <div className="text-[18px]">🐾</div>
-          <span className="whitespace-nowrap text-[16px] font-extrabold tracking-tight text-[#3A2418] xl:text-[17px]">
-            Pet Keepsake Studio
-          </span>
+      <div className="relative mx-auto flex max-w-[1680px] items-center justify-between gap-3 px-3 py-2.5">
+        <Link href="/ja" className="flex shrink-0 items-center gap-2">
+          <Image src="/images/petkeepsart_logo.png" alt="Pet Keeps Art" width={120} height={120} className="h-auto w-[105px] md:w-[120px]" priority />
+          <span className="text-[20px] font-extrabold text-[#4A3428]">Pet Keeps Art</span>
+        </Link>
+        <div className="pointer-events-none absolute left-1/2 hidden -translate-x-[97%] lg:flex">
+          <div className="pointer-events-auto flex items-center gap-5">
+            <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">バンドル</a>
+            <a href="#pricing" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">料金</a>
+            <a href="#guide" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">よくある質問</a>
+            <a href="#examples" className="whitespace-nowrap text-[16px] font-bold text-[#4A3428] hover:opacity-70">例を見る</a>
+          </div>
         </div>
-
-        <div className="hidden items-center gap-5 lg:flex">
-          <a
-            href="#upload"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            アップロード
-          </a>
-          <a
-            href="#pricing"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            料金
-          </a>
-          <a
-            href="#guide"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            FAQ
-          </a>
-          <a
-            href="#examples"
-            className="whitespace-nowrap text-[13px] font-bold text-[#4A3428] hover:opacity-70"
-          >
-            実例を見る
-          </a>
-          <a
-            href="#upload"
-            className="whitespace-nowrap rounded-[14px] border border-[#9B7449] bg-[linear-gradient(180deg,#D28B62_0%,#C56F49_100%)] px-5 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_16px_rgba(139,92,61,0.22)] transition hover:brightness-95"
-          >
-            作成を始める
-          </a>
+        <div className="hidden items-center gap-2 md:flex mr-12">
+          {LANGUAGE_HOME_LINKS.map((lang) => <LangButton key={lang.key} href={lang.href} active={lang.key === currentLocale}>{lang.label}</LangButton>)}
         </div>
-
-        <div className="hidden items-center gap-2 md:flex">
-          {LANGUAGE_HOME_LINKS.map((lang) => (
-            <LangButton
-              key={lang.key}
-              href={lang.href}
-              active={lang.key === currentLocale}
-            >
-              {lang.label}
-            </LangButton>
-          ))}
-        </div>
-
-        <div className="relative block md:hidden">
-          <details className="group relative">
-            <summary className="list-none cursor-pointer rounded-md border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-stone-700 hover:bg-stone-50">
-              🌐 言語
-            </summary>
-
-            <div className="absolute right-0 mt-2 flex w-[190px] flex-col gap-2 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
-              {LANGUAGE_HOME_LINKS.map((lang) => (
-                <LangButton
-                  key={lang.key}
-                  href={lang.href}
-                  active={lang.key === currentLocale}
-                >
-                  {lang.label}
-                </LangButton>
-              ))}
+        <div className="relative md:hidden mr-3">
+          <button type="button" onClick={() => setIsLangOpen(!isLangOpen)} className="flex items-center gap-1 rounded-full border border-[#d9cbbc] bg-white px-3 py-1.5 text-[12px] font-bold text-[#4A3428] shadow-sm">
+            🌐 {LANGUAGE_HOME_LINKS.find((l) => l.key === currentLocale)?.label ?? "ENG"} ▾
+          </button>
+          {isLangOpen && (<>
+            <div className="fixed inset-0 z-40" onClick={() => setIsLangOpen(false)} />
+            <div className="absolute right-0 top-full z-50 mt-2 min-w-[140px] rounded-[16px] border border-[#e3d8cb] bg-white py-2 shadow-xl">
+              {LANGUAGE_HOME_LINKS.map((lang) => <Link key={lang.key} href={lang.href} onClick={() => setIsLangOpen(false)} className={`block px-4 py-2 text-[14px] font-semibold transition hover:bg-[#faf3eb] ${lang.key === currentLocale ? "text-[#D98962]" : "text-[#4A3428]"}`}>{lang.label}</Link>)}
             </div>
-          </details>
+          </>)}
         </div>
       </div>
     </nav>
   );
 }
 
-function HeroBundleSection() {
-  const avatarVariationText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
-  const pricingText = PRICING_TEXT[CURRENT_LOCALE];
-  const [uploadRightsConfirmed, setUploadRightsConfirmed] = useState(false);
+function LangButton({ children, href, active = false }: { children: React.ReactNode; href: string; active?: boolean }) {
+  return <Link href={href} className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[16px] border px-3 py-1.5 text-[12px] font-bold transition ${active ? "border-[#3A2418] bg-[#3A2418] text-white" : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"}`}>{children}</Link>;
+}
 
+function HeroBundleSection({ startCheckout, loadingPlan, customerCountry, setCustomerCountry, customerProvince, setCustomerProvince, isCanada, missingProvince, isQuebecBlocked }: { startCheckout: (plan: PlanId) => void; loadingPlan: PlanId | null; customerCountry: string; setCustomerCountry: React.Dispatch<React.SetStateAction<string>>; customerProvince: string; setCustomerProvince: React.Dispatch<React.SetStateAction<string>>; isCanada: boolean; missingProvince: boolean; isQuebecBlocked: boolean; }) {
+  const avatarText = AVATAR_VARIATION_TEXT[CURRENT_LOCALE];
+  const pt = PRICING_TEXT[CURRENT_LOCALE];
+  const disabled = loadingPlan !== null || missingProvince || isQuebecBlocked;
   return (
-    <section
-      id="upload"
-      className="bg-[linear-gradient(180deg,#f7efe5_0%,#f9f2e9_100%)] px-5 pb-14 pt-12 md:px-8 xl:px-10"
-    >
+    <section className="bg-[linear-gradient(180deg,#f7efe5_0%,#f9f2e9_100%)] px-5 pb-14 pt-12 md:px-8 xl:px-10">
       <div className="mx-auto max-w-[1560px]">
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[1480px] text-center">
-            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">
-              あなたのペット写真から作る、パーソナルなデジタル記念品
-            </div>
-
-            <h1 className="mx-auto mt-6 max-w-[1500px] text-center font-serif font-black leading-[0.96] tracking-[-0.05em] text-[#23150F] text-[clamp(2.35rem,4.15vw,4.45rem)] xl:whitespace-nowrap">
-              1枚の写真 → 3つのパーソナルなペット記念品
-            </h1>
-
-            <p className="mx-auto mt-5 max-w-[1500px] whitespace-nowrap text-[clamp(1.08rem,1.32vw,1.52rem)] leading-[1.45] text-stone-700">
-              ペット写真1枚から、印刷できる塗り絵ページ、記念証書、12種のアバターパックを作成。ダウンロードして、印刷して、贈って、大切に残せます。
-            </p>
-
+            <div className="inline-flex rounded-full border border-[#d8c7b6] bg-white/90 px-7 py-3 text-[16px] font-extrabold uppercase tracking-[0.12em] text-[#7B5B47] shadow-sm">ペットまたはペット＋オーナー写真から作る、パーソナライズされたデジタル記念品</div>
+            <h1 className="mx-auto mt-6 max-w-[1200px] text-center font-serif font-black leading-[1.02] tracking-[-0.04em] text-[#23150F] text-[clamp(2rem,3.6vw,4rem)]">1枚の写真 → 3つのパーソナライズ記念品</h1>
+            <p className="mx-auto mt-5 max-w-[1080px] px-2 text-[clamp(1rem,1.2vw,1.3rem)] leading-[1.55] text-stone-700">ペットやペット＋オーナーの写真を、プリンタブルぬりえ・記念証書・12アバターパックに変えよう。ダウンロード、印刷、ギフト、大切な思い出として。</p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <HeroPill>あなた自身の写真から作成</HeroPill>
-              <HeroPill>誕生日や追悼ギフトにも最適</HeroPill>
+              <HeroPill>あなたの写真から作成</HeroPill>
+              <HeroPill>ペットのみ、またはペット＋オーナーの写真</HeroPill>
+              <HeroPill>カスタム、誕生日、または追悼用</HeroPill>
               <HeroPill>デジタルダウンロードのみ</HeroPill>
             </div>
           </div>
-
-          <div className="mt-10 grid w-full gap-8 xl:grid-cols-[470px_minmax(0,1fr)] xl:items-start">
+          <div className="mt-8 grid w-full gap-6 xl:grid-cols-[420px_minmax(0,1fr)] xl:items-start">
             <div className="flex flex-col items-center">
-              <div className="w-full max-w-[470px] rounded-[34px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
+              <div className="w-full max-w-[420px] rounded-[30px] border border-[#d9cbbc] bg-white p-7 shadow-[0_18px_34px_rgba(84,58,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">
-                    アップロード開始
-                  </span>
-                  <span className="text-[14px] font-semibold text-[#7B6658]">
-                    JPG または PNG
-                  </span>
+                  <span className="rounded-full bg-[#F7EBDD] px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D]">サンプル写真</span>
+                  <span className="text-[14px] font-semibold text-[#7B6658]">デモのみ</span>
                 </div>
-
                 <div className="overflow-hidden rounded-[26px] border border-[#e3d9cd] bg-[#edf4fb] p-3">
-                  <img
-                    src="/images/hero-original-demo.png"
-                    alt="アップロードプレビュー"
-                    className="h-auto w-full rounded-[20px] bg-white object-contain"
-                  />
+                  <img src="/images/hero-original-demo.png" alt="Sample original photo" className="h-auto w-full rounded-[20px] bg-white object-contain" />
                 </div>
-
-                <div className="mt-5 flex flex-col gap-3">
-                  <button
-                    disabled={!uploadRightsConfirmed}
-                    className={`w-full rounded-full px-5 py-4 text-[20px] font-extrabold text-white transition ${
-                      uploadRightsConfirmed
-                        ? "bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] shadow-[0_12px_22px_rgba(157,97,65,0.22)] hover:brightness-95"
-                        : "cursor-not-allowed bg-[#d8c8ba] text-white/90 shadow-none"
-                    }`}
-                  >
-                    写真をアップロード
-                  </button>
-
-                  <a
-                    href="#examples"
-                    className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]"
-                  >
-                    実際の作例を見る
-                  </a>
-                </div>
-
-                <div className="mt-5 rounded-[22px] border border-[#e8d8c7] bg-[#fffaf4] px-4 py-4 text-left shadow-[0_8px_18px_rgba(84,58,39,0.04)]">
-                  <div className="mb-3 text-[18px] font-extrabold text-[#4A3428]">
-                    写真使用権の確認
+                <div className="mt-6 flex flex-col gap-3">
+                  <a href="#pricing" className="w-full rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-4 text-center text-[20px] font-extrabold text-white shadow-[0_12px_22px_rgba(157,97,65,0.22)] transition hover:brightness-95">バンドルを選ぶ</a>
+                  <a href="#examples" className="w-full rounded-full border border-[#baa692] px-5 py-4 text-center text-[20px] font-bold text-[#5b4334] transition hover:bg-[#faf3eb]">実際の例を見る</a>
+                  <div className="mt-2 rounded-[18px] border border-[#eadfd2] bg-[#fffaf4] px-4 py-4 text-center text-[16px] leading-7 text-[#7B6658]">
+                    <div>お支払い後に写真をアップロードしてください。</div>
+                    <div className="mt-2 font-semibold text-[#6E5546]">ファイルはStripeのチェックアウト時に入力したメールアドレスに送信されます。</div>
+                    <div className="mt-1 font-semibold text-[#6E5546]">その配送メールアドレスはカスタマイズページで後から変更できません。</div>
                   </div>
-
-                  <label className="flex cursor-pointer items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={uploadRightsConfirmed}
-                      onChange={(e) => setUploadRightsConfirmed(e.target.checked)}
-                      className="mt-1 h-5 w-5 shrink-0 accent-[#C86C43]"
-                    />
-                    <span className="text-[15px] leading-7 text-[#5b4334]">
-                      この写真を所有している、または使用許可を得ていることを確認します。著名人、公人、架空キャラクター、またはネットから取得した画像はアップロードしないでください。
-                    </span>
-                  </label>
-
-                  <p className="mt-3 text-[15px] leading-7 text-[#8a6a55]">
-                    これらのルールに違反する注文は、お断りまたはキャンセルとなる場合があります。
-                  </p>
                 </div>
-
-                <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[#7B6658]">
-                  デザインスキルは不要です。1回アップロードするだけで、すぐにダウンロードできるファイルを受け取れます。
+              </div>
+              <div className="mt-6 w-full max-w-[420px] rounded-[28px] border border-[#e1d3c5] bg-white p-6 shadow-[0_10px_22px_rgba(84,58,39,0.06)]">
+                <div className="text-[24px] font-black text-[#4B3427]">請求先の地域</div>
+                <div className="mt-3 rounded-[16px] border border-[#e6d8ca] bg-[#fffaf4] px-4 py-3 text-[14px] leading-6 text-[#7B6658]">カナダのお客様は州または準州を選択してください。ケベック州からのご注文はお受けできません。</div>
+                <div className="mt-5 space-y-4">
+                  <div>
+                    <label className="mb-2 block text-[14px] font-bold text-[#6B5345]">国</label>
+                    <select value={customerCountry} onChange={(e) => { setCustomerCountry(e.target.value); if (e.target.value !== "Canada") setCustomerProvince(""); }} className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none">
+                      <option value="United States">アメリカ</option><option value="Canada">カナダ</option><option value="United Kingdom">イギリス</option><option value="Australia">オーストラリア</option><option value="Other">その他</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-[14px] font-bold text-[#6B5345]">{isCanada ? "州 / 準州" : "州 / 省"}</label>
+                    {isCanada ? (
+                      <select value={customerProvince} onChange={(e) => setCustomerProvince(e.target.value)} className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none">
+                        <option value="">Select a province...</option>
+                        {CANADIAN_PROVINCES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+                      </select>
+                    ) : (
+                      <input type="text" value={customerProvince} onChange={(e) => setCustomerProvince(e.target.value)} placeholder="任意" className="w-full rounded-[16px] border border-[#d9cbbc] bg-white px-4 py-3 text-[16px] font-medium text-[#422B1E] outline-none" />
+                    )}
+                  </div>
+                  {missingProvince && <div className="rounded-[16px] border border-amber-200 bg-amber-50 px-4 py-3 text-[15px] font-semibold text-amber-700">続行するには州を選択してください。</div>}
+                  {isQuebecBlocked && <div className="rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-[15px] font-semibold text-red-700">申し訳ありませんが、このサービスは現在ケベック州のお客様にはご利用いただけません。</div>}
                 </div>
               </div>
             </div>
-
             <div className="flex flex-col items-center xl:items-start">
-              <div className="w-full max-w-[1000px] rounded-[36px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)] md:p-6">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <span className="rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">
-                    バンドルプレビュー
-                  </span>
-                  <span className="text-[15px] font-semibold text-[#7B6658]">
-                    1回アップロード • 3つの記念品
-                  </span>
+              <div className="w-full max-w-[980px] rounded-[32px] border border-[#e1d3c5] bg-[linear-gradient(180deg,#fffaf3_0%,#f8efe5_100%)] p-5 shadow-[0_16px_28px_rgba(84,58,39,0.06)]">
+                <div className="mb-5 flex flex-wrap items-center justify-between gap-3 px-2">
+                  <span className="rounded-full bg-white px-5 py-2 text-[14px] font-extrabold uppercase tracking-[0.12em] text-[#8A5A3D] shadow-sm">ライブプレビュー</span>
+                  <span className="text-[16px] font-semibold text-[#7B6658]">1回のアップロード • 3種類の商品</span>
                 </div>
-
-                <div className="relative">
-                  <img
-                    src="/images/hero-keepsake-3-products.png"
-                    alt="塗り絵ページ、記念証書、アバターパックのプレビュー"
-                    className="h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(76,48,30,0.08)]"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-5 flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-3">
-                <HeroSubPill>誕生日</HeroSubPill>
-                <HeroSubPill>大切な思い出に</HeroSubPill>
-                <HeroSubPill>印刷可能</HeroSubPill>
-                <HeroSubPill>シェア可能</HeroSubPill>
-                <HeroSubPill>
-                  {avatarVariationText.line1} {avatarVariationText.line2}
-                </HeroSubPill>
-              </div>
-
-              <div
-                id="pricing"
-                className="mt-8 grid w-full max-w-[1000px] gap-4 sm:grid-cols-2 xl:grid-cols-4"
-              >
-                <button className="relative flex min-h-[258px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[28px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95">
-                  <div className="absolute left-4 top-4 rounded-full bg-white/18 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em]">
-                    {pricingText.bundleBadge}
-                  </div>
-
-                  <div className="mt-6 text-[18px] font-extrabold uppercase tracking-[0.04em]">
-                    {pricingText.bundleTitle}
-                  </div>
-
-                  <PriceCurrencyBadge bundle>米ドル(USD)</PriceCurrencyBadge>
-
-                  <div className="mt-3 text-[46px] font-black">$19.99</div>
-                  <div className="mt-2 text-[18px] opacity-95">
-                    {pricingText.bundleSub}
-                  </div>
-                  <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">
-                    単品購入より {pricingText.bundleSave}
-                  </div>
-                </button>
-
-                <PricingCard
-                  title={pricingText.coloringTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                />
-
-                <PricingCard
-                  title={pricingText.keepsakeTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                  extra={
-                    <div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]">
-                      <div>Happy Birthday /</div>
-                      <div>In Loving Memory</div>
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.coloringTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">AIプレビュー</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/coloringpage.png" alt="Coloring Default" className="h-full w-full scale-[1.06] object-contain" />
                     </div>
-                  }
-                />
-
-                <PricingCard
-                  title={pricingText.avatarTitle}
-                  price="$12.99"
-                  subtitle={pricingText.singleSub}
-                />
-              </div>
-
-              <div className="mt-5 flex w-full max-w-[1000px] flex-wrap items-center justify-center gap-3">
-                <TrustPill>安全な決済</TrustPill>
-                <TrustPill>デジタルファイルのみ</TrustPill>
-                <TrustPill>発送不要</TrustPill>
-              </div>
-
-              <div className="mt-6 w-full max-w-[1000px] rounded-[28px] border border-[#e5d7c9] bg-white/85 shadow-[0_10px_20px_rgba(84,58,39,0.05)]">
-                <div className="grid divide-y divide-[#ead9c8] md:grid-cols-3 md:divide-x md:divide-y-0">
-                  <TrustMiniItem
-                    title="パーソナル"
-                    text="あなたのペット写真から作成"
-                  />
-                  <TrustMiniItem
-                    title="デジタル"
-                    text="すぐダウンロードできる形式"
-                  />
-                  <TrustMiniItem
-                    title="ギフト向き"
-                    text="誕生日や思い出の贈り物に最適"
-                  />
+                    <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">お支払い後に線画を生成</div>
+                  </div>
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.keepsakeTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">AIプレビュー</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/keepsake-certificate.png" alt="Certificate Default" className="h-full w-full scale-[1.04] object-contain" />
+                    </div>
+                    <div className="px-2 flex flex-col items-center text-center">
+                      <div className="whitespace-nowrap text-[11px] font-bold leading-none text-[#8A5A3D]">お支払い後にデザインをカスタマイズ</div>
+                      <div className="mt-1 text-[12px] font-semibold leading-tight text-[#8A5A3D]">カスタム・誕生日・メモリアルに対応</div>
+                    </div>
+                  </div>
+                  <div className="relative flex min-h-[440px] flex-col items-center gap-3 rounded-[28px] border border-[#ead9c8] bg-white p-5 shadow-sm">
+                    <div className="mt-1 text-center text-[18px] font-black text-[#5b4334]">{pt.avatarTitle}</div>
+                    <div className="rounded-full bg-[#5b5551] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white">AIプレビュー</div>
+                    <div className="flex h-[320px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-transparent p-0">
+                      <img src="/images/avatarpack.png" alt="Avatar Pack Default" className="h-full w-full scale-[1.04] object-contain" />
+                    </div>
+                    <div className="px-2 text-center text-[12px] font-bold leading-tight text-[#8A5A3D]">お支払い後に12種類のユニークなアバタースタイルを作成</div>
+                  </div>
                 </div>
+              </div>
+              <div className="mt-6 flex w-full max-w-[980px] flex-wrap items-center justify-center gap-3">
+                <HeroSubPill>誕生日</HeroSubPill><HeroSubPill>追悼</HeroSubPill><HeroSubPill>印刷可能</HeroSubPill><HeroSubPill>シェア可能</HeroSubPill>
+                <HeroSubPill>{avatarText.line1} {avatarText.line2}</HeroSubPill>
+              </div>
+              <div id="pricing" className="mt-8 grid w-full max-w-[980px] gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                <button type="button" onClick={() => startCheckout("bundle")} disabled={disabled} className="relative flex min-h-[280px] scale-[1.02] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-[#cfb39b] bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-5 py-7 text-center text-white shadow-[0_20px_30px_rgba(151,90,59,0.26)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70">
+                  <div className="absolute left-4 top-4 rounded-full bg-white/18 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em]">{pt.bundleBadge}</div>
+                  <div className="mt-6 text-[20px] font-black uppercase tracking-[0.04em]">{pt.bundleTitle}</div>
+                  <PriceCurrencyBadge bundle>USD 米ドル</PriceCurrencyBadge>
+                  <div className="mt-3 text-[40px] font-black">$19.99</div>
+                  <div className="mt-1 text-[18px] font-bold opacity-95">{pt.bundleSub}</div>
+                  <div className="mt-4 rounded-full bg-white/15 px-4 py-1.5 text-[14px] font-bold">{loadingPlan === "bundle" ? "リダイレクト中..." : pt.bundleSave}</div>
+                  <div className="mt-4 text-[13px] font-semibold leading-5 text-white/90 whitespace-nowrap">Stripeのメールに送信</div>
+                </button>
+                <PricingCard title={pt.coloringTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("coloring")} isLoading={loadingPlan === "coloring"} isDisabled={disabled} />
+                <PricingCard title={pt.keepsakeTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("keepsake")} isLoading={loadingPlan === "keepsake"} isDisabled={disabled}
+                  extra={<div className="mt-2 text-[15px] leading-[1.35] text-[#8D6A50]"><div>カスタム /</div><div>お誕生日おめでとう または</div><div>追悼</div></div>}
+                />
+                <PricingCard title={pt.avatarTitle} price="$12.99" subtitle={pt.singleSub} onClick={() => startCheckout("avatar")} isLoading={loadingPlan === "avatar"} isDisabled={disabled} />
+              </div>
+              <div className="mt-6 flex w-full max-w-[980px] flex-wrap items-center justify-center gap-3">
+                <TrustPill>安全なチェックアウト</TrustPill><TrustPill>デジタルファイルのみ</TrustPill><TrustPill>配送不要</TrustPill><TrustPill>チェックアウトと同じメール</TrustPill><TrustPill>後から変更不可</TrustPill>
               </div>
             </div>
           </div>
@@ -604,370 +326,136 @@ function HeroBundleSection() {
   );
 }
 
-function PriceCurrencyBadge({
-  children,
-  bundle = false,
-}: {
-  children: React.ReactNode;
-  bundle?: boolean;
-}) {
-  return (
-    <div
-      className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold uppercase tracking-[0.14em] shadow-sm ${
-        bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"
-      }`}
-    >
-      {children}
-    </div>
-  );
+function PriceCurrencyBadge({ children, bundle = false }: { children: React.ReactNode; bundle?: boolean }) {
+  return <div className={`mt-4 rounded-full px-5 py-2 text-[15px] font-extrabold uppercase tracking-[0.14em] shadow-sm ${bundle ? "bg-white/20 text-white" : "bg-[#F5E7D9] text-[#8A5A3D]"}`}>{children}</div>;
 }
-
-function PricingCard({
-  title,
-  price,
-  subtitle,
-  extra,
-}: {
-  title: string;
-  price: string;
-  subtitle: string;
-  extra?: React.ReactNode;
-}) {
+function PricingCard({ title, price, subtitle, extra, onClick, isLoading, isDisabled }: { title: string; price: string; subtitle: string; extra?: React.ReactNode; onClick?: () => void; isLoading?: boolean; isDisabled?: boolean }) {
   return (
-    <button className="flex min-h-[258px] flex-col items-center justify-center rounded-[28px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb]">
-      <div className="text-[18px] font-extrabold text-[#4B3427]">{title}</div>
-      {extra}
-      <PriceCurrencyBadge>米ドル(USD)</PriceCurrencyBadge>
-      <div className="mt-3 text-[42px] font-black text-[#2E1D16]">{price}</div>
-      <div className="mt-2 text-[18px] text-stone-600">{subtitle}</div>
+    <button type="button" onClick={onClick} disabled={isDisabled} className="flex min-h-[280px] flex-col items-center justify-center rounded-[32px] border border-[#c8b9ab] bg-white px-5 py-6 text-center shadow-[0_10px_22px_rgba(84,58,39,0.08)] transition hover:bg-[#faf3eb] disabled:cursor-not-allowed disabled:opacity-70">
+      <div className="text-[19px] leading-tight font-black text-[#4B3427]">{isLoading ? "リダイレクト中..." : title}</div>
+      {!isLoading && extra}
+      <PriceCurrencyBadge>USD 米ドル</PriceCurrencyBadge>
+      <div className="mt-3 text-[40px] font-black text-[#2E1D16]">{price}</div>
+      <div className="mt-1 text-[17px] font-medium text-stone-600">{subtitle}</div>
+      <div className="mt-3 text-[13px] font-semibold leading-5 text-[#8D6A50]">チェックアウトメールのみ送信</div>
     </button>
   );
 }
-
-function HeroPill({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-full border border-[#decfbe] bg-white/85 px-5 py-2.5 text-[17px] font-semibold text-[#6B5345] shadow-sm">
-      {children}
-    </div>
-  );
-}
-
-function HeroSubPill({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-full bg-[#fff8ef] px-5 py-2.5 text-[17px] font-semibold text-[#7A5B47] shadow-sm ring-1 ring-[#eadacd]">
-      {children}
-    </div>
-  );
-}
-
-function TrustPill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="rounded-full border border-[#dfd0c1] bg-white/70 px-4 py-2 text-[16px] font-medium text-[#7B6658]">
-      {children}
-    </span>
-  );
-}
-
-function TrustMiniItem({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="flex min-h-[128px] flex-col items-center justify-center px-6 py-5 text-center">
-      <span className="text-[19px] font-extrabold text-[#3E2B1F]">{title}</span>
-      <span className="mt-2 text-[17px] leading-7 text-[#7B6658]">{text}</span>
-    </div>
-  );
-}
+function HeroPill({ children }: { children: React.ReactNode }) { return <div className="rounded-full border border-[#decfbe] bg-white/85 px-5 py-2.5 text-[17px] font-semibold text-[#6B5345] shadow-sm">{children}</div>; }
+function HeroSubPill({ children }: { children: React.ReactNode }) { return <div className="rounded-full bg-[#fff8ef] px-5 py-2.5 text-[17px] font-semibold text-[#7A5B47] shadow-sm ring-1 ring-[#eadacd]">{children}</div>; }
+function TrustPill({ children }: { children: React.ReactNode }) { return <span className="rounded-full border border-[#dfd0c1] bg-white/70 px-4 py-2 text-[16px] font-medium text-[#7B6658]">{children}</span>; }
 
 function HowItWorksSection() {
   return (
     <section className="border-t border-[#eadfd2] bg-[#fbf8f2] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1380px]">
-        <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          ご利用の流れ
-        </h2>
-
-        <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-          はっきり写った1枚のペット写真から、印刷できる記念品セットが簡単に作れます。
-        </p>
-
+        <h2 className="text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">ご利用の流れ</h2>
+        <p className="mx-auto mt-4 max-w-[980px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">クリアなペット写真一枚が、簡単なステップで印刷可能な記念品セットに。</p>
         <div className="mt-10 grid gap-8 md:grid-cols-3">
-          <HowCard
-            number="1"
-            icon={<Upload className="h-10 w-10" strokeWidth={2.4} />}
-            title="写真をアップロード"
-            text="顔がはっきり見える、鮮明なペット写真を1枚ご用意ください。"
-          />
-          <HowCard
-            number="2"
-            icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />}
-            title="バンドルを作成"
-            text="塗り絵ページ、記念証書、12種のアバターパックをまとめて受け取れます。"
-          />
-          <HowCard
-            number="3"
-            icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />}
-            title="ダウンロードして保存"
-            text="印刷、保存、共有、ギフトにも使えるパーソナルなデジタルファイルです。"
-          />
+          <HowCard number="1" icon={<ShoppingBag className="h-10 w-10" strokeWidth={2.4} />} title="記念品を選ぶ" text="バンドルまたは単品の記念品を選んで先にお支払いください。" />
+          <HowCard number="2" icon={<PawPrint className="h-10 w-10" strokeWidth={2.4} />} title="お支払い後にアップロード" text="チェックアウト後、明瞭なペットまたはペット＋オーナーの写真をアップロードし、必要に応じて詳細を入力してください。" />
+          <HowCard number="3" icon={<Sparkles className="h-10 w-10" strokeWidth={2.4} />} title="ファイルを受け取る" text="パーソナライズされたデジタル記念品を生成し、チェックアウト時のメールアドレスに送信します。" />
         </div>
       </div>
     </section>
   );
 }
-
-function HowCard({
-  number,
-  icon,
-  title,
-  text,
-}: {
-  number: string;
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
+function HowCard({ number, icon, title, text }: { number: string; icon: React.ReactNode; title: string; text: string }) {
   return (
     <div className="rounded-[28px] border border-[#eadfd2] bg-white/85 px-6 py-10 text-center shadow-[0_12px_22px_rgba(84,58,39,0.05)]">
-      <div className="flex items-end justify-center gap-3">
-        <span className="text-[82px] font-black leading-none text-[#A6825D]">
-          {number}
-        </span>
-        <span className="mb-2 text-[#A6825D]">{icon}</span>
-      </div>
-
+      <div className="flex items-end justify-center gap-3"><span className="text-[82px] leading-none font-black text-[#A6825D]">{number}</span><span className="mb-2 text-[#A6825D]">{icon}</span></div>
       <div className="mt-5 text-[25px] font-black text-[#35241A]">{title}</div>
-      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">
-        {text}
-      </p>
+      <p className="mx-auto mt-3 max-w-[330px] text-[18px] leading-8 text-stone-600">{text}</p>
     </div>
   );
 }
 
 function ExamplesGallerySection() {
   return (
-    <section
-      id="examples"
-      className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fffdfa_0%,#fff7ef_100%)] px-6 py-16 md:px-10 xl:px-12"
-    >
+    <section id="examples" className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fffdfa_0%,#fff7ef_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
-          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            実際の商品イメージ
-          </h2>
-
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">実際の商品スタイルプレビュー</h2>
           <p className="mx-auto mt-4 max-w-[1040px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            <span className="block">
-              アップロードした1枚のペット写真が、印刷できる塗り絵ページに。
-            </span>
-            <span className="block">
-              さらに、パーソナルな記念証書と楽しい12種のアバターパックにもなります。
-            </span>
+            <span className="block">1枚のペットまたはペット＋オーナー写真が、プリンタブルぬりえ、</span>
+            <span className="block">パーソナライズされた記念証書、楽しい12アバターパックになる様子をご覧ください。</span>
           </p>
         </div>
-
         <div className="mx-auto mt-10 max-w-[1450px] rounded-[36px] border border-[#e8ddd1] bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(255,251,246,0.98)_100%)] p-6 shadow-[0_18px_40px_rgba(84,58,39,0.08)] md:p-8 xl:p-10">
-          <div className="mb-7 hidden items-center justify-center gap-8 md:flex">
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-            <div className="text-[48px] leading-none text-[#c8b6a0]">→</div>
-            <div className="h-px w-[24%] bg-[#dacdbf]" />
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            <ExampleFlowCard
-              img="/images/avatar_example.jpg"
-              title="元の写真"
-              badge="元画像"
-              description="あなたがアップロードするペット写真"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/coloring_result.jpg"
-              title="塗り絵ページ"
-              badge="AIプレビュー"
-              description="印刷できる白黒ラインアート"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/keepsake-certificate.png"
-              title="記念証書"
-              badge="AIプレビュー"
-              description="誕生日や追悼向けの記念デザイン"
-              badgeTone="gold"
-            />
-
-            <ExampleFlowCard
-              img="/images/avatar_pack_preview.png"
-              title="アバターパック"
-              badge="AIプレビュー"
-              description="12種類のシェアしやすいアバタースタイル"
-              badgeTone="gold"
-              contain
-            />
+            <EFC img="/images/avatar_example.jpg" title="元の写真" badge="元画像" description="あなたがアップロードするペット写真" />
+            <EFC img="/images/coloring_result.jpg" title="塗り絵" badge="AIプレビュー" description="印刷できる白黒ラインアート" />
+            <EFC img="/images/keepsake-certificate.png" title="記念証書" badge="AIプレビュー" description="カスタム、誕生日または追悼向けの記念デザイン" />
+            <EFC img="/images/avatar_pack_preview.png" title="アバターパック" badge="AIプレビュー" description="12種類のシェアしやすいアバタースタイル" contain />
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-function ExampleFlowCard({
-  img,
-  title,
-  badge,
-  description,
-  contain = false,
-  badgeTone = "gold",
-}: {
-  img: string;
-  title: string;
-  badge: string;
-  description: string;
-  contain?: boolean;
-  badgeTone?: "gold" | "orange";
-}) {
-  const badgeClass =
-    badgeTone === "orange"
-      ? "bg-[linear-gradient(180deg,#D8A483_0%,#C98560_100%)] text-white"
-      : "bg-[#E5D394] text-[#6B5328]";
-
+function EFC({ img, title, badge, description, contain = false }: { img: string; title: string; badge: string; description: string; contain?: boolean }) {
   return (
     <div className="rounded-[26px] border border-[#e4d7ca] bg-white p-4 shadow-[0_12px_24px_rgba(84,58,39,0.07)]">
       <div className="relative overflow-hidden rounded-[20px] border border-[#ece0d4] bg-[#fffdfa]">
-        <span
-          className={`absolute right-3 top-3 z-10 rounded-full px-4 py-1.5 text-[12px] font-extrabold shadow-sm ${badgeClass}`}
-        >
-          {badge}
-        </span>
-
-        <img
-          src={img}
-          alt={title}
-          className={`h-[360px] w-full bg-white object-contain ${
-            contain ? "p-4" : "p-3"
-          }`}
-        />
+        <span className="absolute right-3 top-3 z-10 rounded-full bg-[#E5D394] px-4 py-1.5 text-[12px] font-extrabold text-[#6B5328] shadow-sm">{badge}</span>
+        <img src={img} alt={title} className={`h-[360px] w-full bg-white object-contain ${contain ? "p-4" : "p-3"}`} />
       </div>
-
       <div className="pt-5 text-center">
-        <div className="font-serif text-[28px] font-black leading-tight text-[#2F1C13]">
-          {title}
-        </div>
-        <div className="mt-2 text-[18px] leading-8 text-stone-600">
-          {description}
-        </div>
+        <div className="font-serif text-[28px] font-black text-[#2F1C13]">{title}</div>
+        <div className="mt-2 text-[18px] leading-8 text-stone-600">{description}</div>
       </div>
     </div>
   );
 }
 
-function PhotoGuideSection() {
+function ReviewsSection() {
   return (
-    <section
-      id="guide"
-      className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12"
-    >
+    <section className="border-t border-[#eadfd2] bg-[#fffaf5] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
-          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-            ベストな写真の選び方
-          </h2>
-          <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">
-            明るく鮮明な写真ほど、より良い仕上がりになります。
-          </p>
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">ペットファミリーが選ぶ理由</h2>
+          <p className="mx-auto mt-4 max-w-[780px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">すべてが、あなたの体験をシンプルで安全で特別なものにするために設計されています。</p>
         </div>
-
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
-          <GuidePanel
-            good
-            title="✓ 良い例"
-            bullets={[
-              "ペットの顔に自然な光が当たっている",
-              "顔がはっきり見え、中央に写っている",
-              "フレーム内でペットが十分大きく写っている",
-            ]}
-            images={[
-              "/images/good_1_bird_girl.png",
-              "/images/good_2_rabbit.png",
-              "/images/good_3_hedgehog_girl.png",
-            ]}
-          />
-
-          <GuidePanel
-            title="✕ 避けたい例"
-            bullets={[
-              "ピンぼけ・不鮮明な写真",
-              "暗すぎる、または影が強すぎる写真",
-              "顔が切れている、または横を向いている写真",
-            ]}
-            images={[
-              "/images/avoid_1_blurry_cat.png",
-              "/images/avoid_2_dark_cat.png",
-              "/images/avoid_3_turned_away_bird.png",
-            ]}
-          />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {GUARANTEES.map((g) => (
+            <div key={g.title} className="flex flex-col gap-3 rounded-[26px] border border-[#e8ddd1] bg-white p-7 shadow-[0_8px_20px_rgba(84,58,39,0.06)]">
+              <div className="text-[36px] leading-none">{g.icon}</div>
+              <div className="text-[19px] font-black text-[#35241A]">{g.title}</div>
+              <p className="text-[16px] leading-[1.65] text-[#5e4a3c]">{g.text}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function GuidePanel({
-  title,
-  bullets,
-  images,
-  good = false,
-}: {
-  title: string;
-  bullets: string[];
-  images: string[];
-  good?: boolean;
-}) {
+function PhotoGuideSection() {
+  return (
+    <section id="guide" className="border-t border-[#eadfd2] bg-[#fffaf4] px-6 py-16 md:px-10 xl:px-12">
+      <div className="mx-auto max-w-[1500px]">
+        <div className="text-center">
+          <h2 className="font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">最適な写真の選び方</h2>
+          <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">クリアで明るい写真が最高の記念品結果をもたらします。</p>
+        </div>
+        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+          <GuidePanel good title="✓ 良い例" bullets={["ペットの顔に自然な光が当たっている", "顔がはっきり見え、中央に写っている", "フレーム内でペットが十分大きく写っている"]} images={["/images/good_1_bird_girl.png", "/images/good_2_rabbit.png", "/images/good_3_hedgehog_girl.png"]} />
+          <GuidePanel title="✕ 避けたい例" bullets={["ピンぼけ・不鮮明な写真", "暗すぎる、または影が強すぎる写真", "顔が切れている、または横を向いている写真"]} images={["/images/avoid_1_blurry_cat.png", "/images/avoid_2_dark_cat.png", "/images/avoid_3_turned_away_bird.png"]} />
+        </div>
+      </div>
+    </section>
+  );
+}
+function GuidePanel({ title, bullets, images, good = false }: { title: string; bullets: string[]; images: string[]; good?: boolean }) {
   return (
     <div className="overflow-hidden rounded-[26px] border border-[#eadfd4] bg-white shadow-[0_12px_24px_rgba(70,45,25,0.06)]">
-      <div
-        className={`px-6 py-5 text-center text-[24px] font-black ${
-          good ? "bg-[#edf5e6] text-[#2f6c39]" : "bg-[#fde9e2] text-[#b33a3a]"
-        }`}
-      >
-        {title}
-      </div>
-
+      <div className={`px-6 py-5 text-center text-[24px] font-black ${good ? "bg-[#edf5e6] text-[#2f6c39]" : "bg-[#fde9e2] text-[#b33a3a]"}`}>{title}</div>
       <div className="px-7 py-7">
         <div className="space-y-3 text-[19px] font-medium text-[#5f4c40]">
-          {bullets.map((item) => (
-            <div key={item} className="flex items-center gap-3">
-              {good ? (
-                <Check className="h-6 w-6 text-[#4f9b5d]" strokeWidth={2.6} />
-              ) : (
-                <X className="h-6 w-6 text-[#d64545]" strokeWidth={2.6} />
-              )}
-              <span>{item}</span>
-            </div>
-          ))}
+          {bullets.map((item) => (<div key={item} className="flex items-center gap-3">{good ? <Check className="h-6 w-6 text-[#4f9b5d]" strokeWidth={2.6} /> : <X className="h-6 w-6 text-[#d64545]" strokeWidth={2.6} />}<span>{item}</span></div>))}
         </div>
-
         <div className="mt-7 grid grid-cols-3 gap-4">
-          {images.map((img) => (
-            <div
-              key={img}
-              className={`overflow-hidden rounded-[12px] bg-white p-2 shadow-sm ${
-                good ? "border border-[#e9ddd1]" : "border border-[#f2d4d4]"
-              }`}
-            >
-              <img
-                src={img}
-                alt={title}
-                className="aspect-[4/5] h-full w-full rounded-[8px] bg-white object-contain"
-              />
-            </div>
-          ))}
+          {images.map((img) => (<div key={img} className={`overflow-hidden rounded-[12px] bg-white p-2 shadow-sm ${good ? "border border-[#e9ddd1]" : "border border-[#f2d4d4]"}`}><img src={img} alt={title} className="aspect-[4/5] h-full w-full rounded-[8px] bg-white object-contain" /></div>))}
         </div>
       </div>
     </div>
@@ -978,325 +466,70 @@ function FinalCTASection() {
   return (
     <section className="border-t border-[#eadfd2] bg-[linear-gradient(180deg,#fff8f0_0%,#f8eee3_100%)] px-6 py-16 md:px-10 xl:px-12">
       <div className="mx-auto flex max-w-[1320px] flex-col items-center text-center">
-        <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">
-          ペット写真を、ずっと残したくなる特別な形にしませんか？
-        </h2>
-
-        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px] lg:whitespace-nowrap">
-          1回アップロードするだけで、あなたの写真から作る塗り絵ページ、記念証書、アバターパックを受け取れます。
-        </p>
-
-        <div className="mt-8">
-          <a
-            href="#upload"
-            className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95"
-          >
-            写真をアップロード
-          </a>
-        </div>
-
-        <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">
-          デジタル納品 • 発送不要 • ギフトや思い出用に最適
-        </div>
+        <h2 className="mx-auto max-w-[1180px] text-center font-serif text-[42px] font-black tracking-[-0.04em] text-[#24150F] md:text-[56px]">ペットやペット＋オーナーの写真を、大切な思い出に変える準備はできていますか？</h2>
+        <p className="mx-auto mt-4 max-w-[1280px] text-center text-[20px] leading-[1.65] text-stone-600 md:text-[22px]">まずバンドルを選んでください。お支払い後に写真をアップロードします。</p>
+        <p className="mx-auto mt-2 max-w-[980px] text-center text-[17px] leading-8 text-[#7B6658]">最終ファイルは、チェックアウト時に入力したのと同じメールアドレスに配信されます。後で別の配信メールアドレスを選択することはできません。</p>
+        <div className="mt-8"><a href="#pricing" className="inline-flex rounded-full bg-[linear-gradient(180deg,#D98962_0%,#C86C43_100%)] px-10 py-4 text-[20px] font-extrabold text-white shadow-[0_14px_24px_rgba(157,97,65,0.24)] transition hover:brightness-95">バンドルを選ぶ</a></div>
+        <div className="mt-4 text-[18px] font-medium leading-8 text-[#7B6658]">デジタル配信 • 配送なし • ギフトと思い出に最適</div>
       </div>
     </section>
   );
 }
 
-function Footer({
-  currentLocale,
-  linkCopied,
-  copyLink,
-  openContact,
-  t,
-}: {
-  currentLocale: LocaleKey;
-  linkCopied: boolean;
-  copyLink: () => void;
-  openContact: () => void;
-  t: {
-    footerDisclaimer: string;
-    footerDisclaimer2: string;
-    footerDisclaimer3: string;
-  };
-}) {
-  const legalLinks = LEGAL_LINKS[currentLocale];
-  const legalText = LEGAL_TEXT[currentLocale];
-
-  const openMachineTranslatedSite = (targetLang: string) => {
-    const currentUrl = window.location.href;
-    const hostname = window.location.hostname;
-
-    const isLocal =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.endsWith(".local");
-
-    if (isLocal) {
-      alert(
-        "Google翻訳によるサイト翻訳は通常 localhost では動作しません。公開ドメインでテストするか、Chrome のページ翻訳機能をご利用ください。"
-      );
-      return;
-    }
-
-    const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${targetLang}&u=${encodeURIComponent(
-      currentUrl
-    )}`;
-
-    window.location.href = translateUrl;
-  };
-
+function Footer({ currentLocale, linkCopied, copyLink, openContact, t }: { currentLocale: LocaleKey; linkCopied: boolean; copyLink: () => void; openContact: () => void; t: FooterText }) {
+  const ll = LEGAL_LINKS[currentLocale]; const lt = LEGAL_TEXT[currentLocale];
+  const si = [{ key: "facebook", alt: "Facebook" }, { key: "instagram", alt: "Instagram" }, { key: "tiktok", alt: "TikTok" }, { key: "pinterest", alt: "Pinterest" }, { key: "link", alt: "Copy link" }];
   return (
     <footer className="border-t border-black/5 bg-[#efe5d8]">
-      <div className="mx-auto max-w-[1320px] px-5 py-8 sm:px-8">
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {["email", "facebook", "instagram", "tiktok", "pinterest", "link"].map(
-              (p) => (
-                <button
-                  key={p}
-                  onClick={p === "link" ? copyLink : undefined}
-                  className="relative transition hover:opacity-75"
-                >
-                  <img
-                    src={`/social/${p}.png`}
-                    alt={p}
-                    className="h-10 w-10 object-contain"
-                  />
-                  {p === "link" && linkCopied && (
-                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">
-                      コピー済み
-                    </span>
-                  )}
-                </button>
-              )
-            )}
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
-            <Link href={legalLinks.terms} className="hover:underline">
-              {legalText.terms}
-            </Link>
-            <Link href={legalLinks.privacy} className="hover:underline">
-              {legalText.privacy}
-            </Link>
-            <Link href={legalLinks.refunds} className="hover:underline">
-              {legalText.refunds}
-            </Link>
-            <button onClick={openContact} className="hover:underline">
-              {legalText.contact}
+      <div className="mx-auto flex max-w-[1320px] flex-col items-center px-5 py-8 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {si.map((item) => (
+            <button key={item.key} type="button" onClick={item.key === "link" ? copyLink : undefined} aria-label={item.alt} className="relative transition hover:opacity-75">
+              <img src={`/social/${item.key}.png`} alt={item.alt} className="h-10 w-10 object-contain" />
+              {item.key === "link" && linkCopied && <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#b38a3d] shadow">コピー済</span>}
             </button>
-          </div>
-
-          <div className="mt-5 flex flex-col items-center gap-4 md:flex-row md:gap-6">
-            <div className="text-[17px] font-medium text-[#1f1a16]">
-              © {BRAND.year} {BRAND.name}
-            </div>
-
-            <div className="flex items-center gap-2">
-              {["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => (
-                <img
-                  key={p}
-                  src={`/payments/${p}.png`}
-                  alt={p}
-                  className="h-7 w-auto object-contain"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-3 text-center">
-            <div className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#5d4638]">
-              <Globe className="h-4 w-4" />
-              その他の言語（機械翻訳）
-            </div>
-
-            <select
-              defaultValue=""
-              onChange={(e) => {
-                const value = e.target.value;
-                if (!value) return;
-                openMachineTranslatedSite(value);
-                e.target.value = "";
-              }}
-              className="min-w-[260px] rounded-full border border-[#d3c2b1] bg-white px-4 py-2.5 text-[14px] font-medium text-[#5d4638] shadow-sm outline-none transition hover:bg-[#faf3eb]"
-            >
-              <option value="" disabled>
-                別の言語を選択...
-              </option>
-              {MACHINE_TRANSLATE_OPTIONS.map((lang) => (
-                <option key={lang.tl} value={lang.tl}>
-                  {lang.label}
-                </option>
-              ))}
-            </select>
-
-            <p className="max-w-[760px] text-[13px] leading-6 text-[#7b6658]">
-              機械翻訳は便宜上のものです。正式版はこのサイトに掲載されている各言語ページをご確認ください。
-            </p>
-          </div>
-
-          <div className="mt-5 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
-            <span>{t.footerDisclaimer}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer2}</span>
-            <span className="mx-2 hidden md:inline">|</span>
-            <span className="block md:inline">{t.footerDisclaimer3}</span>
-          </div>
+          ))}
+        </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[17px] font-medium text-[#1f1a16]">
+          <Link href={ll.terms} className="hover:underline">{lt.terms}</Link>
+          <Link href={ll.privacy} className="hover:underline">{lt.privacy}</Link>
+          <Link href={ll.refunds} className="hover:underline">{lt.refunds}</Link>
+          <button type="button" onClick={openContact} className="hover:underline">{lt.contact}</button>
+        </div>
+        <div className="mt-5 text-[17px] font-medium text-[#1f1a16]">© {BRAND.year} {BRAND.name}</div>
+        <div className="mt-5 flex items-center gap-2">{["visa", "mastercard", "amex", "applepay", "googlepay"].map((p) => <img key={p} src={`/payments/${p}.png`} alt={p} className="h-7 w-auto object-contain" />)}</div>
+        <div className="mt-8 text-center text-[17px] font-medium leading-8 text-[rgba(0,0,0,0.62)]">
+          <span>{t.footerDisclaimer}</span><span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer2}</span><span className="mx-2 hidden md:inline">|</span>
+          <span className="block md:inline">{t.footerDisclaimer3}</span>
         </div>
       </div>
     </footer>
   );
 }
 
-function ContactModal({
-  name,
-  setName,
-  supportSubject,
-  setSupportSubject,
-  message,
-  setMessage,
-  msgCopied,
-  setMsgCopied,
-  close,
-}: {
-  name: string;
-  setName: (v: string) => void;
-  supportSubject: string;
-  setSupportSubject: (v: string) => void;
-  message: string;
-  setMessage: (v: string) => void;
-  msgCopied: boolean;
-  setMsgCopied: (v: boolean) => void;
-  close: () => void;
-}) {
+function ContactModal({ name, setName, supportSubject, setSupportSubject, message, setMessage, close }: { name: string; setName: React.Dispatch<React.SetStateAction<string>>; supportSubject: string; setSupportSubject: React.Dispatch<React.SetStateAction<string>>; message: string; setMessage: React.Dispatch<React.SetStateAction<string>>; close: () => void }) {
+  const buildMailto = () => {
+    const s = supportSubject || "Support Request";
+    const b = [name ? `Name: ${name}` : "", "", message || "How can we help?"].filter(Boolean);
+    return `mailto:${BRAND.email}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b.join("\n"))}`;
+  };
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-sm"
-      onClick={close}
-    >
-      <div
-        className="relative w-full max-w-[560px] rounded-[24px] border border-[#e3d8cb] bg-[#FAF6F0] p-6 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white shadow-sm hover:bg-neutral-50"
-          onClick={close}
-        >
-          ✕
-        </button>
-
-        <h3 className="pr-10 font-serif text-[28px] font-black tracking-[-0.03em] text-[#24140D]">
-          サポートお問い合わせ
-        </h3>
-        <p className="mt-1 text-sm text-stone-600">
-          メールアプリを開き、内容を自動入力します。
-        </p>
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-sm" onClick={close}>
+      <div className="relative w-full max-w-[560px] rounded-[24px] border border-[#e3d8cb] bg-[#FAF6F0] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white shadow-sm hover:bg-neutral-50" onClick={close}>✕</button>
+        <h3 className="pr-10 font-serif text-[28px] font-black text-[#24140D]">サポートリクエスト</h3>
         <div className="mt-6 space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              お名前
-            </label>
-            <input
-              type="text"
-              placeholder="お名前（任意）"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              件名 / お問い合わせ種別
-            </label>
-            <select
-              value={supportSubject}
-              onChange={(e) => setSupportSubject(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            >
-              <option value="" disabled>
-                お問い合わせ種別を選択してください...
-              </option>
-              <option value="Order Support">注文サポート</option>
-              <option value="File Access">ファイルアクセス</option>
-              <option value="Photo Upload Issue">写真アップロードの問題</option>
-              <option value="General Question">一般的な質問</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-[#3D2B1F]">
-              メッセージ
-            </label>
-            <textarea
-              rows={4}
-              placeholder="どのようなご用件ですか？"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none focus:border-[#C8A064]"
-            />
-          </div>
-
-          <button
-            className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]"
-            onClick={() => {
-              const finalSubject = `[PET KEEPSAKE STUDIO] ${
-                supportSubject || "お問い合わせ"
-              }`;
-              const bodyLines = [
-                `Customer Name: ${name || "Not provided"}`,
-                `Message: ${message}`,
-              ].join("\n");
-
-              window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent(
-                finalSubject
-              )}&body=${encodeURIComponent(bodyLines)}`;
-            }}
-          >
-            メールアプリを開く
-          </button>
-
-          <button
-            onClick={async () => {
-              const textToCopy = `Subject: [PET KEEPSAKE STUDIO] ${
-                supportSubject || "お問い合わせ"
-              }\n\nCustomer Name: ${name || "Not provided"}\nMessage: ${message}`;
-
-              await navigator.clipboard.writeText(textToCopy);
-              setMsgCopied(true);
-              setTimeout(() => setMsgCopied(false), 1500);
-            }}
-            className="w-full rounded-xl border border-dashed border-[#C8A064] px-4 py-3 text-[12px] font-bold text-[#C8A064] hover:bg-[#FDFBF7]"
-          >
-            {msgCopied ? "クリップボードにコピーしました ✓" : "代替方法：メッセージ本文をコピー"}
-          </button>
+          <input type="text" placeholder="お名前" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none" />
+          <select value={supportSubject} onChange={(e) => setSupportSubject(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none">
+            <option value="" disabled>お問い合わせの種類を選択...</option>
+            <option value="Order Support">注文サポート</option>
+            <option value="General Question">一般的なご質問</option>
+          </select>
+          <textarea rows={4} placeholder="どのようにお役に立てますか？" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full rounded-xl border border-[#d8cdbf] bg-white px-4 py-3 outline-none" />
+          <button type="button" className="w-full rounded-[12px] bg-[#3D2B1F] px-6 py-4 text-base font-bold text-white shadow-md transition hover:bg-[#2A1D15]" onClick={() => { window.location.href = buildMailto(); }}>メールアプリを開く</button>
         </div>
       </div>
     </div>
-  );
-}
-
-function LangButton({
-  children,
-  href,
-  active = false,
-}: {
-  children: React.ReactNode;
-  href: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[12px] border px-3 py-1.5 text-[11px] font-bold leading-none transition ${
-        active
-          ? "border-[#3A2418] bg-[#3A2418] text-white"
-          : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
-      }`}
-    >
-      {children}
-    </Link>
   );
 }

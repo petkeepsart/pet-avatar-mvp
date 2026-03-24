@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/",
   updatedAt: "March 11, 2026",
 };
@@ -23,7 +23,7 @@ const SECTIONS = [
   {
     icon: Receipt,
     title: "1. Overview",
-    body: "At Pet Keepsake Studio, we sell personalized digital products only. Because your order is delivered electronically and may be created through automated image-processing workflows after purchase, refunds, returns, exchanges, and cancellations are generally limited once processing or delivery has begun.",
+    body: "At Pet Keeps Art, we sell personalized digital products only. Because your order is delivered electronically and may be created through automated image-processing workflows after purchase, refunds, returns, exchanges, and cancellations are generally limited once processing or delivery has begun.",
   },
   {
     icon: Download,
@@ -62,12 +62,17 @@ const SECTIONS = [
   },
   {
     icon: Scale,
-    title: "9. Legal Rights",
+    title: "9. EU Consumers — Right of Withdrawal",
+    body: "If you are an EU consumer, you have the right to withdraw from this contract within 14 days without giving any reason. However, by placing your order and confirming payment, you expressly consent to the immediate commencement of delivery of digital content and acknowledge that you thereby lose your right of withdrawal once delivery of your digital files has begun, in accordance with Article 16(m) of EU Directive 2011/83/EU. Because our digital files are generated and made available for download immediately after your order is processed, the right of withdrawal is waived from the moment delivery begins. If you have questions about your rights before purchasing, please contact us at info@petkeepsart.com.",
+  },
+  {
+    icon: Scale,
+    title: "10. Legal Rights",
     body: "Nothing in this Refund Policy limits or excludes any mandatory rights you may have under applicable consumer protection laws. Where local law requires a refund, cancellation right, repair, replacement, price reduction, or other remedy, we will honor those rights.",
   },
   {
     icon: Mail,
-    title: "10. Contact Us",
+    title: "11. Contact Us",
     body: `If you believe there has been a billing issue, delivery problem, duplicate charge, or technical error with your order, please contact us at ${BRAND.email} and include your order details so we can review the issue.`,
   },
 ];

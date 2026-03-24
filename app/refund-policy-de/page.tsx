@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/de",
   updatedAt: "11. März 2026",
 };
@@ -23,7 +23,7 @@ const SECTIONS = [
   {
     icon: Receipt,
     title: "1. Überblick",
-    body: "Bei Pet Keepsake Studio verkaufen wir ausschließlich personalisierte digitale Produkte. Da deine Bestellung elektronisch geliefert wird und nach dem Kauf durch automatisierte Bildverarbeitungsabläufe erstellt werden kann, sind Rückerstattungen, Rückgaben, Umtausch und Stornierungen im Allgemeinen eingeschränkt, sobald die Bearbeitung oder Lieferung begonnen hat.",
+    body: "Bei Pet Keeps Art verkaufen wir ausschließlich personalisierte digitale Produkte. Da deine Bestellung elektronisch geliefert wird und nach dem Kauf durch automatisierte Bildverarbeitungsabläufe erstellt werden kann, sind Rückerstattungen, Rückgaben, Umtausch und Stornierungen im Allgemeinen eingeschränkt, sobald die Bearbeitung oder Lieferung begonnen hat.",
   },
   {
     icon: Download,
@@ -62,12 +62,17 @@ const SECTIONS = [
   },
   {
     icon: Scale,
-    title: "9. Gesetzliche Rechte",
+    title: "9. EU-Verbraucher — Widerrufsrecht",
+    body: "Als EU-Verbraucher hast du das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von Gründen zu widerrufen. Durch Aufgabe deiner Bestellung und Bestätigung der Zahlung stimmst du jedoch ausdrücklich zu, dass die Lieferung digitaler Inhalte sofort beginnt, und du erkennst an, dass du dein Widerrufsrecht verlierst, sobald die Lieferung deiner digitalen Dateien begonnen hat – gemäß Artikel 16(m) der EU-Richtlinie 2011/83/EU. Da unsere digitalen Dateien unmittelbar nach der Bestellungsbearbeitung generiert und zum Download bereitgestellt werden, erlischt das Widerrufsrecht ab dem Moment, in dem die Lieferung beginnt. Wenn du vor dem Kauf Fragen zu deinen Rechten hast, wende dich bitte an info@petkeepsart.com.",
+  },
+  {
+    icon: Scale,
+    title: "10. Gesetzliche Rechte",
     body: "Nichts in dieser Rückerstattungsrichtlinie beschränkt oder schließt zwingende Rechte aus, die du möglicherweise nach geltendem Verbraucherschutzrecht hast. Soweit örtliches Recht eine Rückerstattung, ein Widerrufsrecht, eine Reparatur, einen Ersatz, eine Preisreduzierung oder einen anderen Rechtsbehelf verlangt, werden wir diese Rechte respektieren.",
   },
   {
     icon: Mail,
-    title: "10. Kontaktiere uns",
+    title: "11. Kontaktiere uns",
     body: `Wenn du glaubst, dass es ein Abrechnungsproblem, ein Lieferproblem, eine doppelte Belastung oder einen technischen Fehler bei deiner Bestellung gegeben hat, kontaktiere uns bitte unter ${BRAND.email} und füge deine Bestelldaten bei, damit wir den Fall prüfen können.`,
   },
 ];

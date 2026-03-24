@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/es",
   updatedAt: "11 de marzo de 2026",
 };
@@ -56,7 +56,7 @@ const SECTIONS = [
   {
     icon: Scale,
     title: "8. Limitación de responsabilidad",
-    body: "En la máxima medida permitida por la ley, Pet Keepsake Studio no será responsable de daños indirectos, incidentales o consecuentes. Nuestra responsabilidad total por cualquier reclamación no excederá el importe pagado por el pedido específico.",
+    body: "En la máxima medida permitida por la ley, Pet Keeps Art no será responsable de daños indirectos, incidentales o consecuentes. Nuestra responsabilidad total por cualquier reclamación no excederá el importe pagado por el pedido específico.",
   },
   {
     icon: Scale,
@@ -112,7 +112,7 @@ export default function TermsEsPage() {
               </h1>
 
               <p className="mt-4 max-w-[1280px] text-[14px] leading-7 text-[#7b6658] md:text-[16px]">
-                Lee atentamente estos Términos antes de usar nuestro sitio web o comprar cualquier producto digital de Pet Keepsake Studio.
+                Lee atentamente estos Términos antes de usar nuestro sitio web o comprar cualquier producto digital de Pet Keeps Art.
               </p>
 
               <div className="mt-6 inline-flex rounded-full bg-[#f3e8dc] px-4 py-2 text-[13px] font-semibold text-[#7a5f4d]">

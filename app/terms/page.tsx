@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 
 const BRAND = {
-  name: "Pet Keepsake Studio",
-  email: "support@petkeepsake.com",
+  name: "Pet Keeps Art",
+  email: "info@petkeepsart.com",
   site: "/",
   updatedAt: "March 11, 2026",
 };
@@ -56,7 +56,7 @@ const SECTIONS = [
   {
     icon: Scale,
     title: "8. Limitation of Liability",
-    body: "To the maximum extent permitted by law, Pet Keepsake Studio shall not be liable for any indirect or consequential damages. Our total liability for any claim shall not exceed the amount paid for the specific order.",
+    body: "To the maximum extent permitted by law, Pet Keeps Art shall not be liable for any indirect or consequential damages. Our total liability for any claim shall not exceed the amount paid for the specific order.",
   },
   {
     icon: Scale,
